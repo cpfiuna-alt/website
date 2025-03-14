@@ -1,0 +1,25 @@
+
+/* Layout and Responsive Utilities */
+html {
+  @apply scroll-smooth;
+  overflow-x: hidden;
+  width: 100%;
+}
+
+body {
+  @apply bg-background text-foreground antialiased transition-colors duration-300;
+  font-feature-settings: "rlig" 1, "calt" 1;
+  overflow-x: hidden;
+  width: 100%;
+  min-height: 100vh;
+  /* Usar la variable --vh creada en el Layout */
+  min-height: calc(var(--vh, 1vh) * 100);
+}
+
+/* Responsive utilities */
+@media (max-width: 640px) {
+  .container {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}

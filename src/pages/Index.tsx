@@ -1,0 +1,26 @@
+
+import Layout from "@/components/layout/Layout";
+import Hero from "@/components/home/Hero";
+import Features from "@/components/home/Features";
+import Stats from "@/components/home/Stats";
+import News from "@/components/home/News";
+import AboutClub from "@/components/home/AboutClub";
+import { useIsMobile } from "@/hooks/use-mobile";
+
+const Index = () => {
+  const isMobile = useIsMobile();
+
+  return (
+    <Layout>
+      <Hero />
+      <div className={isMobile ? "space-y-8" : "space-y-16"}>
+        <News />
+        <Stats />
+        <AboutClub />
+        <Features />
+      </div>
+    </Layout>
+  );
+};
+
+export default Index;
