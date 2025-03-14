@@ -1,6 +1,7 @@
+
 import { useState, useEffect } from "react";
 import { NavLink } from "react-router-dom";
-import { Menu, X } from "lucide-react";
+import { Menu, X, BookOpen } from "lucide-react";
 import Logo from "@/components/ui/Logo";
 import ThemeToggle from "@/components/ui/ThemeToggle";
 
@@ -72,6 +73,28 @@ const Header = () => {
 
         {/* Right Actions */}
         <div className="flex items-center">
+          <NavLink 
+            to="/docs"
+            className={({ isActive }) =>
+              `relative px-3 py-2 rounded-md text-sm font-medium mr-2 transition-all duration-300 flex items-center
+              ${
+                isActive
+                  ? "text-primary"
+                  : "text-foreground hover:text-primary"
+              }`
+            }
+          >
+            {({ isActive }) => (
+              <>
+                <BookOpen className="h-4 w-4 mr-1" />
+                Docs
+                {isActive && (
+                  <span className="absolute bottom-0 left-0 w-full h-0.5 bg-primary rounded-full" />
+                )}
+              </>
+            )}
+          </NavLink>
+          
           <ThemeToggle />
 
           {/* Mobile Menu Button */}
@@ -120,6 +143,22 @@ const Header = () => {
                     </NavLink>
                   </li>
                 ))}
+                <li>
+                  <NavLink
+                    to="/docs"
+                    className={({ isActive }) =>
+                      `text-2xl font-medium transition-colors flex items-center justify-center ${
+                        isActive
+                          ? "text-primary"
+                          : "text-foreground hover:text-primary"
+                      }`
+                    }
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    <BookOpen className="h-5 w-5 mr-2" />
+                    Documentación
+                  </NavLink>
+                </li>
               </ul>
             </nav>
             <div className="flex justify-center py-6">

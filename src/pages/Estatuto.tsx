@@ -1,4 +1,3 @@
-
 import React from "react";
 import Layout from "@/components/layout/Layout";
 import { Separator } from "@/components/ui/separator";
@@ -140,7 +139,7 @@ const Estatuto = () => {
                         Para ser miembro activo del Club de Programación FIUNA se requiere:
                       </p>
                       <ol className="list-decimal list-inside space-y-2 text-muted-foreground">
-                        <li>Ser estudiante regular de la Facultad de Ingeniería UNA.</li>
+                        <li>Ser estudiante de la Facultad de Ingeniería UNA.</li>
                         <li>Presentar solicitud formal de ingreso a la Comisión Directiva.</li>
                         <li>Participar en el proceso de inducción establecido por el club.</li>
                         <li>Comprometerse a cumplir con el presente Estatuto y demás normativas del club.</li>
@@ -224,8 +223,8 @@ const Estatuto = () => {
                         <li>Tesorero</li>
                       </ol>
                       <p className="text-muted-foreground mt-4">
-                        La Comisión Directiva será elegida por la Asamblea General y durará en sus funciones un período de un año, 
-                        pudiendo ser reelegidos por un período adicional consecutivo.
+                        La Comisión Directiva será elegida por la Asamblea General y durará en sus funciones un período de dos años, 
+                        pudiendo ser reelegidos con el acuerdo de los miembros.
                       </p>
                     </div>
                     
@@ -325,7 +324,7 @@ const Estatuto = () => {
                     <div>
                       <h3 className="text-xl font-semibold mb-3">Artículo 19 - Proceso Electoral</h3>
                       <p className="text-muted-foreground">
-                        Las elecciones para la Comisión Directiva se realizarán anualmente, en el mes de noviembre, mediante votación 
+                        Las elecciones para la Comisión Directiva se realizarán cada dos años, en el mes de noviembre, mediante votación 
                         directa y secreta de todos los miembros activos. La Asamblea General designará una Comisión Electoral compuesta 
                         por tres miembros activos que no sean candidatos, quienes serán responsables de organizar y supervisar el proceso electoral.
                       </p>
@@ -334,9 +333,9 @@ const Estatuto = () => {
                     <div>
                       <h3 className="text-xl font-semibold mb-3">Artículo 20 - Candidaturas</h3>
                       <p className="text-muted-foreground">
-                        Las candidaturas se presentarán por listas completas para todos los cargos de la Comisión Directiva. Las listas 
-                        deberán ser presentadas a la Comisión Electoral con al menos 15 días de anticipación a la fecha de las elecciones 
-                        y deberán contar con el respaldo de al menos el 10% de los miembros activos.
+                        Las candidaturas se presentarán mediante nominación directa. Los miembros pueden nominar a otros miembros 
+                        para cualquier cargo de la Comisión Directiva, especialmente para el cargo de Presidente. Las nominaciones 
+                        deberán ser presentadas a la Comisión Electoral con al menos 15 días de anticipación a la fecha de las elecciones.
                       </p>
                     </div>
                     
@@ -358,7 +357,8 @@ const Estatuto = () => {
                       <p className="text-muted-foreground">
                         La votación se realizará en una jornada electoral organizada por la Comisión Electoral. Tendrán derecho a voto 
                         todos los miembros activos del club. El escrutinio será realizado inmediatamente después de finalizada la votación 
-                        y será público. Resultará electa la lista que obtenga la mayoría simple de los votos válidos emitidos.
+                        y será público. Para el cargo de Presidente, resultará electo el candidato que obtenga la mayoría simple de votos. 
+                        El candidato a Presidente con la segunda mayor cantidad de votos asumirá como Vicepresidente.
                       </p>
                     </div>
                     
@@ -401,7 +401,7 @@ const Estatuto = () => {
                         Las Asambleas Generales podrán ser:
                       </p>
                       <ol className="list-decimal list-inside space-y-2 text-muted-foreground">
-                        <li><span className="font-medium">Ordinarias:</span> Se celebrarán dos veces al año, en los meses de marzo y octubre, para tratar asuntos generales del club.</li>
+                        <li><span className="font-medium">Ordinarias:</span> Se celebrarán cuatro veces al año, dos en cada semestre, para tratar asuntos generales del club.</li>
                         <li><span className="font-medium">Extraordinarias:</span> Se convocarán cuando lo solicite la Comisión Directiva o al menos el 30% de los miembros activos, para tratar asuntos específicos y urgentes.</li>
                       </ol>
                     </div>

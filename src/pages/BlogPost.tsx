@@ -146,7 +146,7 @@ const BlogPost = () => {
               <div className="max-w-3xl mx-auto text-center">
                 <div className="flex items-center justify-center space-x-2 mb-4">
                   {blogPost.tags.slice(0, 2).map((tag) => (
-                    <span key={tag} className="px-3 py-1 text-xs font-medium bg-primary/10 text-primary rounded-full">
+                    <span key={tag} className="px-3 py-1 text-xs font-medium bg-primary/40 backdrop-blur-sm text-white rounded-full border border-white/30">
                       {tag}
                     </span>
                   ))}

@@ -1,7 +1,7 @@
-
 import Layout from "@/components/layout/Layout";
 import { useState } from "react";
 import { Github, ExternalLink, Search, Filter, Code, User, Tag } from "lucide-react";
+import { Link } from "react-router-dom";
 
 // Sample project data
 const allProjects = [
@@ -201,12 +201,14 @@ const Projects = () => {
                   className="glass-card group hover:shadow-neon-blue transition-all"
                 >
                   <div className="relative">
-                    <img
-                      src={project.image}
-                      alt={project.title}
-                      className="w-full h-48 object-cover object-center rounded-t-xl"
-                      loading="lazy"
-                    />
+                    <Link to={`/projects/${project.id}`}>
+                      <img
+                        src={project.image}
+                        alt={project.title}
+                        className="w-full h-48 object-cover object-center rounded-t-xl"
+                        loading="lazy"
+                      />
+                    </Link>
                     {project.featured && (
                       <div className="absolute top-3 right-3">
                         <span className="px-3 py-1 rounded-full text-xs font-medium bg-primary/90 text-primary-foreground">
@@ -216,9 +218,11 @@ const Projects = () => {
                     )}
                   </div>
                   <div className="p-6">
-                    <h3 className="text-xl font-semibold mb-3 group-hover:text-primary transition-colors">
-                      {project.title}
-                    </h3>
+                    <Link to={`/projects/${project.id}`}>
+                      <h3 className="text-xl font-semibold mb-3 group-hover:text-primary transition-colors">
+                        {project.title}
+                      </h3>
+                    </Link>
                     <p className="text-muted-foreground mb-4 line-clamp-2">
                       {project.description}
                     </p>
@@ -243,15 +247,13 @@ const Projects = () => {
                         <Github className="h-4 w-4 mr-1" />
                         Código
                       </a>
-                      <a
-                        href={project.demoLink}
+                      <Link
+                        to={`/projects/${project.id}`}
                         className="inline-flex items-center justify-center px-4 py-2 rounded-full bg-primary text-primary-foreground text-sm font-medium transition-all hover:shadow-neon-blue"
-                        target="_blank"
-                        rel="noopener noreferrer"
                       >
-                        Ver demo
+                        Ver detalles
                         <ExternalLink className="ml-2 h-3 w-3" />
-                      </a>
+                      </Link>
                     </div>
                   </div>
                 </div>

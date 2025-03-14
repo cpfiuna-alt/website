@@ -21,6 +21,8 @@ import MediaKit from "./pages/MediaKit";
 import Press from "./pages/Press";
 import Transparency from "./pages/Transparency";
 import Estatuto from "./pages/Estatuto";
+import CourseDetail from "./pages/CourseDetail";
+import Documentation from "./pages/Documentation";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -40,6 +42,7 @@ const App = () => (
             <Route path="/projects" element={<Projects />} />
             <Route path="/projects/:slug" element={<ProjectDetail />} />
             <Route path="/resources" element={<Resources />} />
+            <Route path="/course/:slug" element={<CourseDetail />} />
             <Route path="/blog" element={<Blog />} />
             <Route path="/blog/:slug" element={<BlogPost />} />
             <Route path="/contact" element={<Contact />} />
@@ -49,6 +52,7 @@ const App = () => (
             <Route path="/press" element={<Press />} />
             <Route path="/transparency" element={<Transparency />} />
             <Route path="/estatuto" element={<Estatuto />} />
+            <Route path="/docs/*" element={<Documentation />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

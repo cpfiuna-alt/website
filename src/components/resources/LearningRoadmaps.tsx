@@ -1,9 +1,8 @@
-
 import React from "react";
 import { Link } from "react-router-dom";
 import { 
   Code, Terminal, Award, Lightbulb, Video, BookOpen, 
-  FileText, Users, ExternalLink, ChevronRight, ArrowRight, Compass
+  FileText, Users, ExternalLink, ChevronRight, ArrowRight, Compass, Brain
 } from "lucide-react";
 
 interface RoadmapResource {
@@ -149,6 +148,37 @@ const learningRoadmaps: Roadmap[] = [
         ]
       }
     ]
+  },
+  {
+    id: "artificialintelligence",
+    title: "Inteligencia Artificial",
+    description: "Explora los fundamentos y aplicaciones avanzadas de la IA y el aprendizaje automático",
+    levels: [
+      {
+        name: "Principiante",
+        skills: ["Matemáticas para IA", "Python", "Estadística básica", "Algoritmos básicos"],
+        resources: [
+          { name: "Fundamentos matemáticos para IA", url: "#", type: "Curso" },
+          { name: "Introducción a Python para IA", url: "#", type: "Tutorial" }
+        ]
+      },
+      {
+        name: "Intermedio",
+        skills: ["Machine Learning", "Redes Neuronales", "Procesamiento de datos", "Computer Vision básica"],
+        resources: [
+          { name: "Fundamentos de Machine Learning", url: "#", type: "Curso" },
+          { name: "Introducción a las Redes Neuronales", url: "#", type: "Guía" }
+        ]
+      },
+      {
+        name: "Avanzado",
+        skills: ["Deep Learning", "NLP avanzado", "Reinforcement Learning", "Ética en IA"],
+        resources: [
+          { name: "Arquitecturas avanzadas de Deep Learning", url: "#", type: "Taller" },
+          { name: "Implementación de Reinforcement Learning", url: "#", type: "Curso" }
+        ]
+      }
+    ]
   }
 ];
 
@@ -162,6 +192,8 @@ const RoadmapCardIcon = ({ id }: { id: string }) => {
       return <Award className="h-10 w-10 mb-4 text-primary" />;
     case "datascience":
       return <Lightbulb className="h-10 w-10 mb-4 text-primary" />;
+    case "artificialintelligence":
+      return <Brain className="h-10 w-10 mb-4 text-primary" />;
     default:
       return null;
   }
@@ -294,12 +326,12 @@ const LearningRoadmaps = ({ selectedRoadmap, setSelectedRoadmap }: LearningRoadm
           </p>
         </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-12">
           {learningRoadmaps.map(roadmap => (
             <button
               key={roadmap.id}
               onClick={() => setSelectedRoadmap(roadmap.id === selectedRoadmap ? null : roadmap.id)}
-              className={`glass-card p-6 text-left transition-all ${
+              className={`glass-card p-4 text-left transition-all h-full ${
                 roadmap.id === selectedRoadmap 
                   ? "ring-2 ring-primary shadow-neon-blue" 
                   : "hover:shadow-neon-blue"
@@ -307,8 +339,8 @@ const LearningRoadmaps = ({ selectedRoadmap, setSelectedRoadmap }: LearningRoadm
             >
               <RoadmapCardIcon id={roadmap.id} />
               
-              <h3 className="text-xl font-semibold mb-2">{roadmap.title}</h3>
-              <p className="text-muted-foreground text-sm mb-4">{roadmap.description}</p>
+              <h3 className="text-lg font-semibold mb-2">{roadmap.title}</h3>
+              <p className="text-muted-foreground text-xs mb-4">{roadmap.description}</p>
               
               <div className="flex items-center text-primary text-sm font-medium">
                 <span>Ver ruta</span>

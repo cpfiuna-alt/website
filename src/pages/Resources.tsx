@@ -1,5 +1,6 @@
 
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import Layout from "@/components/layout/Layout";
 import ResourcesHero from "@/components/resources/ResourcesHero";
 import LearningRoadmaps from "@/components/resources/LearningRoadmaps";
@@ -35,7 +36,8 @@ const CoursesSection = () => {
       duration: "6 semanas",
       instructor: "Prof. Ana González",
       image: "https://images.unsplash.com/photo-1526379879527-8559ecfcaec0?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80",
-      tags: ["Python", "Programación", "Básico"]
+      tags: ["Python", "Programación", "Básico"],
+      slug: "introduccion-python"
     },
     {
       id: 2,
@@ -45,7 +47,8 @@ const CoursesSection = () => {
       duration: "8 semanas",
       instructor: "Ing. Carlos Martínez",
       image: "https://images.unsplash.com/photo-1633356122102-3fe601e05bd2?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80",
-      tags: ["JavaScript", "React", "Frontend"]
+      tags: ["JavaScript", "React", "Frontend"],
+      slug: "desarrollo-web-react"
     },
     {
       id: 3,
@@ -55,7 +58,8 @@ const CoursesSection = () => {
       duration: "10 semanas",
       instructor: "Dr. Juan Pérez",
       image: "https://images.unsplash.com/photo-1580894908361-967195033215?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80",
-      tags: ["Algoritmos", "Competitive Programming", "C++"]
+      tags: ["Algoritmos", "Competitive Programming", "C++"],
+      slug: "algoritmos-competencias"
     },
     {
       id: 4,
@@ -65,7 +69,8 @@ const CoursesSection = () => {
       duration: "6 semanas",
       instructor: "Lic. María Silva",
       image: "https://images.unsplash.com/photo-1544383835-bda2bc66a55d?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80",
-      tags: ["SQL", "Bases de Datos", "MySQL"]
+      tags: ["SQL", "Bases de Datos", "MySQL"],
+      slug: "bases-datos-sql"
     },
     {
       id: 5,
@@ -75,7 +80,8 @@ const CoursesSection = () => {
       duration: "8 semanas",
       instructor: "Dr. Roberto Fernández",
       image: "https://images.unsplash.com/photo-1620712943543-bcc4688e7485?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80",
-      tags: ["IA", "Python", "Machine Learning"]
+      tags: ["IA", "Python", "Machine Learning"],
+      slug: "inteligencia-artificial-practica"
     },
     {
       id: 6,
@@ -85,7 +91,8 @@ const CoursesSection = () => {
       duration: "9 semanas",
       instructor: "Ing. Patricia López",
       image: "https://images.unsplash.com/photo-1551650975-87deedd944c3?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80",
-      tags: ["React Native", "Mobile", "JavaScript"]
+      tags: ["React Native", "Mobile", "JavaScript"],
+      slug: "desarrollo-aplicaciones-moviles"
     }
   ];
 
@@ -98,9 +105,9 @@ const CoursesSection = () => {
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {courses.map((course) => (
-            <a 
+            <Link 
               key={course.id}
-              href="/course/example" 
+              to={`/course/${course.slug}`}
               className="glass-card group overflow-hidden hover:shadow-neon-blue transition-all duration-300"
             >
               <div className="relative h-40 overflow-hidden">
@@ -141,17 +148,17 @@ const CoursesSection = () => {
                   <span>{course.duration}</span>
                 </div>
               </div>
-            </a>
+            </Link>
           ))}
         </div>
         
         <div className="mt-8 text-center">
-          <a 
-            href="/courses" 
+          <Link 
+            to="/courses" 
             className="inline-flex items-center px-4 py-2 rounded-full bg-primary/10 hover:bg-primary/20 text-primary transition-colors"
           >
             Ver todos los cursos
-          </a>
+          </Link>
         </div>
       </div>
     </section>
