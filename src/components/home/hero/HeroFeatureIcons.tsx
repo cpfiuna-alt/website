@@ -1,6 +1,7 @@
 
 import { useRef, useEffect } from "react";
 import { Code, Users, Calendar, BookOpen } from "lucide-react";
+import { Link } from "react-router-dom";
 
 interface HeroFeatureIconsProps {
   onMount?: () => void;
@@ -22,24 +23,28 @@ const HeroFeatureIcons = ({ onMount }: HeroFeatureIconsProps) => {
       icon: <Code className="h-6 w-6 md:h-8 md:w-8 text-primary mb-2 md:mb-4 animate-pulse-slow" />,
       title: "Proyectos",
       description: "Código abierto y colaborativo",
+      link: "/projects",
       delay: 0
     },
     {
       icon: <Users className="h-6 w-6 md:h-8 md:w-8 text-primary mb-2 md:mb-4 animate-pulse-slow" style={{ animationDelay: "0.5s" }} />,
       title: "Comunidad",
       description: "Aprendizaje compartido",
+      link: "/community",
       delay: 0.1
     },
     {
       icon: <Calendar className="h-6 w-6 md:h-8 md:w-8 text-primary mb-2 md:mb-4 animate-pulse-slow" style={{ animationDelay: "1s" }} />,
       title: "Eventos",
       description: "Hackathons y workshops",
+      link: "/events",
       delay: 0.2
     },
     {
       icon: <BookOpen className="h-6 w-6 md:h-8 md:w-8 text-primary mb-2 md:mb-4 animate-pulse-slow" style={{ animationDelay: "1.5s" }} />,
       title: "Recursos",
       description: "Tutoriales y herramientas",
+      link: "/resources",
       delay: 0.3
     }
   ];
@@ -50,8 +55,9 @@ const HeroFeatureIcons = ({ onMount }: HeroFeatureIconsProps) => {
       className="mt-12 md:mt-24 grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8 opacity-0"
     >
       {features.map((feature, index) => (
-        <div 
+        <Link 
           key={index}
+          to={feature.link}
           className="glass-card p-4 md:p-6 text-center hover:scale-105 transition-transform hover:shadow-neon-blue" 
           style={{ transitionDelay: `${feature.delay}s` }}
         >
@@ -62,7 +68,7 @@ const HeroFeatureIcons = ({ onMount }: HeroFeatureIconsProps) => {
           <p className="text-xs md:text-sm text-muted-foreground mt-1 md:mt-2">
             {feature.description}
           </p>
-        </div>
+        </Link>
       ))}
     </div>
   );

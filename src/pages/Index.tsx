@@ -5,6 +5,7 @@ import Features from "@/components/home/Features";
 import Stats from "@/components/home/Stats";
 import News from "@/components/home/News";
 import AboutClub from "@/components/home/AboutClub";
+import SocialMedia from "@/components/home/SocialMedia";
 import { useIsMobile } from "@/hooks/use-mobile";
 
 const Index = () => {
@@ -16,6 +17,7 @@ const Index = () => {
       <div className={isMobile ? "space-y-8" : "space-y-16"}>
         <News />
         <Stats />
+        <SocialMedia />
         <AboutClub />
         <Features />
       </div>

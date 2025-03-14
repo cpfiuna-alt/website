@@ -25,7 +25,7 @@ export const contactInfo = {
   },
   socials: {
     github: "https://github.com/cpfiuna", // TODO: Replace with actual URL
-    discord: "https://discord.gg/cpfiuna", // TODO: Replace with actual URL
+    discord: "https://discord.gg/b3GeJtUN", 
     twitter: "https://twitter.com/cpfIUNA", // TODO: Replace with actual URL
     instagram: "https://instagram.com/cpfiuna", // TODO: Replace with actual URL
     youtube: "https://youtube.com/cpfiuna", // TODO: Replace with actual URL
@@ -39,6 +39,7 @@ export const navLinks = [
   { name: "Eventos", to: "/events" },
   { name: "Proyectos", to: "/projects" },
   { name: "Recursos", to: "/resources" },
+  { name: "Comunidad", to: "/community" },
   { name: "Blog", to: "/blog" },
   { name: "Contacto", to: "/contact" },
 ];

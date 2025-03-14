@@ -39,7 +39,7 @@ const MediaKit = () => {
               <h3 className="text-xl font-semibold mb-4">Logo</h3>
               <div className="bg-muted/20 flex-grow rounded-lg p-8 flex items-center justify-center mb-6">
                 <img 
-                  src="/path/to/logo.png" 
+                  src="/lovable-uploads/0917dd1a-52c0-48f9-8df8-7ac2546d2955.png" 
                   alt="Logo del Club de Programación FIUNA"
                   className="max-w-full max-h-48"
                 />

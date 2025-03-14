@@ -23,6 +23,7 @@ import Transparency from "./pages/Transparency";
 import Estatuto from "./pages/Estatuto";
 import CourseDetail from "./pages/CourseDetail";
 import Documentation from "./pages/Documentation";
+import Community from "./pages/Community";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -52,6 +53,7 @@ const App = () => (
             <Route path="/press" element={<Press />} />
             <Route path="/transparency" element={<Transparency />} />
             <Route path="/estatuto" element={<Estatuto />} />
+            <Route path="/community" element={<Community />} />
             <Route path="/docs/*" element={<Documentation />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
