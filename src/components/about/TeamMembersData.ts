@@ -27,7 +27,7 @@ export const teamMembers = [
   {
     name: "Daniel Villalba",
     role: "Secretario",
-    image: "/placeholder.svg",
+    image: "/miembros/danielvillalba.png",
     bio: "Apasionado por la educación en tecnología y el desarrollo de habilidades de programación.",
     social: {
       github: "https://github.com/DaniVillalba03",
