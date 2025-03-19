@@ -4,7 +4,7 @@ export const teamMembers = [
     name: "David Giménez",
     role: "Presidente",
     image: "/miembros/davidgimenez.png",
-    bio: "Estudiante de Ingeniería Informática con especialización en Inteligencia Artificial.",
+    bio: "Estudiante de Ingeniería Mecatrónica con especialización en Inteligencia Artificial.",
     social: {
       github: "https://github.com/carlosgimenez",
       linkedin: "https://linkedin.com/in/carlosgimenez",
