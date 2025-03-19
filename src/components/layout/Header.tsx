@@ -9,6 +9,7 @@ const navigation = [
   { name: "Inicio", to: "/" },
   { name: "Sobre Nosotros", to: "/about" },
   { name: "Eventos", to: "/events" },
+  { name: "Logros", to: "/logros" },
   { name: "Proyectos", to: "/projects" },
   { name: "Recursos", to: "/resources" },
   { name: "Blog", to: "/blog" },
@@ -107,7 +108,7 @@ const Header = () => {
           </button>
         </div>
 
-        {/* Mobile Menu */}
+        {/* Mobile Menu - Now with a permanent background */}
         <div
           className={`md:hidden fixed inset-0 z-50 bg-background/95 backdrop-blur-lg transition-transform duration-300 ease-in-out ${
             isMenuOpen ? "translate-x-0" : "translate-x-full"

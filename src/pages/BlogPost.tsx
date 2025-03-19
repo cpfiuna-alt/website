@@ -1,128 +1,120 @@
 
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Layout from "@/components/layout/Layout";
-import { Link, useParams } from "react-router-dom";
-import { CalendarIcon, Clock, User, Tag, ArrowLeft, Share2, Bookmark, ThumbsUp, MessageSquare } from "lucide-react";
-import { format } from "date-fns";
-import { es } from "date-fns/locale";
-
-// Sample blog post data (in a real app, this would come from an API/PayloadCMS)
-const blogPost = {
-  id: "1",
-  title: "Cómo comenzar en el mundo de la programación competitiva",
-  slug: "como-comenzar-programacion-competitiva",
-  publishedAt: new Date("2023-09-15"),
-  updatedAt: new Date("2023-09-20"),
-  author: {
-    name: "Carlos Gómez",
-    avatar: "https://images.unsplash.com/photo-1599566150163-29194dcaad36?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80",
-    role: "Coordinador de Competencias"
-  },
-  estimatedReadTime: 8,
-  tags: ["Programación Competitiva", "Algoritmos", "Consejos", "Principiantes"],
-  excerpt: "Una guía completa para quienes desean iniciarse en el fascinante mundo de la programación competitiva, con recursos, consejos y estrategias para competidores novatos.",
-  coverImage: "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
-  content: `
-    <h2>¿Qué es la programación competitiva?</h2>
-    <p>La programación competitiva es un deporte mental donde los participantes resuelven problemas de programación algorítmicos en un tiempo limitado. Estas competencias ponen a prueba no solo tus habilidades de programación, sino también tu capacidad para resolver problemas, trabajar bajo presión y pensar creativamente.</p>
-    
-    <p>Participar en competencias de programación ofrece múltiples beneficios:</p>
-    
-    <ul>
-      <li>Mejora tus habilidades de resolución de problemas</li>
-      <li>Fortalece tu comprensión de estructuras de datos y algoritmos</li>
-      <li>Aumenta tu eficiencia y velocidad de codificación</li>
-      <li>Te prepara para entrevistas técnicas en grandes empresas de tecnología</li>
-      <li>Te conecta con una comunidad global de programadores</li>
-    </ul>
-    
-    <h2>Plataformas populares</h2>
-    <p>Existen varias plataformas donde puedes practicar y participar en competencias regularmente:</p>
-    
-    <h3>1. Codeforces</h3>
-    <p>Probablemente la plataforma más popular para programación competitiva, con contests regulares y una gran comunidad.</p>
-    
-    <h3>2. LeetCode</h3>
-    <p>Excelente para practicar problemas comunes de entrevistas, con una gran colección de problemas clasificados por dificultad y tema.</p>
-    
-    <h3>3. HackerRank</h3>
-    <p>Ofrece desafíos de codificación en múltiples dominios, desde algoritmos hasta inteligencia artificial.</p>
-    
-    <h3>4. ICPC</h3>
-    <p>La International Collegiate Programming Contest es una de las competencias más prestigiosas a nivel mundial para estudiantes universitarios.</p>
-    
-    <h2>Recursos recomendados para principiantes</h2>
-    <p>Si estás comenzando, te recomendamos estos recursos:</p>
-    
-    <h3>Libros</h3>
-    <ul>
-      <li>"Competitive Programming 3" por Steven Halim y Felix Halim</li>
-      <li>"Introduction to Algorithms" por CLRS</li>
-      <li>"Algorithm Design Manual" por Steven Skiena</li>
-    </ul>
-    
-    <h3>Cursos en línea</h3>
-    <ul>
-      <li>Coursera: "Algoritmos" por la Universidad de Princeton</li>
-      <li>edX: "Estructuras de Datos y Algoritmos" por la Universidad de California, San Diego</li>
-      <li>YouTube: Canal "Errichto" y "William Lin"</li>
-    </ul>
-    
-    <h2>Consejos para comenzar</h2>
-    <ol>
-      <li><strong>Domina un lenguaje de programación:</strong> Elige uno (C++, Java o Python son populares) y domínalo antes de intentar problemas complejos.</li>
-      <li><strong>Aprende las estructuras de datos fundamentales:</strong> Arrays, listas enlazadas, pilas, colas, árboles, grafos, etc.</li>
-      <li><strong>Estudia algoritmos básicos:</strong> Búsqueda binaria, ordenamiento, programación dinámica, algoritmos codiciosos, etc.</li>
-      <li><strong>Practica regularmente:</strong> Resuelve al menos un problema diario.</li>
-      <li><strong>Participa en contests:</strong> Incluso si no te sientes preparado, participar en competencias reales es la mejor forma de aprender.</li>
-      <li><strong>Analiza soluciones:</strong> Después de cada competencia, estudia las soluciones de otros participantes para aprender técnicas nuevas.</li>
-      <li><strong>Únete a una comunidad:</strong> Participar en comunidades como el Club de Programación FIUNA te conectará con otros entusiastas y mentores.</li>
-    </ol>
-    
-    <h2>Próximos pasos</h2>
-    <p>En el Club de Programación FIUNA organizamos talleres regulares, sesiones de práctica y competencias internas para ayudarte a mejorar tus habilidades. ¡No dudes en unirte a nuestras actividades!</p>
-    
-    <p>Recuerda que la programación competitiva es un camino largo, pero extremadamente gratificante. La constancia y la perseverancia son claves para el éxito. ¡Esperamos verte pronto en nuestras competencias!</p>
-  `,
-  relatedPosts: [
-    {
-      id: "2",
-      title: "Estructuras de datos avanzadas para competencias",
-      slug: "estructuras-datos-avanzadas",
-      coverImage: "https://images.unsplash.com/photo-1629904853893-c2c8c2417bac?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80"
-    },
-    {
-      id: "3",
-      title: "Guía de preparación para el ICPC",
-      slug: "guia-preparacion-icpc",
-      coverImage: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80"
-    },
-    {
-      id: "4",
-      title: "Optimización de algoritmos: técnicas avanzadas",
-      slug: "optimizacion-algoritmos",
-      coverImage: "https://images.unsplash.com/photo-1504639725590-34d0984388bd?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80"
-    }
-  ]
-};
+import { Link, useParams, useNavigate } from "react-router-dom";
+import { CalendarIcon, Clock, User, Tag, ArrowLeft, ThumbsUp, Bookmark, Share2 } from "lucide-react";
+import MarkdownRenderer from "@/components/MarkdownRenderer";
+import { getContentBySlug, getAllBlogPosts } from "@/utils/staticSiteGenerator";
+import { BlogFrontMatter } from "@/utils/markdownUtils";
+import { formatDate } from "@/utils/markdownUtils";
+import { Container } from "@/components/ui/container";
+import { Avatar } from "@/components/ui/avatar";
 
 const BlogPost = () => {
-  // In a real app, we would fetch the post based on the slug
   const { slug } = useParams<{ slug: string }>();
+  const navigate = useNavigate();
+  const [post, setPost] = useState<{frontMatter: BlogFrontMatter, content: string} | null>(null);
+  const [relatedPosts, setRelatedPosts] = useState<BlogFrontMatter[]>([]);
+  const [loading, setLoading] = useState(true);
   
   useEffect(() => {
+    const fetchBlogPost = async () => {
+      if (!slug) {
+        navigate("/blog");
+        return;
+      }
+      
+      setLoading(true);
+      try {
+        const blogPost = await getContentBySlug<BlogFrontMatter>('blog', slug);
+        if (blogPost) {
+          setPost(blogPost);
+          // Set page title
+          document.title = `${blogPost.frontMatter.title} | Club de Programación FIUNA`;
+          
+          // Get related posts based on tags
+          const allPosts = await getAllBlogPosts();
+          const filtered = allPosts
+            .filter(p => p.frontMatter.slug !== slug) // Exclude current post
+            .filter(p => {
+              // Find posts with at least one common tag
+              return p.frontMatter.tags?.some(tag => 
+                blogPost.frontMatter.tags?.includes(tag)
+              );
+            })
+            .map(p => p.frontMatter)
+            .slice(0, 3); // Limit to 3 related posts
+          
+          setRelatedPosts(filtered);
+        } else {
+          // Redirect to blog page if post not found
+          navigate("/blog");
+        }
+      } catch (error) {
+        console.error("Error fetching blog post:", error);
+        navigate("/blog");
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    fetchBlogPost();
     // Scroll to top when page loads
     window.scrollTo(0, 0);
-    
-    // Set page title
-    document.title = `${blogPost.title} | Club de Programación FIUNA`;
-  }, []);
+  }, [slug, navigate]);
+
+  if (loading) {
+    return (
+      <Layout>
+        <div className="py-20">
+          <Container>
+            <div className="animate-pulse space-y-6 max-w-3xl mx-auto">
+              <div className="h-8 bg-muted/50 rounded-lg w-3/4"></div>
+              <div className="h-6 bg-muted/50 rounded-lg w-1/2"></div>
+              <div className="h-[300px] bg-muted/50 rounded-lg w-full"></div>
+              <div className="space-y-4">
+                <div className="h-4 bg-muted/50 rounded w-full"></div>
+                <div className="h-4 bg-muted/50 rounded w-full"></div>
+                <div className="h-4 bg-muted/50 rounded w-5/6"></div>
+              </div>
+            </div>
+          </Container>
+        </div>
+      </Layout>
+    );
+  }
+
+  if (!post) {
+    return (
+      <Layout>
+        <div className="py-20">
+          <Container>
+            <div className="text-center">
+              <h1 className="text-3xl font-bold mb-4">Post no encontrado</h1>
+              <p className="mb-6 text-muted-foreground">
+                El artículo que buscas no existe o ha sido removido.
+              </p>
+              <Link 
+                to="/blog"
+                className="inline-flex items-center text-primary hover:underline"
+              >
+                <ArrowLeft className="mr-2 h-4 w-4" />
+                Volver al blog
+              </Link>
+            </div>
+          </Container>
+        </div>
+      </Layout>
+    );
+  }
+
+  const { frontMatter, content } = post;
 
   return (
     <Layout>
-      <article className="relative py-12 md:py-20">
+      <article className="relative pb-16">
         {/* Back to blog button */}
-        <div className="container mx-auto px-6 mb-8">
+        <div className="container mx-auto px-6 py-6">
           <Link 
             to="/blog"
             className="inline-flex items-center text-sm text-muted-foreground hover:text-primary transition-colors"
@@ -132,150 +124,147 @@ const BlogPost = () => {
           </Link>
         </div>
         
-        {/* Cover image */}
-        <div className="relative w-full h-[300px] md:h-[500px] mb-12 overflow-hidden">
-          <div className="absolute inset-0 bg-black/40 z-10"></div>
+        {/* Cover image and header */}
+        <div className="relative w-full h-[400px] md:h-[500px] mb-8 overflow-hidden">
+          <div className="absolute inset-0 bg-black/50 z-10"></div>
           <img 
-            src={blogPost.coverImage} 
-            alt={blogPost.title}
+            src={frontMatter.image || "/placeholder.svg"} 
+            alt={frontMatter.title}
             className="w-full h-full object-cover"
+            onError={(e) => {
+              e.currentTarget.src = "/placeholder.svg";
+            }}
           />
           
-          <div className="absolute inset-0 z-20 flex items-center justify-center">
+          <div className="absolute inset-0 z-20 flex items-center">
             <div className="container px-6 mx-auto">
-              <div className="max-w-3xl mx-auto text-center">
-                <div className="flex items-center justify-center space-x-2 mb-4">
-                  {blogPost.tags.slice(0, 2).map((tag) => (
+              <div className="max-w-3xl mx-auto">
+                <div className="flex items-center space-x-2 mb-4">
+                  {frontMatter.tags && frontMatter.tags.slice(0, 2).map((tag) => (
                     <span key={tag} className="px-3 py-1 text-xs font-medium bg-primary/40 backdrop-blur-sm text-white rounded-full border border-white/30">
                       {tag}
                     </span>
                   ))}
                 </div>
                 <h1 className="text-3xl md:text-5xl font-bold mb-4 text-white">
-                  {blogPost.title}
+                  {frontMatter.title}
                 </h1>
+                
+                {/* Author and date section */}
+                <div className="flex items-center mt-6">
+                  <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center text-white overflow-hidden mr-3">
+                    <User className="h-5 w-5" />
+                  </div>
+                  <div>
+                    <div className="text-white font-medium">Escrito por {frontMatter.author}</div>
+                    <div className="text-white/70 text-sm flex items-center mt-1">
+                      <CalendarIcon className="h-3 w-3 mr-1" />
+                      {formatDate(frontMatter.date)}
+                      <span className="mx-2">•</span>
+                      <Clock className="h-3 w-3 mr-1" />
+                      {frontMatter.readTime || "5 min"} de lectura
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </div>
         
-        {/* Post metadata */}
+        {/* Social sharing buttons */}
+        <div className="container mx-auto px-6 mb-8">
+          <div className="max-w-3xl mx-auto flex justify-between items-center">
+            <div className="flex space-x-4">
+              <button className="flex items-center text-sm text-muted-foreground hover:text-primary">
+                <ThumbsUp className="h-4 w-4 mr-2" />
+                Me gusta
+              </button>
+              <button className="flex items-center text-sm text-muted-foreground hover:text-primary">
+                <Share2 className="h-4 w-4 mr-2" />
+                Compartir
+              </button>
+            </div>
+            <button className="flex items-center text-sm text-muted-foreground hover:text-primary">
+              <Bookmark className="h-4 w-4 mr-2" />
+              Guardar
+            </button>
+          </div>
+        </div>
+        
+        {/* Post content */}
         <div className="container mx-auto px-6">
           <div className="max-w-3xl mx-auto">
-            <div className="flex items-center justify-between mb-8 pb-8 border-b">
-              <div className="flex items-center">
-                <img 
-                  src={blogPost.author.avatar} 
-                  alt={blogPost.author.name}
-                  className="w-12 h-12 rounded-full mr-4 object-cover"
-                />
-                <div>
-                  <div className="font-medium">{blogPost.author.name}</div>
-                  <div className="text-sm text-muted-foreground">{blogPost.author.role}</div>
-                </div>
-              </div>
-              
-              <div className="flex flex-col items-end">
-                <div className="flex items-center text-sm text-muted-foreground mb-1">
-                  <CalendarIcon className="mr-1 h-4 w-4" />
-                  {format(blogPost.publishedAt, "d 'de' MMMM, yyyy", { locale: es })}
-                </div>
-                <div className="flex items-center text-sm text-muted-foreground">
-                  <Clock className="mr-1 h-4 w-4" />
-                  {blogPost.estimatedReadTime} min de lectura
-                </div>
-              </div>
+            <div className="prose prose-lg dark:prose-invert max-w-none mb-12">
+              <MarkdownRenderer content={content} />
             </div>
-            
-            {/* Post content */}
-            <div className="prose prose-lg dark:prose-invert max-w-none mb-12"
-              dangerouslySetInnerHTML={{ __html: blogPost.content }}
-            />
             
             {/* Tags */}
-            <div className="flex flex-wrap gap-2 mb-8">
-              {blogPost.tags.map((tag) => (
-                <Link
-                  key={tag}
-                  to={`/blog/tag/${tag.toLowerCase().replace(/\s+/g, '-')}`}
-                  className="flex items-center px-3 py-1 bg-muted hover:bg-muted/80 rounded-full text-sm transition-colors"
-                >
-                  <Tag className="mr-1 h-3 w-3" />
-                  {tag}
-                </Link>
-              ))}
-            </div>
-            
-            {/* Share and actions */}
-            <div className="flex justify-between items-center mb-12 pb-8 border-b">
-              <div className="flex space-x-4">
-                <button className="flex items-center gap-1 text-sm text-muted-foreground hover:text-primary transition-colors">
-                  <ThumbsUp className="h-4 w-4" />
-                  <span>Me gusta</span>
-                </button>
-                <button className="flex items-center gap-1 text-sm text-muted-foreground hover:text-primary transition-colors">
-                  <MessageSquare className="h-4 w-4" />
-                  <span>Comentar</span>
-                </button>
-              </div>
-              
-              <div className="flex space-x-4">
-                <button className="flex items-center gap-1 text-sm text-muted-foreground hover:text-primary transition-colors">
-                  <Bookmark className="h-4 w-4" />
-                  <span>Guardar</span>
-                </button>
-                <button className="flex items-center gap-1 text-sm text-muted-foreground hover:text-primary transition-colors">
-                  <Share2 className="h-4 w-4" />
-                  <span>Compartir</span>
-                </button>
-              </div>
-            </div>
-            
-            {/* Author bio */}
-            <div className="bg-muted/30 rounded-xl p-6 mb-12">
-              <div className="flex items-center mb-4">
-                <img 
-                  src={blogPost.author.avatar} 
-                  alt={blogPost.author.name}
-                  className="w-16 h-16 rounded-full mr-4 object-cover"
-                />
-                <div>
-                  <h3 className="text-lg font-medium">{blogPost.author.name}</h3>
-                  <p className="text-sm text-muted-foreground">{blogPost.author.role}</p>
-                </div>
-              </div>
-              <p className="text-muted-foreground">
-                Apasionado por la programación competitiva y la enseñanza de algoritmos. 
-                Ha participado en múltiples competencias nacionales e internacionales, 
-                incluyendo el ICPC Latinoamericano. Actualmente coordina el equipo de 
-                competencias del Club de Programación FIUNA.
-              </p>
-            </div>
-            
-            {/* Related posts */}
-            <div className="mb-12">
-              <h2 className="text-2xl font-bold mb-6">Artículos relacionados</h2>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                {blogPost.relatedPosts.map((post) => (
-                  <Link 
-                    key={post.id} 
-                    to={`/blog/${post.slug}`}
-                    className="group"
+            {frontMatter.tags && frontMatter.tags.length > 0 && (
+              <div className="flex flex-wrap gap-2 mb-8">
+                {frontMatter.tags.map((tag) => (
+                  <Link
+                    key={tag}
+                    to={`/blog?tag=${tag.toLowerCase().replace(/\s+/g, '-')}`}
+                    className="flex items-center px-3 py-1 bg-muted hover:bg-muted/80 rounded-full text-sm transition-colors"
                   >
-                    <div className="rounded-lg overflow-hidden mb-3">
-                      <img 
-                        src={post.coverImage} 
-                        alt={post.title}
-                        className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
-                      />
-                    </div>
-                    <h3 className="font-medium group-hover:text-primary transition-colors">
-                      {post.title}
-                    </h3>
+                    <Tag className="mr-1 h-3 w-3" />
+                    {tag}
                   </Link>
                 ))}
               </div>
+            )}
+            
+            {/* Author bio */}
+            <div className="glass-card p-6 mb-12">
+              <div className="flex items-start gap-4">
+                <Avatar className="h-16 w-16 rounded-full">
+                  <div className="bg-primary/20 h-full w-full flex items-center justify-center text-primary">
+                    <User className="h-8 w-8" />
+                  </div>
+                </Avatar>
+                <div>
+                  <h3 className="text-lg font-semibold mb-1">{frontMatter.author}</h3>
+                  <p className="text-sm text-muted-foreground mb-2">Coordinador de Competencias</p>
+                  <p className="text-sm">
+                    Apasionado por la programación competitiva y la enseñanza de algoritmos. Ha participado en 
+                    múltiples competencias nacionales e internacionales, incluyendo el ICPC Latinoamericano.
+                  </p>
+                </div>
+              </div>
             </div>
+            
+            {/* Related articles */}
+            {relatedPosts.length > 0 && (
+              <div className="mb-12">
+                <h2 className="text-2xl font-bold mb-6">Artículos relacionados</h2>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  {relatedPosts.map((relatedPost) => (
+                    <Link 
+                      key={relatedPost.slug} 
+                      to={`/blog/${relatedPost.slug}`}
+                      className="group"
+                    >
+                      <div className="overflow-hidden rounded-lg h-40 mb-2">
+                        <img 
+                          src={relatedPost.image || "/placeholder.svg"} 
+                          alt={relatedPost.title}
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                          onError={(e) => {
+                            e.currentTarget.src = "/placeholder.svg";
+                          }}
+                        />
+                      </div>
+                      <h3 className="font-medium group-hover:text-primary transition-colors line-clamp-2">
+                        {relatedPost.title}
+                      </h3>
+                      <div className="text-xs text-muted-foreground mt-1">
+                        {formatDate(relatedPost.date)}
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </article>

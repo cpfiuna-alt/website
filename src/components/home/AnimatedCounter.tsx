@@ -57,14 +57,12 @@ const AnimatedCounter = ({ end, duration = 2000, label, icon }: CounterProps) =>
   return (
     <div 
       ref={countRef}
-      className="glass-card p-6 text-center hover:scale-105 transition-transform"
+      className="glass-card p-6 text-center hover:translate-y-[-5px] transition-transform hover:shadow-neon-blue"
     >
       <div className="flex justify-center mb-4">
-        <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center text-primary">
-          {icon}
-        </div>
+        {icon}
       </div>
-      <div className="text-3xl font-bold mb-2">{count}+</div>
+      <div className="text-3xl font-bold mb-2">{count}</div>
       <div className="text-muted-foreground">{label}</div>
     </div>
   );

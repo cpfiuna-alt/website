@@ -1,57 +1,113 @@
 
 import { Link } from "react-router-dom";
-import { ArrowRight, Clock, Calendar, Tag } from "lucide-react";
+import { ArrowRight, Calendar } from "lucide-react";
+import NewsCard from "@/components/NewsCard";
+import { useLatestContent } from "@/hooks/useLatestContent";
+import { Badge } from "@/components/ui/badge";
+import { formatDateEs } from "@/utils/dateUtils";
 
-type NewsItem = {
-  id: string;
-  title: string;
-  excerpt: string;
-  date: string;
-  category: string;
-  imageSrc?: string;
-  link: string;
+const NewsCardSkeleton = () => (
+  <div className="glass-card animate-pulse rounded-xl overflow-hidden">
+    <div className="h-48 bg-gray-300 dark:bg-gray-700"></div>
+    <div className="p-6 space-y-3">
+      <div className="flex items-center text-sm space-x-2">
+        <div className="h-4 w-4 bg-gray-300 dark:bg-gray-700 rounded"></div>
+        <div className="h-4 w-24 bg-gray-300 dark:bg-gray-700 rounded"></div>
+      </div>
+      <div className="h-6 bg-gray-300 dark:bg-gray-700 rounded"></div>
+      <div className="h-4 bg-gray-300 dark:bg-gray-700 rounded"></div>
+      <div className="h-4 w-1/2 bg-gray-300 dark:bg-gray-700 rounded"></div>
+      <div className="h-5 w-20 bg-gray-300 dark:bg-gray-700 rounded"></div>
+    </div>
+  </div>
+);
+
+// Add a fallback card in case we need to show demo content
+const FallbackNewsCard = ({ index }: { index: number }) => {
+  const fallbackItems = [
+    {
+      title: "Nuevo curso de Python para principiantes",
+      excerpt: "Aprende los fundamentos de la programación con uno de los lenguajes más populares.",
+      date: new Date().toISOString(),
+      category: "Cursos",
+      slug: "python-principiantes"
+    },
+    {
+      title: "Hackathon: Soluciones tecnológicas sostenibles",
+      excerpt: "Participa en este evento de 48 horas para crear soluciones a problemas ambientales.",
+      date: new Date().toISOString(),
+      category: "Eventos",
+      slug: "hackathon-soluciones-sostenibles"
+    },
+    {
+      title: "Proyecto destacado: Análisis de datos climáticos",
+      excerpt: "Herramienta de visualización y análisis de datos meteorológicos históricos.",
+      date: new Date().toISOString(),
+      category: "Proyectos",
+      slug: "analisis-datos-climaticos"
+    },
+    {
+      title: "Workshop: Introducción a React",
+      excerpt: "Aprende los fundamentos de React y crea tu primera aplicación en este taller práctico.",
+      date: new Date().toISOString(),
+      category: "Eventos",
+      slug: "workshop-introduccion-react"
+    }
+  ];
+
+  const item = fallbackItems[index % fallbackItems.length];
+  
+  // Determine the correct URL path based on category
+  let path = '';
+  switch(item.category) {
+    case 'Cursos':
+      path = `/course/${item.slug}`;
+      break;
+    case 'Eventos':
+      path = `/events/${item.slug}`;
+      break;
+    case 'Proyectos':
+      path = `/projects/${item.slug}`;
+      break;
+    case 'Blog':
+      path = `/blog/${item.slug}`;
+      break;
+    default:
+      path = `/${item.slug}`;
+  }
+  
+  return (
+    <NewsCard
+      key={`fallback-${index}`}
+      title={item.title}
+      date={formatDateEs(new Date(item.date), "d MMM yyyy")}
+      excerpt={item.excerpt}
+      category={item.category}
+      imageSrc={"/placeholder.svg"}
+      slug={path}
+    />
+  );
 };
 
 const News = () => {
-  // Datos de muestra para las noticias
-  const newsItems: NewsItem[] = [
-    {
-      id: "1",
-      title: "Inscripciones abiertas: Curso de Introducción a Python",
-      excerpt: "Aprende los fundamentos de Python con nuestro curso práctico para principiantes.",
-      date: "15 Oct 2023",
-      category: "Cursos",
-      imageSrc: "/placeholder.svg",
-      link: "/events/python-course",
-    },
-    {
-      id: "2",
-      title: "Hackathon Nacional 2023: ¡Inscripciones abiertas!",
-      excerpt: "Participa en el mayor evento de programación del país y demuestra tus habilidades.",
-      date: "23 Sep 2023",
-      category: "Eventos",
-      imageSrc: "/placeholder.svg",
-      link: "/events/hackathon-2023",
-    },
-    {
-      id: "3",
-      title: "Lanzamiento: Nueva plataforma de recursos para miembros",
-      excerpt: "Accede a cientos de tutoriales, cursos y herramientas exclusivas para miembros del club.",
-      date: "05 Sep 2023",
-      category: "Recursos",
-      imageSrc: "/placeholder.svg",
-      link: "/resources/platform",
-    },
-    {
-      id: "4",
-      title: "Entrevista: Egresados exitosos en la industria tech",
-      excerpt: "Conoce las historias de ex-miembros del club que están triunfando en empresas globales.",
-      date: "28 Ago 2023",
-      category: "Blog",
-      imageSrc: "/placeholder.svg",
-      link: "/blog/alumni-success",
-    },
-  ];
+  const { latestContent, isLoading } = useLatestContent(4);
+  console.log("Latest content in News component:", latestContent);
+
+  // Function to get the correct path for each content item
+  const getContentPath = (item: { category: string; slug: string }) => {
+    switch(item.category) {
+      case 'Blog':
+        return `/blog/${item.slug}`;
+      case 'Eventos':
+        return `/events/${item.slug}`;
+      case 'Proyectos':
+        return `/projects/${item.slug}`;
+      case 'Cursos':
+        return `/course/${item.slug}`;
+      default:
+        return `/${item.slug}`;
+    }
+  };
 
   return (
     <section className="py-16 section-padding relative">
@@ -66,40 +122,31 @@ const News = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {newsItems.map((item) => (
-            <div 
-              key={item.id} 
-              className="glass-card overflow-hidden group hover:shadow-neon-blue transition-all duration-300"
-            >
-              <div className="h-40 bg-muted relative overflow-hidden">
-                <img 
-                  src={item.imageSrc} 
-                  alt={item.title}
-                  className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-300"
-                />
-                <div className="absolute top-0 right-0 bg-primary/90 text-primary-foreground px-3 py-1 text-xs font-medium">
-                  {item.category}
-                </div>
-              </div>
-              <div className="p-5">
-                <div className="flex items-center text-xs text-muted-foreground mb-3">
-                  <Calendar className="h-3 w-3 mr-1" />
-                  <span>{item.date}</span>
-                </div>
-                <h3 className="font-semibold mb-2 line-clamp-2">{item.title}</h3>
-                <p className="text-sm text-muted-foreground mb-4 line-clamp-2">
-                  {item.excerpt}
-                </p>
-                <Link 
-                  to={item.link}
-                  className="text-primary text-sm font-medium inline-flex items-center hover:underline"
-                >
-                  Leer más
-                  <ArrowRight className="ml-1 h-3 w-3" />
-                </Link>
-              </div>
-            </div>
-          ))}
+          {isLoading ? (
+            // Show skeletons while loading
+            Array(4).fill(0).map((_, index) => (
+              <NewsCardSkeleton key={`skeleton-${index}`} />
+            ))
+          ) : latestContent && latestContent.length > 0 ? (
+            // Show actual content
+            latestContent.map((item) => (
+              <NewsCard
+                key={item.id}
+                title={item.title}
+                date={formatDateEs(new Date(item.date), "d MMM yyyy")}
+                excerpt={item.excerpt}
+                category={item.category}
+                imageSrc={item.imageSrc}
+                slug={getContentPath(item)}
+                eventType={item.eventType}
+              />
+            ))
+          ) : (
+            // Use fallback content when no data is available
+            Array(4).fill(0).map((_, index) => (
+              <FallbackNewsCard key={`fallback-${index}`} index={index} />
+            ))
+          )}
         </div>
 
         <div className="mt-10 text-center">

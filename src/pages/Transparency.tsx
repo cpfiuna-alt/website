@@ -2,12 +2,13 @@
 import React from "react";
 import Layout from "@/components/layout/Layout";
 import { Download, FileText, Calendar, DollarSign, Trophy, Users, Briefcase, Lightbulb } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 const Transparency = () => {
   return (
     <Layout>
       {/* Hero section */}
-      <section className="pt-20 pb-16 relative overflow-hidden">
+      <section className="relative py-24 px-6 overflow-hidden bg-gradient-to-b from-black to-background/90 dark:from-black dark:to-background/70">
         <div className="absolute inset-0 bg-grid-white/5 [mask-image:linear-gradient(to_bottom,transparent,black)]"></div>
         <div className="container mx-auto px-6 relative z-10">
           <div className="max-w-3xl mx-auto text-center">
@@ -94,7 +95,7 @@ const Transparency = () => {
                 
                 <a 
                   href={`/reports/annual-report-${year}.pdf`}
-                  className="flex items-center justify-center gap-2 p-2 rounded-lg bg-muted/30 hover:bg-muted/50 text-sm transition-colors"
+                  className="flex items-center justify-center gap-2 px-4 py-2 rounded-full bg-muted/30 hover:bg-muted/50 text-sm transition-colors hover:shadow-neon-blue"
                 >
                   <Download className="h-4 w-4" />
                   <span>Descargar informe completo</span>
@@ -223,13 +224,12 @@ const Transparency = () => {
               </div>
               
               <div className="mt-8 text-center">
-                <a 
-                  href="/reports/financial-report-2023.pdf"
-                  className="inline-flex items-center justify-center gap-2 px-4 py-2 bg-muted/30 hover:bg-muted/50 rounded-lg text-sm transition-colors"
-                >
-                  <FileText className="h-4 w-4" />
-                  <span>Informe financiero detallado</span>
-                </a>
+                <Button variant="outline" className="rounded-full hover:shadow-neon-blue transition-all">
+                  <a href="/reports/financial-report-2023.pdf" className="flex items-center gap-2">
+                    <FileText className="h-4 w-4" />
+                    <span>Informe financiero detallado</span>
+                  </a>
+                </Button>
               </div>
             </div>
           </div>
@@ -286,13 +286,12 @@ const Transparency = () => {
             </div>
             
             <div className="mt-8 text-center">
-              <a 
-                href="/projects"
-                className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-primary hover:bg-primary/90 text-primary-foreground rounded-full font-medium transition-colors"
-              >
-                <Lightbulb className="h-5 w-5" />
-                <span>Ver todos los proyectos</span>
-              </a>
+              <Button className="rounded-full px-6 py-3 hover:shadow-neon-blue transition-all">
+                <a href="/projects" className="flex items-center gap-2 text-primary-foreground">
+                  <Lightbulb className="h-5 w-5" />
+                  <span>Ver todos los proyectos</span>
+                </a>
+              </Button>
             </div>
           </div>
         </div>

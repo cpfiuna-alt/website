@@ -17,9 +17,9 @@ const Index = () => {
       <div className={isMobile ? "space-y-8" : "space-y-16"}>
         <News />
         <Stats />
-        <SocialMedia />
         <AboutClub />
         <Features />
+        <SocialMedia />
       </div>
     </Layout>
   );

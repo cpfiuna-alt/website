@@ -3,22 +3,21 @@ import Layout from "@/components/layout/Layout";
 import { Instagram, Twitter, Youtube, Disc } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
+import { contactInfo } from "@/config/site";
 
 const Community = () => {
   return (
     <Layout>
       {/* Hero Section */}
-      <section className="pt-20 pb-16 relative overflow-hidden">
+      <section className="relative py-24 px-6 overflow-hidden bg-gradient-to-b from-black to-background/90 dark:from-black dark:to-background/70">
         <div className="absolute inset-0 bg-grid-white/5 [mask-image:linear-gradient(to_bottom,transparent,black)]"></div>
-        <div className="container mx-auto px-6 relative z-10">
-          <div className="max-w-3xl mx-auto text-center">
-            <h1 className="text-4xl md:text-5xl font-bold mb-6">
-              Nuestra <span className="gradient-text">Comunidad</span>
-            </h1>
-            <p className="text-xl text-muted-foreground">
-              Conectate con nuestra comunidad a través de redes sociales, Discord y más.
-            </p>
-          </div>
+        <div className="container mx-auto max-w-5xl relative z-10">
+          <h1 className="text-4xl md:text-5xl font-bold mb-6 text-center">
+            Nuestra <span className="gradient-text">Comunidad</span>
+          </h1>
+          <p className="text-xl text-muted-foreground text-center max-w-3xl mx-auto">
+            Conectate con nuestra comunidad a través de redes sociales, Discord y más.
+          </p>
         </div>
       </section>
 
@@ -27,10 +26,10 @@ const Community = () => {
         <div className="container mx-auto max-w-6xl">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-16">
             <a 
-              href="https://youtube.com/cpfiuna"
+              href={contactInfo.socials.youtube}
               target="_blank"
               rel="noreferrer"
-              className="glass-card p-6 flex flex-col items-center justify-center hover:shadow-neon-blue transition-all"
+              className="glass-card p-6 flex flex-col items-center justify-center hover:scale-105 hover:shadow-neon-blue transition-all"
             >
               <Youtube className="h-12 w-12 text-red-500 mb-4" />
               <h3 className="text-xl font-semibold mb-2">YouTube</h3>
@@ -38,10 +37,10 @@ const Community = () => {
             </a>
             
             <a 
-              href="https://instagram.com/cpfiuna"
+              href={contactInfo.socials.instagram}
               target="_blank" 
               rel="noreferrer"
-              className="glass-card p-6 flex flex-col items-center justify-center hover:shadow-neon-blue transition-all"
+              className="glass-card p-6 flex flex-col items-center justify-center hover:scale-105 hover:shadow-neon-blue transition-all"
             >
               <Instagram className="h-12 w-12 text-pink-500 mb-4" />
               <h3 className="text-xl font-semibold mb-2">Instagram</h3>
@@ -49,10 +48,10 @@ const Community = () => {
             </a>
             
             <a 
-              href="https://twitter.com/cpfIUNA"
+              href={contactInfo.socials.twitter}
               target="_blank"
               rel="noreferrer"
-              className="glass-card p-6 flex flex-col items-center justify-center hover:shadow-neon-blue transition-all"
+              className="glass-card p-6 flex flex-col items-center justify-center hover:scale-105 hover:shadow-neon-blue transition-all"
             >
               <Twitter className="h-12 w-12 text-blue-400 mb-4" />
               <h3 className="text-xl font-semibold mb-2">Twitter</h3>
@@ -60,10 +59,10 @@ const Community = () => {
             </a>
             
             <a 
-              href="https://discord.gg/b3GeJtUN"
+              href={contactInfo.socials.discord}
               target="_blank"
               rel="noreferrer"
-              className="glass-card p-6 flex flex-col items-center justify-center hover:shadow-neon-blue transition-all"
+              className="glass-card p-6 flex flex-col items-center justify-center hover:scale-105 hover:shadow-neon-blue transition-all"
             >
               <Disc className="h-12 w-12 text-purple-500 mb-4" />
               <h3 className="text-xl font-semibold mb-2">Discord</h3>
@@ -82,7 +81,7 @@ const Community = () => {
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-10">
             {[1, 2, 3].map((item) => (
-              <div key={item} className="glass-card overflow-hidden hover:shadow-neon-blue transition-all">
+              <div key={item} className="glass-card overflow-hidden hover:scale-105 hover:shadow-neon-blue transition-all">
                 <div className="aspect-video bg-muted/20 dark:bg-black/30 flex items-center justify-center">
                   <img 
                     src="/placeholder.svg" 
@@ -94,7 +93,7 @@ const Community = () => {
                   <h3 className="text-xl font-semibold mb-2">Título del Video {item}</h3>
                   <p className="text-muted-foreground mb-4">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam euismod magna vel.</p>
                   <a 
-                    href="https://youtube.com/cpfiuna"
+                    href={contactInfo.socials.youtube}
                     target="_blank"
                     rel="noreferrer"
                     className="inline-flex items-center text-primary hover:underline"
@@ -108,8 +107,8 @@ const Community = () => {
           </div>
           
           <div className="text-center">
-            <Button asChild variant="default">
-              <a href="https://youtube.com/cpfiuna" target="_blank" rel="noreferrer">
+            <Button asChild variant="default" className="rounded-full px-6 py-2 hover:scale-105 hover:shadow-neon-blue transition-all">
+              <a href={contactInfo.socials.youtube} target="_blank" rel="noreferrer">
                 Ver más videos
               </a>
             </Button>
@@ -137,8 +136,8 @@ const Community = () => {
           </div>
           
           <div className="text-center">
-            <Button asChild variant="default">
-              <a href="https://instagram.com/cpfiuna" target="_blank" rel="noreferrer">
+            <Button asChild variant="default" className="rounded-full px-6 py-2 hover:scale-105 hover:shadow-neon-blue transition-all">
+              <a href={contactInfo.socials.instagram} target="_blank" rel="noreferrer">
                 Seguirnos en Instagram
               </a>
             </Button>
@@ -155,7 +154,7 @@ const Community = () => {
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-10">
             {[1, 2, 3].map((item) => (
-              <div key={item} className="glass-card overflow-hidden hover:shadow-neon-blue transition-all">
+              <div key={item} className="glass-card overflow-hidden hover:scale-105 hover:shadow-neon-blue transition-all">
                 <div className="aspect-video bg-muted/20 dark:bg-black/30 flex items-center justify-center">
                   <img 
                     src="/placeholder.svg" 
@@ -175,6 +174,14 @@ const Community = () => {
                 </div>
               </div>
             ))}
+          </div>
+          
+          <div className="text-center mt-8">
+            <Button asChild variant="default" className="rounded-full px-6 py-2 hover:scale-105 hover:shadow-neon-blue transition-all">
+              <Link to="/projects">
+                Ver todos los proyectos
+              </Link>
+            </Button>
           </div>
         </div>
       </section>

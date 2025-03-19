@@ -1,5 +1,5 @@
 
-import { Youtube, Instagram, Twitter } from "lucide-react";
+import { Youtube, Instagram, Twitter, Disc } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { contactInfo } from "@/config/site";
@@ -125,7 +125,7 @@ const SocialMedia = () => {
                   </div>
                   <div>
                     <p className="font-semibold">Club de Programación FIUNA</p>
-                    <p className="text-sm text-muted-foreground">@cpfIUNA</p>
+                    <p className="text-sm text-muted-foreground">@cpfiuna</p>
                   </div>
                 </div>
                 <p className="text-sm mb-3">

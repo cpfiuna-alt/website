@@ -1,0 +1,41 @@
+            88                       .o88o.        
+   .dP     .8'                       888 `" Yb     
+ .dP      .8'   .ooooo.  oo.ooooo.  o888oo   `Yb   
+dP       .8'   d88' `"Y8  888' `88b  888       `Yb 
+Yb      .8'    888        888   888  888       .dP 
+ `Yb   .8'     888   .o8  888   888  888     .dP   
+   `Yb 88      `Y8bod8P'  888bod8P' o888o   dP     
+                          888                      
+                         o888o                     
+                                         
+/* TEAM */
+  Club de Programacion FIUNA
+  Site: https://cpfiuna.io
+  Twitter: @cpfiuna
+  Instagram: @cpfiuna
+  GitHub: https://github.com/cpfiuna
+  Discord: https://discord.gg/fncpNatR
+  Location: San Lorenzo, Paraguay
+
+/* THANKS */
+  Gracias a todos los miembros y colaboradores del Club de Programacion FIUNA!
+  
+/* SITE */
+  Estandares: HTML5, CSS3, JavaScript, TypeScript, React
+  Componentes: React, Tailwind CSS, shadcn/ui
+  Software: VS Code, GitHub, Vite
+
+/* EASTER EGG */
+  Felicitaciones por encontrar nuestro archivo humans.txt! 
+  
+  01001000 01101111 01101100 01100001 00100000 01101101 01110101 01101110 01100100 01101111 00100001
+  
+  Si estas leyendo esto, probablemente seas un desarrollador curioso. 
+  Nos encantaria tenerte en nuestro club! Envianos un mensaje a 
+  clubdeprogramacion@ing.una.py mencionando que encontraste nuestro easter egg 
+  y quizas obtengas una sorpresa. ;)
+  
+  Sabias que la primera computadora de Paraguay fue instalada en 1970 en el
+  Centro Nacional de Computacion (CNC) de la Universidad Nacional de Asuncion?
+  Era una IBM 1130 con 16KB de memoria principal. Ahora tu telefono es
+  aproximadamente 1 millon de veces mas potente!

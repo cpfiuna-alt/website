@@ -12,7 +12,7 @@ const ThemeToggle = ({ className = "" }: ThemeToggleProps) => {
   return (
     <button
       onClick={toggleTheme}
-      className={`relative p-2 rounded-full bg-secondary hover:bg-secondary/80 transition-all duration-300 ${className}`}
+      className={`relative inline-flex items-center justify-center p-2 rounded-full bg-secondary hover:bg-secondary/80 transition-all duration-300 ${className}`}
       aria-label="Toggle theme"
       title={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
     >

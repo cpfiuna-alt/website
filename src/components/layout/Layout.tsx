@@ -46,8 +46,11 @@ const Layout = ({ children }: LayoutProps) => {
     };
   }, []);
 
+  // Check if we're on the home page to determine if we should add the gradient background
+  const isHomePage = location.pathname === '/';
+
   return (
-    <div className="flex flex-col min-h-screen overflow-x-hidden w-full">
+    <div className={`flex flex-col min-h-screen overflow-x-hidden w-full ${!isHomePage ? 'bg-gradient-to-b from-background via-background/95 to-background/90' : ''}`}>
       <Header />
       <main className="flex-grow pt-16 md:pt-20 w-full">
         {children}

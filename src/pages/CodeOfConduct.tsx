@@ -17,7 +17,7 @@ const CodeOfConduct = () => {
           
           <div className="mb-12 text-center">
             <Shield className="h-12 w-12 mx-auto mb-4 text-primary" />
-            <h1 className="text-3xl md:text-5xl font-bold mb-4">Código de Conducta</h1>
+            <h1 className="text-3xl md:text-5xl font-bold mb-4">Código de <span className="text-gradient">Conducta</span></h1>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
               Guía para mantener un ambiente inclusivo, respetuoso y colaborativo en nuestra comunidad
             </p>

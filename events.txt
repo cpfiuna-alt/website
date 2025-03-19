@@ -1,0 +1,49 @@
+
+# Event Ideas for Club de Programación FIUNA
+
+## Hackathons
+- FIUNA Code Jam - 48-hour internal hackathon focused on solving university problems
+- Health Tech Hackathon - Collaboration with Medicine faculty to create healthcare solutions
+- Sustainable Development Hackathon - Focus on UN sustainable development goals
+- Industry-sponsored Hackathon - Partner with local tech companies
+
+## Workshops
+- Git and GitHub Workflow - Version control fundamentals
+- Modern Web Development - React, TypeScript, and Tailwind CSS
+- Mobile App Development - React Native introduction
+- Machine Learning Fundamentals - Python and TensorFlow basics
+- Cybersecurity Fundamentals - Basic security principles and practices
+- Cloud Computing - AWS/Azure/GCP introduction
+- DevOps Fundamentals - CI/CD pipelines and infrastructure as code
+- Blockchain and Web3 Development - Smart contracts and dApps
+
+## Competitions
+- ACM ICPC Training Sessions - Competitive programming practice
+- Google Code Jam Watch Party - Collaborative problem-solving
+- Kaggle Competition Group - Form teams for data science competitions
+- Microsoft Imagine Cup - Form teams for the global student technology competition
+
+## Conferences
+- TechFIUNA - Annual technology conference hosted by the programming club
+- Research Symposium - Showcase student research projects
+- Industry Expert Talks - Invite professionals from tech companies
+- Alumni Success Stories - Invite former students to share experiences
+
+## Community Events
+- Code and Coffee - Weekly informal coding sessions
+- Open Source Contribution Day - Help students contribute to open source
+- Tech Book Club - Monthly discussion of programming books
+- Networking Mixer - Connect students with industry professionals
+- New Member Orientation - Introduction to club resources and opportunities
+
+## Special Programs
+- Mentorship Program - Pair experienced developers with beginners
+- Summer of Code - Similar to GSoC but for local projects
+- Industry Internship Fair - Connect students with internship opportunities
+- Research Assistant Matching - Connect students with professors needing programming help
+
+## Online Events
+- Virtual Coding Challenges - Regular programming contests
+- Webinar Series - Online talks from remote experts
+- Discord Community Events - Online game nights and social events
+- Remote Pair Programming Sessions - Practice collaborative coding

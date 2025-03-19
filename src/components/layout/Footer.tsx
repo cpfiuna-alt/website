@@ -1,6 +1,6 @@
 
 import { Link } from "react-router-dom";
-import { Github, Twitter, Mail, ArrowUpRight, Instagram, Youtube, FileEdit, BugIcon } from "lucide-react";
+import { Github, Twitter, Mail, Instagram, Youtube, FileEdit, BugIcon } from "lucide-react";
 import Logo from "@/components/ui/Logo";
 import { contactInfo, footerLinks } from "@/config/site";
 
@@ -87,6 +87,12 @@ const Footer = () => {
       pageName = "Press";
     } else if (path === "/transparency") {
       pageName = "Transparency";
+    } else if (path === "/community") {
+      pageName = "Community";
+    } else if (path === "/estatuto") {
+      pageName = "Estatuto";
+    } else if (path.startsWith("/docs")) {
+      pageName = "Documentation";
     }
     
     return `https://github.com/cpfiuna/website/edit/main/src/pages/${pageName}.tsx`;
@@ -99,7 +105,7 @@ const Footer = () => {
           <div className="lg:col-span-4">
             <Logo className="mx-auto lg:mx-0" />
             <p className="mt-4 text-sm text-muted-foreground text-center lg:text-left">
-              Club de Programación FIUNA es una comunidad de estudiantes y profesionales
+              El Club de Programación es una comunidad de estudiantes y profesionales
               apasionados por la programación y la tecnología.
             </p>
             <div className="mt-8 flex flex-wrap justify-center lg:justify-start gap-4">
@@ -122,7 +128,7 @@ const Footer = () => {
             <div>
               <h3 className="text-base font-semibold">Navegación</h3>
               <ul className="mt-4 space-y-3">
-                {footerLinks.main.slice(0, 4).map((item) => (
+                {footerLinks.main.map((item) => (
                   <li key={item.name}>
                     <Link
                       to={item.to}
@@ -137,16 +143,6 @@ const Footer = () => {
             <div>
               <h3 className="text-base font-semibold">Recursos</h3>
               <ul className="mt-4 space-y-3">
-                {footerLinks.main.slice(4).map((item) => (
-                  <li key={item.name}>
-                    <Link
-                      to={item.to}
-                      className="text-sm text-muted-foreground hover:text-primary transition-colors"
-                    >
-                      {item.name}
-                    </Link>
-                  </li>
-                ))}
                 {footerLinks.resources.map((item) => (
                   <li key={item.name}>
                     <Link
@@ -157,6 +153,14 @@ const Footer = () => {
                     </Link>
                   </li>
                 ))}
+                <li>
+                  <Link
+                    to="/docs"
+                    className="text-sm text-muted-foreground hover:text-primary transition-colors"
+                  >
+                    Documentación
+                  </Link>
+                </li>
               </ul>
             </div>
             <div>
@@ -199,7 +203,15 @@ const Footer = () => {
             </a>
           </div>
           <p className="text-xs text-muted-foreground text-center md:text-right">
-            &copy; {new Date().getFullYear()} Club de Programación FIUNA. Todos los derechos reservados.
+            &copy; {new Date().getFullYear()} 
+            <a 
+              href="/humans.txt" 
+              target="_blank" 
+              className="hover:text-primary transition-colors ml-1"
+              rel="noopener noreferrer"
+            >
+              Club de Programación FIUNA
+            </a>. Todos los derechos reservados.
           </p>
         </div>
       </div>

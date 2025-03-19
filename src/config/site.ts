@@ -20,13 +20,13 @@ export const siteConfig = {
 export const contactInfo = {
   email: "clubdeprogramacion@ing.una.py",
   location: {
-    name: "Facultad de Ingeniería UNA",
-    address: "Campus Universitario, San Lorenzo, Paraguay",
+    name: "Universidad Nacional de Asunción",
+    address: "Facultad de Ingeniería\nCampus Universitario\nSan Lorenzo - Paraguay",
   },
   socials: {
     github: "https://github.com/cpfiuna", // TODO: Replace with actual URL
     discord: "https://discord.gg/b3GeJtUN", 
-    twitter: "https://twitter.com/cpfIUNA", // TODO: Replace with actual URL
+    twitter: "https://twitter.com/cpfiuna", // Updated to lowercase
     instagram: "https://instagram.com/cpfiuna", // TODO: Replace with actual URL
     youtube: "https://youtube.com/cpfiuna", // TODO: Replace with actual URL
   },
@@ -37,6 +37,7 @@ export const navLinks = [
   { name: "Inicio", to: "/" },
   { name: "Sobre Nosotros", to: "/about" },
   { name: "Eventos", to: "/events" },
+  { name: "Logros", to: "/logros" },
   { name: "Proyectos", to: "/projects" },
   { name: "Recursos", to: "/resources" },
   { name: "Comunidad", to: "/community" },
