@@ -32,7 +32,7 @@ export const teamMembers = [
     social: {
       github: "https://github.com/DaniVillalba03",
       linkedin: "https://linkedin.com/in/",
-      instagram: "https://instagram.com/danivillalba03,
+      instagram: "https://instagram.com/danivillalba03",
       email: "mailto:daniel.villalba@fiuna.edu.py",
     },
   },
