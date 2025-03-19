@@ -1,6 +1,6 @@
 
 import { Link } from "react-router-dom";
-import { Github, Twitter, Mail, Instagram, Youtube, FileEdit, BugIcon } from "lucide-react";
+import { Github, Mail, Instagram, Youtube, FileEdit, BugIcon } from "lucide-react";
 import Logo from "@/components/ui/Logo";
 import { contactInfo, footerLinks } from "@/config/site";
 
@@ -22,6 +22,22 @@ const DiscordLogo = ({ className, size = 24, ...props }) => (
   </svg>
 );
 
+const Twitter = (props) => (
+  <svg 
+    xmlns="http://www.w3.org/2000/svg" 
+    width="24" 
+    height="24" 
+    viewBox="0 0 24 24" 
+    fill="none" 
+    stroke="currentColor" 
+    strokeWidth="2" 
+    strokeLinecap="round" 
+    strokeLinejoin="round" 
+    {...props}
+  >
+    <path d="M14.258 10.152L20 4h-2L12.742 9.848 8.658 4H4l6.142 8.67L4 20h2l5.588-6.128L15.342 20H20l-6.446-9.152zM6.284 6h1.969l9.418 12h-1.969L6.284 6z" />
+  </svg>
+);
 const Footer = () => {
   const socials = [
     {
