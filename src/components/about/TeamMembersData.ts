@@ -6,10 +6,10 @@ export const teamMembers = [
     image: "/miembros/davidgimenez.png",
     bio: "Estudiante de Ingeniería Mecatrónica con especialización en Inteligencia Artificial.",
     social: {
-      github: "https://github.com/carlosgimenez",
-      linkedin: "https://linkedin.com/in/carlosgimenez",
-      instagram: "https://instagram.com/carlosgimenez",
-      email: "mailto:clubdeprogramacion@ing.una.py",
+      github: "https://github.com/davidgimenezs",
+      linkedin: "https://linkedin.com/in/davidgimenezs",
+      instagram: "https://instagram.com/davidgimenez_s",
+      email: "mailto:david.gimenezs@fiuna.edu.py",
     },
   },
   {
@@ -18,10 +18,10 @@ export const teamMembers = [
     image: "/miembros/oscaralderete.png",
     bio: "Especialista en desarrollo web y gestión de proyectos de software.",
     social: {
-      github: "https://github.com/lauramartinez",
-      linkedin: "https://linkedin.com/in/lauramartinez",
-      instagram: "https://instagram.com/lauramartinez",
-      email: "mailto:clubdeprogramacion@ing.una.py",
+      github: "https://github.com/Osukaru17",
+      linkedin: "https://linkedin.com/in/",
+      instagram: "https://instagram.com/oscar_alderete99",
+      email: "mailto:osualderete@fiuna.edu.py",
     },
   },
   {
@@ -30,10 +30,10 @@ export const teamMembers = [
     image: "/placeholder.svg",
     bio: "Apasionado por la educación en tecnología y el desarrollo de habilidades de programación.",
     social: {
-      github: "https://github.com/miguelacosta",
-      linkedin: "https://linkedin.com/in/miguelacosta",
-      instagram: "https://instagram.com/miguelacosta",
-      email: "mailto:clubdeprogramacion@ing.una.py",
+      github: "https://github.com/DaniVillalba03",
+      linkedin: "https://linkedin.com/in/",
+      instagram: "https://instagram.com/danivillalba03,
+      email: "mailto:daniel.villalba@fiuna.edu.py",
     },
   },
   {
@@ -42,10 +42,10 @@ export const teamMembers = [
     image: "/placeholder.svg",
     bio: "Encargado de la organización de eventos y gestión de la comunicación del club.",
     social: {
-      github: "https://github.com/sofiabenitez",
-      linkedin: "https://linkedin.com/in/sofiabenitez",
-      instagram: "https://instagram.com/sofiabenitez",
-      email: "mailto:clubdeprogramacion@ing.una.py",
+      github: "https://github.com/",
+      linkedin: "https://linkedin.com/in/",
+      instagram: "https://instagram.com/ivanjara019",
+      email: "mailto:ivan.jara@fiuna.edu.py",
     },
   },
 ];
