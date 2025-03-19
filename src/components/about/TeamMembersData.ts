@@ -3,7 +3,7 @@ export const teamMembers = [
   {
     name: "David Giménez",
     role: "Presidente",
-    image: "/placeholder.svg",
+    image: "/miembros/davidgimenez.png",
     bio: "Estudiante de Ingeniería Informática con especialización en Inteligencia Artificial.",
     social: {
       github: "https://github.com/carlosgimenez",
@@ -15,7 +15,7 @@ export const teamMembers = [
   {
     name: "Oscar Alderete",
     role: "Vicepresidente",
-    image: "/placeholder.svg",
+    image: "/miembros/oscaralderete.png",
     bio: "Especialista en desarrollo web y gestión de proyectos de software.",
     social: {
       github: "https://github.com/lauramartinez",
