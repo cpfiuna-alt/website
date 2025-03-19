@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Upload } from "lucide-react";
 
@@ -11,6 +10,23 @@ interface ResourceUploadModalProps {
 
 const ResourceUploadModal = ({ isOpen, onClose, onSubmit, resourceTypes }: ResourceUploadModalProps) => {
   if (!isOpen) return null;
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    // === RESOURCE UPLOAD ENDPOINT ===
+    // Replace this with actual API endpoint for file uploads
+    // Example:
+    // const formData = new FormData(e.target as HTMLFormElement);
+    // const response = await fetch('https://api.yoursite.com/resources/upload', {
+    //   method: 'POST',
+    //   body: formData, // Use FormData to handle file uploads
+    // });
+    // if (!response.ok) throw new Error('Upload failed');
+    // === END RESOURCE UPLOAD ENDPOINT ===
+    
+    onSubmit(e);
+  };
 
   return (
     <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
@@ -25,7 +41,7 @@ const ResourceUploadModal = ({ isOpen, onClose, onSubmit, resourceTypes }: Resou
           </button>
         </div>
         
-        <form onSubmit={onSubmit}>
+        <form onSubmit={handleSubmit}>
           <div className="space-y-4">
             <div>
               <label className="block text-sm font-medium mb-1">Título</label>

@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { useToast } from "@/components/ui/use-toast";
 
@@ -21,24 +20,45 @@ const ContactForm = () => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    // Simulate form submission
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    try {
+      // === FORM SUBMISSION ENDPOINT ===
+      // Replace this comment and the code below with actual API endpoint
+      // Example: 
+      // const response = await fetch('https://api.yoursite.com/contact', {
+      //   method: 'POST',
+      //   headers: { 'Content-Type': 'application/json' },
+      //   body: JSON.stringify(formData)
+      // });
+      // if (!response.ok) throw new Error('Failed to submit form');
+      // === END FORM SUBMISSION ENDPOINT ===
 
-    // Show success message
-    toast({
-      title: "Mensaje enviado",
-      description: "Hemos recibido tu mensaje. Te responderemos a la brevedad.",
-      variant: "default",
-    });
+      // Simulate form submission
+      await new Promise((resolve) => setTimeout(resolve, 1000));
 
-    // Reset form
-    setFormData({
-      name: "",
-      email: "",
-      subject: "",
-      message: "",
-    });
-    setIsSubmitting(false);
+      // Show success message
+      toast({
+        title: "Mensaje enviado",
+        description: "Hemos recibido tu mensaje. Te responderemos a la brevedad.",
+        variant: "default",
+      });
+
+      // Reset form
+      setFormData({
+        name: "",
+        email: "",
+        subject: "",
+        message: "",
+      });
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Hubo un problema al enviar tu mensaje. Por favor intenta de nuevo.",
+        variant: "destructive",
+      });
+      console.error("Form submission error:", error);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (

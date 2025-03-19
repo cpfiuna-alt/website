@@ -27,12 +27,16 @@ const NewsletterSubscribe = () => {
     setLoading(true);
     
     try {
-      // This would be replaced with an actual API call
-      // await fetch('/api/subscribe', {
+      // === NEWSLETTER SUBSCRIPTION ENDPOINT ===
+      // Replace this comment with actual API endpoint
+      // Example:
+      // const response = await fetch('/api/subscribe', {
       //   method: 'POST',
       //   body: JSON.stringify({ email }),
       //   headers: { 'Content-Type': 'application/json' }
       // });
+      // if (!response.ok) throw new Error('Subscription failed');
+      // === END NEWSLETTER SUBSCRIPTION ENDPOINT ===
       
       // For now, we'll just simulate a successful subscription
       await new Promise(resolve => setTimeout(resolve, 500));
@@ -41,6 +45,7 @@ const NewsletterSubscribe = () => {
       setEmail("");
     } catch (error) {
       toast.error("Hubo un error al suscribirte. Por favor intenta de nuevo.");
+      console.error("Newsletter subscription error:", error);
     } finally {
       setLoading(false);
     }

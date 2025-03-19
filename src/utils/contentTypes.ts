@@ -7,3 +7,19 @@ export interface ContentItem {
   content: string;
   slug: string;
 }
+
+// Course specific type
+export interface CourseItem extends ContentItem {
+  frontMatter: {
+    id: number | string;
+    title: string;
+    description: string;
+    level: string;
+    duration: string;
+    instructor: string;
+    image: string;
+    tags: string[];
+    slug: string;
+    date?: string;
+  };
+}
