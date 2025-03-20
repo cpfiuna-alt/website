@@ -1,7 +1,6 @@
-
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Github, Instagram, Twitter, Mail, MessageSquare, AlertTriangle, Edit2, Youtube } from "lucide-react";
+import { Github, Instagram, Twitter, Mail, MessageSquare, AlertTriangle, Edit2, Youtube, FileCode, FileImage } from "lucide-react";
 
 const Footer: React.FC = () => {
   const location = useLocation();
@@ -14,7 +13,7 @@ const Footer: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
           <div className="lg:col-span-1 flex flex-col items-center md:items-start">
             <Link to="/humans.txt" className="font-bold text-2xl mb-4 inline-block">
-              <img src="/public/cpf-logo.png" alt="CPF FIUNA Logo" className="h-10 w-auto" />
+              <img src="/cpf-logo.png" alt="CPF FIUNA Logo" className="h-10 w-auto" />
             </Link>
             <p className="text-[#94a3b8] dark:text-[#94a3b8] mb-4 max-w-md text-sm">
               El Club de Programación FIUNA es una organización estudiantil
@@ -174,4 +173,47 @@ const Footer: React.FC = () => {
   );
 };
 
+const LogoSection = () => {
+  return (
+    <div className="glass-card p-8 flex flex-col h-full">
+      <h3 className="text-xl font-semibold mb-4">Logo</h3>
+      <div className="bg-muted/20 flex-grow rounded-lg p-8 flex items-center justify-center mb-6">
+        <img 
+          src="/cpf-logo.png" 
+          alt="Logo del Club de Programación FIUNA"
+          className="max-w-full max-h-48"
+        />
+      </div>
+      <p className="text-sm text-muted-foreground mb-6">
+        Nuestro logo puede utilizarse sobre fondos claros u oscuros. Mantenga siempre un área
+        de protección alrededor del logo.
+      </p>
+      <div className="flex flex-wrap gap-3">
+        <a 
+          href="/media-kit/logo/svg" 
+          className="flex items-center gap-2 px-3 py-2 bg-muted/30 hover:bg-muted/50 rounded-lg text-sm transition-colors"
+        >
+          <FileCode className="h-4 w-4" />
+          <span>SVG</span>
+        </a>
+        <a 
+          href="/media-kit/logo/png" 
+          className="flex items-center gap-2 px-3 py-2 bg-muted/30 hover:bg-muted/50 rounded-lg text-sm transition-colors"
+        >
+          <FileImage className="h-4 w-4" />
+          <span>PNG</span>
+        </a>
+        <a 
+          href="/media-kit/logo/pdf" 
+          className="flex items-center gap-2 px-3 py-2 bg-muted/30 hover:bg-muted/50 rounded-lg text-sm transition-colors"
+        >
+          <FileImage className="h-4 w-4" />
+          <span>PDF</span>
+        </a>
+      </div>
+    </div>
+  );
+};
+
 export default Footer;
+export { LogoSection };

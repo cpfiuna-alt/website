@@ -14,7 +14,7 @@ const Logo = ({ className = "", variant = "full" }: LogoProps) => {
     >
       {variant === "full" ? (
         <img 
-          src="/public/cpf-logo.png" 
+          src="/cpf-logo.png" 
           alt="Club de Programación FIUNA" 
           className="h-10"
         />

@@ -52,7 +52,7 @@ const Navbar: React.FC = () => {
               to="/"
               className="flex items-center space-x-2"
             >
-              <img src="/public/cpf-logo.png" alt="CPF FIUNA Logo" className="h-8 w-auto" />
+              <img src="/cpf-logo.png" alt="CPF FIUNA Logo" className="h-8 w-auto" />
             </Link>
           </div>
 

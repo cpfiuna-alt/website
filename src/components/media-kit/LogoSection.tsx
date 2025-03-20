@@ -8,7 +8,7 @@ const LogoSection = () => {
       <h3 className="text-xl font-semibold mb-4">Logo</h3>
       <div className="bg-muted/20 flex-grow rounded-lg p-8 flex items-center justify-center mb-6">
         <img 
-          src="/public/cpf-logo.png" 
+          src="cpf-logo.png" 
           alt="Logo del Club de Programación FIUNA"
           className="max-w-full max-h-48"
         />
