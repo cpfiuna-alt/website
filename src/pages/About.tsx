@@ -53,24 +53,24 @@ const timelineEvents = [
   },
   {
     year: "2022",
-    title: "Reconocimiento Internacional",
-    description: "Miembros del club representaron a Paraguay en competencias internacionales de programación, poniendo a FIUNA en el mapa tecnológico mundial.",
+    title: "Renovación y Expansión",
+    description: "Bajo la presidencia de Mathias Barrios, el CPF vive una etapa de transformación. Se moderniza su identidad con un nuevo logo y una presencia digital más fuerte a través de redes sociales. Se forma un equipo de marketing y se amplían las oportunidades para los miembros con cursos como Git y GitHub, el mantenimiento de las salas R de FIUNA y la participación en eventos clave como el TIGO Campus Party y el IEEExtreme. Además, el club fortalece su rol en la comunidad IEEE, coorganizando el IEEExtreme junto a IEEE RAS y IEEE CS de la UNA.",
     icon: Award,
-    image: "/images/timeline/international.jpg"
+    image: "/images/timeline/expansion.jpg"
   },
   {
     year: "2023",
-    title: "Hub de Innovación",
-    description: "Establecimos el primer espacio físico permanente del club, convertido en hub de innovación y desarrollo de proyectos para estudiantes.",
-    icon: Star,
-    image: "/images/timeline/hub.jpg"
+    title: "Consolidación y Representación",
+    description: "El CPF continúa siendo un referente en la facultad, manteniendo su participación en el Campus Party y en la hackathon del año. Aunque la organización interna atraviesa una fase de transición, el impacto de los esfuerzos realizados sigue presente. La comunidad formada sigue creciendo y los conocimientos compartidos en la gestión anterior continúan beneficiando a los miembros.",
+    icon: Users,
+    image: "/images/timeline/consolidation.jpg"
   },
   {
     year: "2024",
-    title: "Presente y Futuro",
-    description: "Continuamos expandiendo nuestra misión con nuevas iniciativas, talleres especializados y proyectos de impacto social a través de la tecnología.",
-    icon: Star,
-    image: "/images/timeline/present.jpg"
+    title: "Una Pausa para el Futuro",
+    description: "El club entra en un período de pausa estratégica, permitiendo que la comunidad reflexione sobre nuevos caminos a seguir. El legado de la modernización y las experiencias acumuladas servirán como base para futuras generaciones que deseen revitalizar el CPF con nuevos proyectos y desafíos.",
+    icon: Lightbulb,
+    image: "/images/timeline/future.jpg"
   },
   {
     year: "2025",

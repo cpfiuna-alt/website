@@ -39,7 +39,7 @@ export const teamMembers = [
   {
     name: "Iván Jara",
     role: "Tesorero",
-    image: "/placeholder.svg",
+    image: "/miembros/ivanjara.png",
     bio: "Encargado de la organización de eventos y gestión de la comunicación del club.",
     social: {
       github: "https://github.com/",
