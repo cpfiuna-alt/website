@@ -523,11 +523,11 @@ const Estatuto = () => {
                       
                       <div className="mt-8 grid grid-cols-2 gap-8">
                         <div className="text-center">
-                          <p className="font-medium">Juan Pérez</p>
+                          <p className="font-medium">David Giménez</p>
                           <p className="text-sm text-muted-foreground">Presidente</p>
                         </div>
                         <div className="text-center">
-                          <p className="font-medium">María González</p>
+                          <p className="font-medium">Daviel Villalba</p>
                           <p className="text-sm text-muted-foreground">Secretaria</p>
                         </div>
                       </div>
