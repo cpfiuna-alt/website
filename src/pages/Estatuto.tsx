@@ -518,17 +518,17 @@ const Estatuto = () => {
                     <div className="pt-8 border-t border-border">
                       <p className="text-center text-sm text-muted-foreground">
                         Aprobado en Asamblea General Constitutiva del Club de Programación FIUNA, 
-                        realizada el día 15 de marzo de 2017 en el Campus Universitario de San Lorenzo.
+                        realizada el día 11 de abril de 2025 en el Campus Universitario de San Lorenzo.
                       </p>
                       
                       <div className="mt-8 grid grid-cols-2 gap-8">
                         <div className="text-center">
-                          <p className="font-medium">Juan Pérez</p>
+                          <p className="font-medium">David Giménez</p>
                           <p className="text-sm text-muted-foreground">Presidente</p>
                         </div>
                         <div className="text-center">
-                          <p className="font-medium">María González</p>
-                          <p className="text-sm text-muted-foreground">Secretaria</p>
+                          <p className="font-medium">Daviel Villalba</p>
+                          <p className="text-sm text-muted-foreground">Secretario</p>
                         </div>
                       </div>
                     </div>
