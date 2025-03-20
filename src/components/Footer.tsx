@@ -14,7 +14,7 @@ const Footer: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
           <div className="lg:col-span-1 flex flex-col items-center md:items-start">
             <Link to="/humans.txt" className="font-bold text-2xl mb-4 inline-block">
-              <img src="/cpf-logo.png" alt="CPF FIUNA Logo" className="h-10 w-auto" />
+              <img src="/public/cpf-logo.png" alt="CPF FIUNA Logo" className="h-10 w-auto" />
             </Link>
             <p className="text-[#94a3b8] dark:text-[#94a3b8] mb-4 max-w-md text-sm">
               El Club de Programación FIUNA es una organización estudiantil
