@@ -528,7 +528,7 @@ const Estatuto = () => {
                         </div>
                         <div className="text-center">
                           <p className="font-medium">Daviel Villalba</p>
-                          <p className="text-sm text-muted-foreground">Secretaria</p>
+                          <p className="text-sm text-muted-foreground">Secretario</p>
                         </div>
                       </div>
                     </div>
