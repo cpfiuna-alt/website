@@ -10,6 +10,9 @@ demoLink: "#"
 category: "data"
 featured: true
 slug: "analisis-datos-climaticos"
+status: "Abandonado"
+lastUpdated: "2023-11-15"
+team: ["María González", "Pedro Benítez", "Sofía Ramírez"]
 ---
 
 # Análisis de Datos Climáticos
@@ -48,15 +51,24 @@ Este proyecto nació como respuesta a la necesidad de datos climáticos accesibl
 
 ## Estado del proyecto
 
-La plataforma se encuentra en fase operativa con actualizaciones periódicas de datos. Estamos trabajando en la implementación de modelos más sofisticados de análisis predictivo y en la expansión de nuestra cobertura geográfica a países limítrofes para análisis regionales.
+El proyecto fue abandonado debido a la falta de financiamiento y recursos para mantener la infraestructura necesaria. Sin embargo, el código fuente sigue disponible para quienes deseen retomarlo o utilizarlo como base para proyectos similares.
+
+## Motivos del abandono
+
+- Dificultades para mantener actualizadas las fuentes de datos
+- Costos de infraestructura para procesamiento de grandes volúmenes de información
+- Cambios en las prioridades del equipo de desarrollo
+- Surgimiento de alternativas comerciales más completas
+
+## Lecciones aprendidas
+
+A pesar de su abandono, el proyecto generó aprendizajes valiosos en:
+
+- Técnicas de procesamiento de datos meteorológicos
+- Visualización científica de información compleja
+- Colaboración interdisciplinaria entre programadores y meteorólogos
+- Gestión de proyectos de código abierto con enfoque científico
 
 ## Contribución
 
-Buscamos colaboradores con experiencia en:
-
-- Ciencia de datos y estadística
-- Meteorología y climatología
-- Desarrollo frontend para visualizaciones científicas
-- Optimización de consultas en bases de datos de series temporales
-
-¡Ayúdanos a construir una herramienta que contribuya a la investigación climática y a la toma de decisiones informadas sobre nuestro ambiente!
+La documentación y el código siguen disponibles para referencia. Si estás interesado en retomar el proyecto, contáctanos para más información.

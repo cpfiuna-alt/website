@@ -10,6 +10,9 @@ demoLink: "https://neo-tracker.cpf.com.py"
 category: "space"
 featured: true
 slug: "neo-tracker"
+status: "Completado"
+lastUpdated: "2024-05-24"
+team: ["Ana López", "Carlos Méndez", "Julia Ramírez"]
 ---
 
 # NEO Tracker: Visualización 3D de Objetos Cercanos a la Tierra

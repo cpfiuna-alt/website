@@ -14,26 +14,26 @@ const Footer = () => {
       links: [
         { name: "Eventos", href: "/events" },
         { name: "Proyectos", href: "/projects" },
-        { name: "Recursos", href: "/resources" },
         { name: "Blog", href: "/blog" },
+        { name: "Logros", href: "/logros" },
       ],
     },
     {
-      title: "Comunidad",
+      title: "Navegación",
       links: [
+        { name: "Inicio", href: "/" },
         { name: "Sobre Nosotros", href: "/about" },
         { name: "Contacto", href: "/contact" },
         { name: "Código de Conducta", href: "/code-of-conduct" },
-        { name: "Estatuto", href: "/estatuto" },
       ],
     },
     {
       title: "Recursos",
       links: [
         { name: "Documentación", href: "/docs" },
+        { name: "Comunidad", href: "/community" },
         { name: "Media Kit", href: "/media-kit" },
         { name: "Prensa", href: "/press" },
-        { name: "Transparencia", href: "/transparency" },
       ],
     },
     {

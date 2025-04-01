@@ -12,7 +12,7 @@ export interface Project {
   repoUrl: string;
   demoUrl?: string;
   contributors: number;
-  status: "Activo" | "En Desarrollo" | "Completado";
+  status: "Activo" | "En Desarrollo" | "Completado" | "Abandonado";
   lastUpdated?: string;
   slug: string;
   
@@ -108,7 +108,7 @@ const projects: Project[] = [
     repoUrl: "https://github.com/cpfiuna/tech-library",
     demoUrl: "https://biblioteca.cpfiuna.io",
     contributors: 5,
-    status: "Activo",
+    status: "Abandonado",
     lastUpdated: "Febrero 2024",
     slug: "biblioteca-virtual",
     objectives: [
@@ -137,4 +137,3 @@ export const getProjectBySlug = (slug: string): Project | undefined => {
 export const getFeaturedProjects = (count: number = 3): Project[] => {
   return projects.slice(0, count);
 };
-

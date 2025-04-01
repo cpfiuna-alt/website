@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from 'react';
-import { parseMarkdown, ProjectFrontMatter } from '@/utils/markdownUtils';
+import { parseMarkdown, ProjectFrontMatter, GitHubStats } from '@/utils/markdownUtils';
 
 // Import all project markdown files
 const projectFiles = import.meta.glob('../content/projects/*.md', { as: 'raw', eager: true });
@@ -21,33 +21,51 @@ export function useProjects() {
           return;
         }
         
+        console.log("Loading projects from", Object.keys(projectFiles).length, "files");
+        
         const parsedProjects = await Promise.all(
           Object.entries(projectFiles).map(async ([path, content]) => {
             // Extract slug from path (filename without extension)
             const slug = path.split('/').pop()?.replace('.md', '') || '';
+            console.log("Processing project:", slug);
             
             try {
               // Parse the markdown content
               const { frontMatter, content: markdownContent } = parseMarkdown(content as string);
               
-              // Ensure frontMatter has all required fields
-              return {
+              // Ensure team is an array
+              let teamData = frontMatter.team || [];
+              if (!Array.isArray(teamData)) {
+                console.warn(`Team data for ${slug} is not an array:`, teamData);
+                teamData = [];
+              }
+              
+              // Convert to ProjectFrontMatter with required fields
+              const projectData: ProjectFrontMatter & { content: string } = {
                 id: frontMatter.id || slug,
                 title: frontMatter.title || "Untitled Project",
                 description: frontMatter.description || "",
+                technologies: frontMatter.technologies || [],
                 image: frontMatter.image || "/placeholder.svg",
-                tags: frontMatter.tags || [],
-                githubLink: frontMatter.githubLink || "#",
-                demoLink: frontMatter.demoLink || "",
                 category: frontMatter.category || "web",
+                team: teamData,
+                // Additional properties used by the existing codebase
+                tags: frontMatter.tags || [],
                 featured: frontMatter.featured || false,
-                status: frontMatter.status || "En desarrollo",
-                lastUpdated: frontMatter.lastUpdated || "",
-                team: frontMatter.team || [],
-                githubStats: frontMatter.githubStats || { stars: 0, forks: 0, issues: 0 },
-                content: markdownContent || "",
-                slug: slug // Important: Ensure slug comes from the filename
-              } as ProjectFrontMatter & { content: string };
+                slug: slug,
+                content: markdownContent,
+                status: frontMatter.status,
+                lastUpdated: frontMatter.lastUpdated,
+                startDate: frontMatter.startDate,
+                endDate: frontMatter.endDate,
+                githubLink: frontMatter.githubLink || frontMatter.githubUrl || "#",
+                demoLink: frontMatter.demoLink || frontMatter.demoUrl || "",
+                githubStats: frontMatter.githubStats || { stars: 0, forks: 0, issues: 0, contributors: 0 },
+                github: frontMatter.github || frontMatter.githubLink,
+                demo: frontMatter.demo || frontMatter.demoLink
+              };
+              
+              return projectData;
             } catch (error) {
               console.error(`Error parsing project file ${path}:`, error);
               // Return a default project object
@@ -55,22 +73,21 @@ export function useProjects() {
                 id: slug,
                 title: `Project ${slug}`,
                 description: "Project description unavailable",
+                technologies: ["misc"],
                 image: "/placeholder.svg",
-                tags: ["misc"],
-                githubLink: "#",
-                demoLink: "",
                 category: "web",
-                featured: false,
-                status: "En desarrollo",
-                lastUpdated: "",
                 team: [],
-                githubStats: { stars: 0, forks: 0, issues: 0 },
+                tags: ["misc"],
+                featured: false,
+                slug,
                 content: "",
-                slug: slug
+                status: "in-progress"
               } as ProjectFrontMatter & { content: string };
             }
           })
         );
+        
+        console.log("Projects loaded:", parsedProjects.length);
         
         // Sort projects by featured status and then by id
         parsedProjects.sort((a, b) => {
@@ -80,7 +97,7 @@ export function useProjects() {
           
           // If both have same featured status, sort by id
           if (typeof a.id === 'number' && typeof b.id === 'number') {
-            return b.id - a.id;
+            return Number(b.id) - Number(a.id);
           }
           
           // Default sort by string comparison of title

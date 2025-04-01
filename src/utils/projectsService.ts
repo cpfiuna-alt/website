@@ -4,20 +4,34 @@ import { ProjectFrontMatter } from './markdownUtils';
 
 // Get all projects (with sorting and filtering options)
 export async function getAllProjects({
-  sortBy = 'featured',
+  sortBy = 'date',
   filterByCategory,
   filterByTag,
-  featuredOnly = false,
   limit
 }: {
-  sortBy?: 'featured',
+  sortBy?: 'date',
   filterByCategory?: string,
   filterByTag?: string,
-  featuredOnly?: boolean,
   limit?: number
 } = {}): Promise<Array<{ frontMatter: ProjectFrontMatter, content: string, slug: string }>> {
   // Get all projects
   const projects = await getAllContent<ProjectFrontMatter>('projects');
+  
+  // Process team data for all projects to ensure it's valid
+  projects.forEach(project => {
+    // Make sure team is properly formatted if it exists
+    if (typeof project.frontMatter.team === 'string') {
+      try {
+        // Handle string team data by parsing it or converting to array 
+        project.frontMatter.team = safeParseTeam(project.frontMatter.team);
+      } catch (error) {
+        console.warn(`Error parsing team data for ${project.slug}:`, error);
+        project.frontMatter.team = [];
+      }
+    } else if (!Array.isArray(project.frontMatter.team)) {
+      project.frontMatter.team = [];
+    }
+  });
   
   // Filter projects based on criteria
   let filteredProjects = projects;
@@ -28,28 +42,18 @@ export async function getAllProjects({
     );
   }
   
-  if (filterByTag) {
+  if (filterByTag && filterByTag !== 'all') {
     filteredProjects = filteredProjects.filter(project => 
-      project.frontMatter.tags && project.frontMatter.tags.includes(filterByTag)
-    );
-  }
-  
-  if (featuredOnly) {
-    filteredProjects = filteredProjects.filter(project => 
-      project.frontMatter.featured
+      project.frontMatter.tags && 
+      project.frontMatter.tags.includes(filterByTag)
     );
   }
   
   // Sort projects
-  if (sortBy === 'featured') {
-    filteredProjects.sort((a, b) => {
-      // First sort by featured status (featured first)
-      if (a.frontMatter.featured && !b.frontMatter.featured) return -1;
-      if (!a.frontMatter.featured && b.frontMatter.featured) return 1;
-      
-      // If both have same featured status, sort by id
-      return Number(b.frontMatter.id) - Number(a.frontMatter.id);
-    });
+  if (sortBy === 'date') {
+    filteredProjects.sort((a, b) => 
+      new Date(b.frontMatter.date).getTime() - new Date(a.frontMatter.date).getTime()
+    );
   }
   
   // Apply limit if specified
@@ -62,5 +66,49 @@ export async function getAllProjects({
 
 // Get a single project by slug
 export async function getProjectBySlug(slug: string): Promise<{ frontMatter: ProjectFrontMatter, content: string, slug: string } | null> {
-  return getContentBySlug<ProjectFrontMatter>('projects', slug);
+  const project = await getContentBySlug<ProjectFrontMatter>('projects', slug);
+  
+  if (project && typeof project.frontMatter.team === 'string') {
+    try {
+      project.frontMatter.team = safeParseTeam(project.frontMatter.team);
+    } catch (error) {
+      console.warn(`Error parsing team data for ${slug}:`, error);
+      project.frontMatter.team = [];
+    }
+  }
+  
+  return project;
+}
+
+// Helper to safely parse team data from string
+function safeParseTeam(teamData: string): Array<{name: string, role: string, avatar?: string}> {
+  if (!teamData) return [];
+  
+  try {
+    // First try parsing it as JSON
+    const parsed = JSON.parse(teamData);
+    if (Array.isArray(parsed)) {
+      return parsed;
+    }
+    return [];
+  } catch (e) {
+    // If it's not valid JSON, try to handle it as a string representation of an array
+    if (teamData.trim().startsWith('[') && teamData.trim().endsWith(']')) {
+      // Try to create a proper JSON string by replacing single quotes with double quotes
+      const fixedJson = teamData
+        .replace(/'/g, '"')
+        .replace(/(\w+):/g, '"$1":');
+      
+      try {
+        const parsed = JSON.parse(fixedJson);
+        if (Array.isArray(parsed)) {
+          return parsed;
+        }
+      } catch {
+        // If still fails, return empty array
+        console.error("Could not parse team data even after cleanup:", teamData);
+      }
+    }
+    return [];
+  }
 }

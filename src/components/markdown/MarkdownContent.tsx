@@ -3,6 +3,7 @@ import React from 'react';
 import ReactMarkdown from 'react-markdown';
 import rehypeRaw from 'rehype-raw';
 import { Link } from 'react-router-dom';
+import { Copy, CheckCheck } from 'lucide-react';
 
 interface MarkdownContentProps {
   content: string;
@@ -10,6 +11,14 @@ interface MarkdownContentProps {
 }
 
 const MarkdownContent: React.FC<MarkdownContentProps> = ({ content, className = "" }) => {
+  const [copiedCode, setCopiedCode] = React.useState<string | null>(null);
+
+  const handleCopyCode = (code: string) => {
+    navigator.clipboard.writeText(code);
+    setCopiedCode(code);
+    setTimeout(() => setCopiedCode(null), 2000);
+  };
+
   return (
     <div className={`prose prose-lg dark:prose-invert max-w-none ${className}`}>
       <ReactMarkdown 
@@ -46,16 +55,29 @@ const MarkdownContent: React.FC<MarkdownContentProps> = ({ content, className = 
               className="border-l-4 border-primary pl-4 italic my-4" 
             />
           ),
-          code: ({ node, className, ...props }) => {
+          code: ({ node, className, children, ...props }) => {
             // Check if we're in a code block or inline code
             const isCodeBlock = className?.includes('language-');
+            const codeContent = String(children).replace(/\n$/, '');
             
             return isCodeBlock ? (
-              <pre className="bg-muted p-4 rounded-lg overflow-x-auto">
-                <code {...props} className="text-sm" />
-              </pre>
+              <div className="relative">
+                <button 
+                  className="absolute right-2 top-2 p-1.5 rounded-md text-gray-400 hover:text-gray-100 hover:bg-gray-700 transition-colors"
+                  onClick={() => handleCopyCode(codeContent)}
+                >
+                  {copiedCode === codeContent ? (
+                    <CheckCheck className="h-4 w-4" />
+                  ) : (
+                    <Copy className="h-4 w-4" />
+                  )}
+                </button>
+                <pre className="bg-muted p-4 rounded-lg overflow-x-auto mb-6">
+                  <code {...props} className={`${className} text-sm block pt-4`}>{children}</code>
+                </pre>
+              </div>
             ) : (
-              <code {...props} className="bg-muted px-1 py-0.5 rounded text-sm" />
+              <code {...props} className="bg-muted px-1 py-0.5 rounded text-sm">{children}</code>
             );
           },
           img: ({ node, ...props }) => (

@@ -2,41 +2,40 @@
 import React from "react";
 import Layout from "@/components/layout/Layout";
 import BlogHero from "@/components/blog/BlogHero";
-import BlogSearch from "@/components/blog/BlogSearch";
 import BlogGrid from "@/components/blog/BlogGrid";
-import BlogNewsletter from "@/components/blog/BlogNewsletter";
+import BlogSearch from "@/components/blog/BlogSearch";
 import { useBlogPosts } from "@/hooks/useBlogPosts";
+import BlogNewsletter from "@/components/blog/BlogNewsletter";
 
-const Blog = () => {
+const Blog: React.FC = () => {
   const { 
-    blogPosts, 
-    allTags, 
+    filteredPosts, 
     loading, 
     searchTerm, 
     setSearchTerm, 
     selectedTag, 
     setSelectedTag, 
-    filteredPosts 
+    allTags 
   } = useBlogPosts();
 
   return (
     <Layout>
       <BlogHero />
       
-      <BlogSearch 
-        searchTerm={searchTerm}
-        setSearchTerm={setSearchTerm}
-        selectedTag={selectedTag}
-        setSelectedTag={setSelectedTag}
-        allTags={allTags}
-      />
-      
-      <BlogGrid 
-        filteredPosts={filteredPosts}
-        loading={loading}
-      />
-      
-      <BlogNewsletter />
+      <div className="bg-black py-12">
+        <BlogSearch 
+          onSearch={setSearchTerm} 
+          tags={allTags} 
+          onTagSelect={setSelectedTag}
+          selectedTag={selectedTag || ""}
+        />
+        
+        <div className="py-12">
+          <BlogGrid posts={filteredPosts} loading={loading} />
+        </div>
+        
+        <BlogNewsletter />
+      </div>
     </Layout>
   );
 };

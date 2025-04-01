@@ -3,15 +3,18 @@ import React from 'react';
 import { NavLink, NavLinkProps } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 
-interface SidebarLinkProps extends NavLinkProps {
+interface SidebarLinkProps extends Omit<NavLinkProps, 'children'> {
   exact?: boolean;
   className?: string;
+  icon?: React.ReactNode;
+  children: React.ReactNode;
 }
 
 export const SidebarLink: React.FC<SidebarLinkProps> = ({ 
   children, 
   exact = false, 
-  className, 
+  className,
+  icon,
   ...props 
 }) => {
   return (
@@ -28,7 +31,12 @@ export const SidebarLink: React.FC<SidebarLinkProps> = ({
         )
       }
     >
-      {children}
+      {({isActive}) => (
+        <>
+          {icon && <span className="mr-2">{icon}</span>}
+          {children}
+        </>
+      )}
     </NavLink>
   );
 };

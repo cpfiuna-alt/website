@@ -77,3 +77,8 @@
 .org-chart-mobile {
   @apply flex flex-col items-center;
 }
+
+/* Documentation page specific styles */
+.docs-card {
+  @apply hover:translate-y-0;
+}

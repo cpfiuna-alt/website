@@ -125,6 +125,11 @@ const Footer: React.FC = () => {
                   Documentación
                 </Link>
               </li>
+              <li>
+                <Link to="/community" className="text-[#94a3b8] dark:text-[#94a3b8] hover:text-primary dark:hover:text-primary transition-colors text-sm">
+                  Comunidad
+                </Link>
+              </li>
             </ul>
           </div>
 

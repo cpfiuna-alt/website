@@ -1,6 +1,6 @@
 
 import React from "react";
-import { Filter } from "lucide-react";
+import { Filter, Search } from "lucide-react";
 
 export type EventType = {
   value: string;
@@ -13,6 +13,8 @@ interface EventFilterProps {
   setFilter: (filter: string) => void;
   showPast: boolean;
   setShowPast: (showPast: boolean) => void;
+  searchTerm?: string;
+  onSearchChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 const EventFilter = ({ 
@@ -20,42 +22,59 @@ const EventFilter = ({
   filter, 
   setFilter, 
   showPast, 
-  setShowPast 
+  setShowPast,
+  searchTerm = "",
+  onSearchChange
 }: EventFilterProps) => {
   return (
-    <div className="mb-10 flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
-      <div className="flex items-center space-x-2">
-        <Filter className="h-5 w-5 text-muted-foreground" />
-        <span className="text-muted-foreground">Filtrar por:</span>
+    <div className="mb-10 space-y-6">
+      {/* Search Bar - Added to match Project Filter */}
+      <div className="relative max-w-md mx-auto">
+        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+        <input
+          type="text"
+          placeholder="Buscar eventos..."
+          value={searchTerm}
+          onChange={onSearchChange}
+          className="w-full pl-10 pr-4 py-2 rounded-full border border-input bg-background focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all"
+        />
       </div>
       
-      <div className="flex flex-wrap gap-2">
-        {eventTypes.map((type) => (
+      {/* Filter buttons - Styled like ProjectFilter */}
+      <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
+        <div className="flex items-center space-x-2">
+          <Filter className="h-5 w-5 text-muted-foreground" />
+          <span className="text-muted-foreground">Filtrar por:</span>
+        </div>
+        
+        <div className="flex flex-wrap gap-2">
+          {eventTypes.map((type) => (
+            <button
+              key={type.value}
+              onClick={() => setFilter(type.value)}
+              className={`px-4 py-2 rounded-full text-sm transition-all
+                ${
+                  filter === type.value
+                    ? "bg-primary text-primary-foreground"
+                    : "bg-secondary text-secondary-foreground hover:bg-secondary/80"
+                }`}
+            >
+              {type.label}
+            </button>
+          ))}
+          
           <button
-            key={type.value}
-            onClick={() => setFilter(type.value)}
-            className={`px-4 py-2 rounded-full text-sm transition-all
+            onClick={() => setShowPast(!showPast)}
+            className={`px-4 py-2 rounded-full text-sm transition-all ml-2
               ${
-                filter === type.value
+                showPast
                   ? "bg-primary text-primary-foreground"
                   : "bg-secondary text-secondary-foreground hover:bg-secondary/80"
               }`}
           >
-            {type.label}
+            {showPast ? "Todos los eventos" : "Solo próximos"}
           </button>
-        ))}
-        
-        <button
-          onClick={() => setShowPast(!showPast)}
-          className={`px-4 py-2 rounded-full text-sm transition-all ml-2
-            ${
-              showPast
-                ? "bg-primary text-primary-foreground"
-                : "bg-secondary text-secondary-foreground hover:bg-secondary/80"
-            }`}
-        >
-          {showPast ? "Todos los eventos" : "Solo próximos"}
-        </button>
+        </div>
       </div>
     </div>
   );

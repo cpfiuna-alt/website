@@ -21,7 +21,7 @@ export const useLogros = () => {
             fecha: "2023-10-07",
             lugar: "Asunción, Paraguay",
             imagen: "/placeholder.svg",
-            url: "https://www.spaceappschallenge.org/",
+            url: "/certificates/nasa-space-apps-2023.pdf",
             equipo: ["Juan Pérez", "María González", "Carlos López"]
           },
           {
@@ -33,7 +33,7 @@ export const useLogros = () => {
             fecha: "2022-10-22",
             lugar: "Virtual",
             imagen: "/placeholder.svg",
-            url: "https://ieeextreme.org/"
+            url: "/certificates/ieeextreme-2022.pdf"
           },
           {
             id: "3",
@@ -43,7 +43,8 @@ export const useLogros = () => {
             categoria: "Reconocimiento",
             fecha: "2023-05-15",
             lugar: "San Lorenzo, Paraguay",
-            imagen: "/placeholder.svg"
+            imagen: "/placeholder.svg",
+            url: "/certificates/gdsc-2023.pdf"
           },
           {
             id: "4",
@@ -54,7 +55,7 @@ export const useLogros = () => {
             fecha: "2023-04-10",
             lugar: "Virtual",
             imagen: "/placeholder.svg",
-            url: "https://imaginecup.microsoft.com/"
+            url: "/certificates/imagine-cup-2023.pdf"
           },
           {
             id: "5",
@@ -64,7 +65,8 @@ export const useLogros = () => {
             categoria: "Concurso",
             fecha: "2022-11-15",
             lugar: "Asunción, Paraguay",
-            imagen: "/placeholder.svg"
+            imagen: "/placeholder.svg",
+            url: "/certificates/innovapy-2022.pdf"
           },
           {
             id: "6",
@@ -75,7 +77,7 @@ export const useLogros = () => {
             fecha: "2022-05-20",
             lugar: "Regional Sudamérica",
             imagen: "/placeholder.svg",
-            url: "https://icpc.global/"
+            url: "/certificates/acm-icpc-2022.pdf"
           }
         ];
 

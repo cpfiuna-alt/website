@@ -1,83 +1,54 @@
 
 import React from "react";
-import { Link } from "react-router-dom";
-import { ArrowLeft, Github, ExternalLink, Calendar } from "lucide-react";
-import { format, parseISO } from "date-fns";
+import { Calendar } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 import { ProjectFrontMatter } from "@/utils/markdownUtils";
 
 interface ProjectDetailHeaderProps {
   project: ProjectFrontMatter;
+  formatDateIfAvailable: (dateString?: string) => string;
+  getStatusBadgeVariant: (status?: string) => string;
 }
 
-const ProjectDetailHeader = ({ project }: ProjectDetailHeaderProps) => {
+const ProjectDetailHeader: React.FC<ProjectDetailHeaderProps> = ({
+  project,
+  formatDateIfAvailable,
+  getStatusBadgeVariant
+}) => {
   return (
-    <div className="container mx-auto px-6 mb-12">
-      <div className="max-w-4xl mx-auto">
-        <div className="flex items-center gap-3 mb-4">
-          {project.status && (
-            <span className="px-3 py-1 rounded-full text-xs font-medium bg-primary/20 text-primary">
-              {project.status}
-            </span>
-          )}
-          
-          {(project.date || project.lastUpdated) && (
-            <div className="flex items-center text-sm text-muted-foreground">
-              <Calendar className="mr-1 h-4 w-4" />
-              Actualizado el {format(parseISO(project.date || project.lastUpdated || new Date().toISOString()), "dd/MM/yyyy")}
-            </div>
-          )}
+    <div className="mb-8">
+      <div className="flex flex-wrap items-center gap-3 mb-4">
+        <Badge 
+          variant="default" 
+          className={getStatusBadgeVariant(project.status)}
+        >
+          {project.status || "En desarrollo"}
+        </Badge>
+        <div className="inline-flex items-center text-sm text-muted-foreground">
+          <Calendar className="mr-1 h-4 w-4" />
+          Actualizado el {formatDateIfAvailable(project.lastUpdated)}
         </div>
-        
-        <h1 className="text-3xl md:text-5xl font-bold mb-6">
-          {project.title}
-        </h1>
-        
-        <div className="flex flex-wrap gap-3 mb-8">
-          {project.tags && project.tags.map((tag) => (
-            <span 
-              key={tag}
-              className="px-3 py-1 rounded-full text-xs font-medium bg-muted/70 hover:bg-muted transition-colors"
-            >
-              {tag}
-            </span>
-          ))}
-        </div>
-        
-        <div className="flex flex-wrap gap-4 mb-8">
-          {project.githubLink && (
-            <a 
-              href={project.githubLink}
-              className="inline-flex items-center px-4 py-2 rounded-full bg-primary text-primary-foreground font-medium transition-all hover:shadow-neon-blue"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <Github className="mr-2 h-4 w-4" />
-              Ver repositorio
-            </a>
-          )}
-          
-          {project.demoLink && (
-            <a 
-              href={project.demoLink}
-              className="inline-flex items-center px-4 py-2 rounded-full border border-primary bg-transparent text-primary font-medium transition-all hover:bg-primary/10"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <ExternalLink className="mr-2 h-4 w-4" />
-              Ver demo
-            </a>
-          )}
-        </div>
-        
-        {project.image && (
-          <div className="mb-12 rounded-xl overflow-hidden">
-            <img 
-              src={project.image} 
-              alt={project.title}
-              className="w-full h-auto object-cover"
-            />
-          </div>
-        )}
+      </div>
+      
+      <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
+        {project.title}
+      </h1>
+      
+      <p className="text-xl text-muted-foreground mb-6">
+        {project.description}
+      </p>
+      
+      {/* Tags/technologies */}
+      <div className="flex flex-wrap gap-2 mb-6">
+        {project.tags && project.tags.map((tag, index) => (
+          <Badge 
+            key={index}
+            variant="secondary" 
+            className="bg-[#2563eb] text-white text-xs px-3 py-1 rounded-full border-none"
+          >
+            {tag.replace(/"/g, '')}
+          </Badge>
+        ))}
       </div>
     </div>
   );

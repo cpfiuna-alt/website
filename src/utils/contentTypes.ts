@@ -23,3 +23,21 @@ export interface CourseItem extends ContentItem {
     date?: string;
   };
 }
+
+// Documentation specific type
+export interface DocItem extends ContentItem {
+  frontMatter: {
+    title: string;
+    description: string;
+    category: string;
+    order?: number;
+    tags?: string[];
+    author?: string;
+    updatedAt?: string;
+    readTime?: string;
+    githubUrl?: string;
+    resources?: Array<{ title: string; url: string }>;
+    icon?: string;
+    slug: string;
+  };
+}

@@ -25,14 +25,20 @@ export function useEvents() {
             id: frontMatter.id || slug,
             title: frontMatter.title || "Untitled Event",
             date: frontMatter.date || new Date().toISOString(),
-            time: frontMatter.time || "TBD",
             location: frontMatter.location || "TBD",
             description: frontMatter.description || "",
             image: frontMatter.image || "/placeholder.svg",
             type: frontMatter.type || "meetup",
-            registrationLink: frontMatter.registrationLink || "#",
             isUpcoming: frontMatter.isUpcoming ?? false,
-            slug
+            slug,
+            time: frontMatter.time || "TBD",
+            organizer: frontMatter.organizer,
+            registrationUrl: frontMatter.registrationUrl,
+            speakers: frontMatter.speakers,
+            topics: frontMatter.topics,
+            prerequisites: frontMatter.prerequisites,
+            resources: frontMatter.resources,
+            sponsors: frontMatter.sponsors
           };
           
           return eventData;
@@ -43,12 +49,10 @@ export function useEvents() {
             id: slug,
             title: `Event ${slug}`,
             date: new Date().toISOString(),
-            time: "TBD",
             location: "TBD",
             description: "Event description unavailable",
             image: "/placeholder.svg",
             type: "meetup",
-            registrationLink: "#",
             isUpcoming: false,
             slug
           } as EventFrontMatter;

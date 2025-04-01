@@ -44,7 +44,7 @@ const About = () => {
           <div className="order-1 lg:order-2">
             <div className="relative">
               <div className={cn(
-                "glass-card rounded-2xl overflow-hidden shadow-lg",
+                "glass-card rounded-2xl overflow-hidden shadow-lg transition-all duration-300 hover:shadow-neon-blue hover:border-primary/50 hover:translate-y-[-5px]",
                 "transform rotate-2 scale-90 lg:scale-95 opacity-70",
                 "absolute top-5 right-5 z-0 hidden md:block"
               )}>
@@ -55,7 +55,7 @@ const About = () => {
                   loading="lazy"
                 />
               </div>
-              <div className="glass-card rounded-2xl overflow-hidden shadow-lg relative z-10">
+              <div className="glass-card rounded-2xl overflow-hidden shadow-lg relative z-10 transition-all duration-300 hover:shadow-neon-blue hover:border-primary/50 hover:translate-y-[-5px]">
                 <img 
                   src="https://images.unsplash.com/photo-1518770660439-4636190af475" 
                   alt="Our product" 

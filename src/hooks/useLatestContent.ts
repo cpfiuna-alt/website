@@ -44,7 +44,7 @@ export function useLatestContent(limit: number = 4) {
           ...blogPosts.map(post => ({
             id: String(post.frontMatter.id || post.slug),
             title: post.frontMatter.title,
-            excerpt: post.frontMatter.excerpt || '',
+            excerpt: post.frontMatter.excerpt || post.frontMatter.description || '',
             date: post.frontMatter.date,
             category: 'Blog',
             imageSrc: post.frontMatter.image || '/placeholder.svg',
@@ -68,7 +68,8 @@ export function useLatestContent(limit: number = 4) {
             id: String(project.frontMatter.id || project.slug),
             title: project.frontMatter.title,
             excerpt: project.frontMatter.description || '',
-            date: project.frontMatter.lastUpdated || project.frontMatter.date || new Date().toISOString(),
+            // Fix to handle missing date properties
+            date: project.frontMatter.lastUpdated || project.frontMatter.startDate || new Date().toISOString(),
             category: 'Proyectos',
             imageSrc: project.frontMatter.image || '/placeholder.svg',
             slug: project.slug
@@ -79,6 +80,7 @@ export function useLatestContent(limit: number = 4) {
             id: String(course.frontMatter.id || course.slug),
             title: course.frontMatter.title,
             excerpt: course.frontMatter.description || '',
+            // Fix - provide default date if not available
             date: course.frontMatter.date || new Date().toISOString(),
             category: 'Cursos',
             imageSrc: course.frontMatter.image || '/placeholder.svg',

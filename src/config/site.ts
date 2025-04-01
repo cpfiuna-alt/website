@@ -40,6 +40,7 @@ export const navLinks = [
   { name: "Logros", to: "/logros" },
   { name: "Proyectos", to: "/projects" },
   { name: "Recursos", to: "/resources" },
+  { name: "Comunidad", to: "/community" },
   { name: "Blog", to: "/blog" },
   { name: "Contacto", to: "/contact" },
 ];
@@ -56,7 +57,6 @@ export const footerLinks = {
   resources: [
     { name: "Kit de Medios", to: "/media-kit" },
     { name: "Prensa", to: "/press" },
-    { name: "Comunidad", to: "/community" },
   ],
   github: [
     {

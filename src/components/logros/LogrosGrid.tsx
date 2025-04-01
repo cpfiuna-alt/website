@@ -1,6 +1,6 @@
 
 import React, { useState } from "react";
-import { Trophy, Medal, Award, Star, GraduationCap, Flag } from "lucide-react";
+import { Trophy, Medal, Award, Star, GraduationCap, Flag, ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 
@@ -128,7 +128,7 @@ const LogrosGrid = () => {
               <h3 className="text-xl font-semibold mb-3 text-center">{achievement.title}</h3>
               <p className="text-muted-foreground text-sm mb-4">{achievement.description}</p>
               <div className="text-primary text-sm font-medium flex items-center justify-center mt-auto group-hover:underline">
-                Más información
+                Ver más <ArrowRight className="ml-1 h-4 w-4" />
               </div>
             </Link>
           ))}

@@ -115,11 +115,18 @@ const CoursesSection = () => {
                   {course.tags && course.tags.map((tag, idx) => (
                     <span 
                       key={`${course.slug || course.id}-tag-${idx}`}
-                      className="text-xs px-2 py-1 bg-primary/80 backdrop-blur-sm text-white rounded-md"
+                      className="text-xs px-2 py-1 bg-[#2563eb] text-white rounded-md"
                     >
-                      {tag}
+                      {tag.replace(/"/g, '')}
                     </span>
                   ))}
+                </div>
+                
+                {/* Level badge moved to top left */}
+                <div className="absolute top-2 left-2">
+                  <span className="text-xs px-2 py-1 bg-muted/50 rounded-full">
+                    {course.level}
+                  </span>
                 </div>
               </div>
               
@@ -128,9 +135,7 @@ const CoursesSection = () => {
                   <h3 className="font-bold text-lg">
                     {course.title}
                   </h3>
-                  <span className="text-xs px-2 py-1 bg-muted/50 rounded-full">
-                    {course.level}
-                  </span>
+                  {/* Removed level badge from here */}
                 </div>
                 
                 <p className="text-sm text-gray-400 mb-4 line-clamp-2">

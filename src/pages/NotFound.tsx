@@ -34,14 +34,14 @@ const NotFound = () => {
           </p>
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button asChild variant="default" size="lg">
+            <Button asChild variant="default" size="lg" className="rounded-full">
               <Link to="/" className="flex items-center gap-2">
                 <Home className="h-4 w-4" />
                 Volver al inicio
               </Link>
             </Button>
             
-            <Button asChild variant="outline" size="lg">
+            <Button asChild variant="outline" size="lg" className="rounded-full">
               <Link to="#" onClick={() => window.history.back()} className="flex items-center gap-2">
                 <ArrowLeft className="h-4 w-4" />
                 Página anterior

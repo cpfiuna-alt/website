@@ -53,7 +53,7 @@ const values = [
 
 const ValueCard: React.FC<ValueProps> = ({ icon, title, description }) => {
   return (
-    <div className="glass-card p-6 flex flex-col items-center text-center">
+    <div className="glass-card p-6 flex flex-col items-center text-center transition-all duration-300 hover:shadow-neon-blue hover:border-primary/50 hover:translate-y-[-5px]">
       <div className="bg-primary/10 rounded-full w-12 h-12 flex items-center justify-center mb-4">
         {icon}
       </div>

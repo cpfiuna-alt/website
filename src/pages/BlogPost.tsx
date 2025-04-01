@@ -140,8 +140,8 @@ const BlogPost = () => {
             <div className="container px-6 mx-auto">
               <div className="max-w-3xl mx-auto">
                 <div className="flex items-center space-x-2 mb-4">
-                  {frontMatter.tags && frontMatter.tags.slice(0, 2).map((tag) => (
-                    <span key={tag} className="px-3 py-1 text-xs font-medium bg-primary/40 backdrop-blur-sm text-white rounded-full border border-white/30">
+                  {frontMatter.tags && frontMatter.tags.slice(0, 2).map((tag, idx) => (
+                    <span key={`header-tag-${idx}`} className="px-3 py-1 text-xs font-medium bg-primary/40 backdrop-blur-sm text-white rounded-full border border-white/30">
                       {tag}
                     </span>
                   ))}
@@ -201,9 +201,9 @@ const BlogPost = () => {
             {/* Tags */}
             {frontMatter.tags && frontMatter.tags.length > 0 && (
               <div className="flex flex-wrap gap-2 mb-8">
-                {frontMatter.tags.map((tag) => (
+                {frontMatter.tags.map((tag, idx) => (
                   <Link
-                    key={tag}
+                    key={`bottom-tag-${idx}`}
                     to={`/blog?tag=${tag.toLowerCase().replace(/\s+/g, '-')}`}
                     className="flex items-center px-3 py-1 bg-muted hover:bg-muted/80 rounded-full text-sm transition-colors"
                   >
@@ -238,9 +238,9 @@ const BlogPost = () => {
               <div className="mb-12">
                 <h2 className="text-2xl font-bold mb-6">Artículos relacionados</h2>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                  {relatedPosts.map((relatedPost) => (
+                  {relatedPosts.map((relatedPost, idx) => (
                     <Link 
-                      key={relatedPost.slug} 
+                      key={`related-post-${relatedPost.slug || idx}`} 
                       to={`/blog/${relatedPost.slug}`}
                       className="group"
                     >

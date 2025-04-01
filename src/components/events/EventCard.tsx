@@ -9,13 +9,27 @@ interface EventCardProps {
   getEventTypeLabel: (type: string) => string;
 }
 
+// Fallback images by event type
+const eventTypeImages = {
+  "hackathon": "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+  "workshop": "https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+  "meetup": "https://images.unsplash.com/photo-1505373877841-8d25f7d46678?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+  "challenge": "https://images.unsplash.com/photo-1498050108023-c5249f4df085?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+  "conference": "https://images.unsplash.com/photo-1560439513-74b037a25d84?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+  "program": "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+  "competition": "https://images.unsplash.com/photo-1475721027785-f74eccf877e2?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+  "default": "https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+};
+
 const EventCard = ({ event, getEventTypeLabel }: EventCardProps) => {
   const isPastEvent = !event.isUpcoming;
   
-  const handleImageError = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
-    const target = e.target as HTMLImageElement;
-    target.src = "/placeholder.svg";
-    target.onerror = null; // Prevent infinite loop if placeholder also fails to load
+  // Get appropriate image based on event type or use provided image
+  const getEventImage = () => {
+    if (!event.image || event.image === "/placeholder.svg") {
+      return eventTypeImages[event.type as keyof typeof eventTypeImages] || eventTypeImages.default;
+    }
+    return event.image;
   };
 
   return (
@@ -23,11 +37,14 @@ const EventCard = ({ event, getEventTypeLabel }: EventCardProps) => {
       <Link to={`/events/${event.slug}`} className="block">
         <div className="relative">
           <img
-            src={event.image || "/placeholder.svg"}
+            src={getEventImage()}
             alt={event.title}
             className="w-full h-48 object-cover object-center rounded-t-xl"
             loading="lazy"
-            onError={handleImageError}
+            onError={(e) => {
+              const target = e.target as HTMLImageElement;
+              target.src = eventTypeImages.default;
+            }}
           />
           <div className="absolute top-3 right-3">
             <span className={`px-3 py-1 rounded-full text-xs font-medium ${

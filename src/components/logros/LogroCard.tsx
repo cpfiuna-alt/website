@@ -2,7 +2,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Logro } from "@/types/logros";
-import { Award, Calendar, MapPin, Users, ExternalLink, Trophy, Medal, Star } from "lucide-react";
+import { Award, Calendar, MapPin, Users, ExternalLink, Trophy, Medal, Star, ArrowRight } from "lucide-react";
 
 interface LogroCardProps {
   logro: Logro;
@@ -93,8 +93,8 @@ const LogroCard = ({ logro }: LogroCardProps) => {
             rel="noopener noreferrer"
             className="inline-flex items-center text-sm text-primary hover:underline"
           >
-            Ver más información
-            <ExternalLink className="ml-1 h-3 w-3" />
+            Ver más
+            <ArrowRight className="ml-1 h-3 w-3" />
           </a>
         )}
       </div>
