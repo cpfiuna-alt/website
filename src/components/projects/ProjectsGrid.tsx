@@ -12,7 +12,7 @@ interface ProjectsGridProps {
 const ProjectsGrid = ({ projects }: ProjectsGridProps) => {
   if (projects.length === 0) {
     return (
-      <Container className="px-6 mx-auto">
+      <Container size="full" className="mx-auto">
         <div className="text-center py-16 bg-black/80 rounded-xl border border-border/50">
           <Code className="h-12 w-12 mx-auto text-gray-500 mb-4" />
           <h3 className="text-xl font-semibold mb-2 text-white">No hay proyectos disponibles</h3>
@@ -25,7 +25,7 @@ const ProjectsGrid = ({ projects }: ProjectsGridProps) => {
   }
 
   return (
-    <Container className="px-6 mx-auto">
+    <Container size="full" className="mx-auto">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {projects.map((project) => (
           <ProjectCard key={project.slug} project={project} />

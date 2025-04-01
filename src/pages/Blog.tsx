@@ -22,20 +22,20 @@ const Blog: React.FC = () => {
     <Layout>
       <BlogHero />
       
-      <div className="bg-black py-12">
-        <BlogSearch 
-          onSearch={setSearchTerm} 
-          tags={allTags} 
-          onTagSelect={setSelectedTag}
-          selectedTag={selectedTag || ""}
-        />
-        
-        <div className="py-12">
+      <section className="py-12">
+        <div className="container mx-auto px-6">
+          <BlogSearch 
+            onSearch={setSearchTerm} 
+            tags={allTags} 
+            onTagSelect={setSelectedTag}
+            selectedTag={selectedTag || ""}
+          />
+          
           <BlogGrid posts={filteredPosts} loading={loading} />
         </div>
-        
-        <BlogNewsletter />
-      </div>
+      </section>
+      
+      <BlogNewsletter />
     </Layout>
   );
 };

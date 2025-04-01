@@ -46,8 +46,8 @@ const Projects = () => {
     return (
       <Layout>
         <section className="pt-24 pb-16">
-          <div className="container mx-auto px-6">
-            <div className="max-w-3xl mx-auto">
+          <div className="container mx-auto">
+            <div className="mx-auto">
               <h1 className="text-4xl md:text-5xl font-bold mb-6">Proyectos</h1>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {[1, 2, 3, 4, 5, 6].map((i) => (
@@ -80,7 +80,7 @@ const Projects = () => {
     <Layout>
       <ProjectsHero />
       <section className="py-12">
-        <div className="container mx-auto px-6">
+        <div className="container mx-auto">
           <ProjectFilter 
             categories={categories}
             filter={filter}
