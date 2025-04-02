@@ -6,7 +6,7 @@ date: "2024-06-05"
 time: "13:00 - 19:00"
 location: "Pabellón de Informática, FIUNA"
 description: "Versión local de la conferencia anual de Microsoft para desarrolladores, con sesiones prácticas sobre las últimas herramientas, plataformas y servicios de la compañía."
-image: "https://images.unsplash.com/photo-1613071293472-d6c33dafe4f0?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+image: "/eventos/microsoft-build.jpg"
 type: "conference"
 registrationLink: "#"
 isUpcoming: false
