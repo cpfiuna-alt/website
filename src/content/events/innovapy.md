@@ -1,19 +1,19 @@
 
 ---
 id: 501
-title: "InnovaPY"
+title: "InnovandoPY"
 date: "2024-08-22"
 time: "14:00 - 19:00"
 location: "Centro de Convenciones de la UNA"
 description: "Feria de innovación y tecnología que reúne a emprendedores, estudiantes y empresas para mostrar proyectos tecnológicos desarrollados en Paraguay."
-image: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+image: "/eventos/innovandopy.jpg"
 type: "conference"
 registrationLink: "#"
 isUpcoming: true
 slug: "innovapy"
 ---
 
-# InnovaPY
+# InnovandoPY
 
 ## La vitrina de la innovación tecnológica en Paraguay
 

@@ -6,7 +6,7 @@ date: "2024-10-19"
 time: "00:00 - 23:59"
 location: "Laboratorio de Informática, FIUNA"
 description: "Competencia global de programación de 24 horas organizada por IEEE donde equipos de estudiantes resuelven problemas algorítmicos de diversa complejidad."
-image: "https://images.unsplash.com/photo-1580894732444-8ecded7900cd?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+image: "/eventos/ieee-xtreme.jpg"
 type: "competition"
 registrationLink: "https://ieeextreme.org/"
 isUpcoming: true

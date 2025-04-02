@@ -6,7 +6,7 @@ date: "2024-05-18"
 time: "09:00 - 18:00"
 location: "Auditorio FIUNA"
 description: "Extensión local del evento anual de desarrolladores de Google, donde se presentan las últimas novedades en tecnologías, herramientas y plataformas de la compañía."
-image: "https://images.unsplash.com/photo-1573164713988-8665fc963095?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+image: "/eventos/google-io.jpg"
 type: "conference"
 registrationLink: "#"
 isUpcoming: false

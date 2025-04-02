@@ -6,7 +6,7 @@ date: "2024-09-28"
 time: "08:00 - 20:00"
 location: "Campus FIUNA, Bloque A"
 description: "Competencia oficial de Major League Hacking donde equipos de estudiantes crean proyectos innovadores en un fin de semana de inmersión tecnológica."
-image: "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+image: "/eventos/mlh.jpg"
 type: "hackathon"
 registrationLink: "https://mlh.io/"
 isUpcoming: true

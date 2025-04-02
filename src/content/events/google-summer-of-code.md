@@ -6,7 +6,7 @@ date: "2024-05-01"
 time: "18:00 - 20:00"
 location: "Auditorio FIUNA y virtual"
 description: "Programa global que ofrece a estudiantes la oportunidad de contribuir a proyectos de código abierto durante el verano con una mentoría de organizaciones reconocidas."
-image: "https://images.unsplash.com/photo-1617854818583-09e7f077a156?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+image: "/eventos/google-soc.jpg"
 type: "program"
 registrationLink: "https://summerofcode.withgoogle.com/"
 isUpcoming: false
