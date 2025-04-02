@@ -6,7 +6,7 @@ date: "2023-11-15"
 time: "09:00 - 23:00"
 location: "Centro de Convenciones Conmebol, Luque"
 description: "Festival de innovación, creatividad, ciencia y tecnología digital que reúne a jóvenes geeks en un evento de colaboración, aprendizaje y entretenimiento."
-image: "https://images.unsplash.com/photo-1517457373958-b7bdd4587205?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+image: "/eventos/campus-party.jpg"
 type: "conference"
 registrationLink: "https://paraguay.campus-party.org/"
 isUpcoming: false

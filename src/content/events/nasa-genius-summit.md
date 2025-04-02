@@ -6,7 +6,7 @@ date: "2024-11-25"
 time: "09:00 - 17:00"
 location: "Hotel Sheraton, Asunción"
 description: "Conferencia internacional que reúne a los ganadores del NASA Space Apps Challenge y expertos de la NASA para discutir soluciones innovadoras a problemas espaciales."
-image: "https://images.unsplash.com/photo-1541185933-ef5d8ed016c2?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+image: "/eventos/nasa-collective-summit.jpg"
 type: "conference"
 registrationLink: "#"
 isUpcoming: true
