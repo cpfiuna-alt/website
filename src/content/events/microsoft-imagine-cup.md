@@ -6,7 +6,7 @@ date: "2024-08-20"
 time: "14:00 - 18:00"
 location: "Auditorio FIUNA"
 description: "La competencia tecnológica estudiantil más prestigiosa del mundo, donde los participantes desarrollan soluciones innovadoras utilizando tecnologías Microsoft."
-image: "https://images.unsplash.com/photo-1516110833967-0b5716ca1387?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+image: "/eventos/imagine-cup.jpg"
 type: "competition"
 registrationLink: "https://imaginecup.microsoft.com/"
 isUpcoming: true
