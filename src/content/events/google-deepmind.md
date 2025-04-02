@@ -1,14 +1,14 @@
 
 ---
 id: 402
-title: "Google DeepMind: AI for Science Scholar Program"
+title: "Google DeepMind Program"
 date: "2024-07-10"
 time: "16:00 - 18:30"
 location: "Sala de Conferencias, FIUNA"
 description: "Programa que conecta a estudiantes con investigadores de Google DeepMind para aplicar IA a desafíos científicos complejos."
-image: "https://images.unsplash.com/photo-1677442135146-1eb6f9395301?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+image: "/eventos/google-deepmind.jpg"
 type: "program"
-registrationLink: "https://deepmind.google/impact/ai-for-science-scholar/"
+registrationLink: "https://deepmind.google"
 isUpcoming: true
 slug: "google-deepmind"
 ---
