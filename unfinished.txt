@@ -1,0 +1,33 @@
+
+# Unfinished Elements in CPF Website
+
+This document tracks UI elements, forms, and features that are present in the codebase but not fully implemented or connected.
+
+## Forms and Inputs
+- Contact Form: Present in Contact page but not connected to a backend endpoint
+- Newsletter Subscription: Present in Footer and Blog but not connected to a backend service
+- Resource Upload Modal: Modal exists but file upload functionality not implemented
+- Blog Search: Search functionality needs server-side implementation for better performance
+
+## Pages and Features
+- Documentation Section: Structure exists but content incomplete
+- Media Kit: Some sections are placeholder content
+- Estatuto: Page exists but content may need updating
+- Transparency: Page structure exists but needs more detailed financial information
+- Course Details: Page exists but not all courses have complete information
+- LogrosGrid: Grid component exists but data source needs to be connected to real achievements
+
+## Navigation and Links
+- Some footer links point to pages that need more content
+- Discord and GitHub links in the footer need to be updated with actual organization URLs
+- Some project demo links are placeholders
+
+## Data and Content
+- Many content items (blogs, events, projects) use placeholder data
+- Team member data uses placeholder images and information
+- Statistics on the home page use placeholder values
+
+## Technical Debt
+- Content loading utilities (staticSiteGenerator.ts and markdownUtils.ts) need optimization
+- SidebarContentLoader has potential performance issues with multiple content fetches
+- MatrixRain component could be optimized for better performance
