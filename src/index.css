@@ -1,0 +1,251 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
+@import './styles/animations.css';
+@import './styles/components.css';
+@import './styles/layout.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222 47% 11%;
+    
+    --card: 0 0% 100%;
+    --card-foreground: 222 47% 11%;
+    
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 47% 11%;
+    
+    --primary: 221 83% 53%;
+    --primary-foreground: 210 40% 98%;
+    
+    --secondary: 210 40% 96%;
+    --secondary-foreground: 222 47% 11%;
+    
+    --muted: 210 40% 96%;
+    --muted-foreground: 215 16% 47%;
+    
+    --accent: 210 40% 96%;
+    --accent-foreground: 222 47% 11%;
+    
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 210 40% 98%;
+    
+    --border: 214 32% 91%;
+    --input: 214 32% 91%;
+    --ring: 221 83% 53%;
+    
+    --radius: 0.75rem;
+  }
+
+  .dark {
+    --background: 222 47% 5%;
+    --foreground: 0 0% 98%;
+    
+    --card: 222 47% 8%;
+    --card-foreground: 0 0% 98%;
+    
+    --popover: 222 47% 5%;
+    --popover-foreground: 0 0% 98%;
+    
+    --primary: 217 91% 60%;
+    --primary-foreground: 0 0% 100%;
+    
+    --secondary: 217 33% 15%;
+    --secondary-foreground: 0 0% 98%;
+    
+    --muted: 217 33% 15%;
+    --muted-foreground: 215 20% 65%;
+    
+    --accent: 217 33% 15%;
+    --accent-foreground: 0 0% 98%;
+    
+    --destructive: 0 63% 31%;
+    --destructive-foreground: 0 0% 98%;
+    
+    --border: 217 33% 15%;
+    --input: 217 33% 15%;
+    --ring: 213 27% 84%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+}
+
+/* Fix for gradient text in light mode */
+.gradient-text {
+  @apply bg-clip-text text-transparent bg-gradient-to-r;
+  background-image: linear-gradient(to right, #00befe, #3984f6); /*#3b82f6, #2563eb*/
+}
+
+.dark .gradient-text {
+  background-image: linear-gradient(to right, #00befe, #3984f6);
+}
+
+/* Fix for background gradients in light mode */
+.bg-gradient-to-b {
+  --tw-gradient-from: #fff var(--tw-gradient-from-position);
+  --tw-gradient-to: rgb(255 255 255 / 0) var(--tw-gradient-to-position);
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
+}
+
+.dark .bg-gradient-to-b {
+  --tw-gradient-from: #000 var(--tw-gradient-from-position);
+  --tw-gradient-to: rgb(0 0 0 / 0) var(--tw-gradient-to-position);
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
+}
+
+/* Smooth theme transitions for radial gradients */
+.bg-gradient-radial {
+  transition: background-image 0.5s ease-in-out;
+}
+
+/* Ensure smooth theme transitions for all background elements */
+* {
+  transition-property: background-color, border-color, color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 300ms;
+}
+
+/* Markdown Content Styling Fixes */
+.markdown-content.prose {
+  /* Override prose default colors for better theme integration */
+  --tw-prose-body: hsl(var(--foreground));
+  --tw-prose-headings: hsl(var(--foreground));
+  --tw-prose-links: hsl(var(--primary));
+  --tw-prose-bold: hsl(var(--foreground));
+  --tw-prose-bullets: hsl(var(--muted-foreground));
+  --tw-prose-counters: hsl(var(--muted-foreground));
+}
+
+/* List items should be blueish/muted color */
+.markdown-content.prose ul li,
+.markdown-content.prose ol li,
+.markdown-content.prose ul li *:not(strong):not(b),
+.markdown-content.prose ol li *:not(strong):not(b) {
+  color: hsl(var(--muted-foreground)) !important;
+}
+
+/* Bold text in lists and elsewhere should be white */
+.markdown-content.prose ul li strong,
+.markdown-content.prose ol li strong,
+.markdown-content.prose strong,
+.markdown-content.prose ul li b,
+.markdown-content.prose ol li b,
+.markdown-content.prose b {
+  color: hsl(var(--foreground)) !important;
+  font-weight: 700;
+}
+
+/* List markers should be blueish/muted */
+.markdown-content.prose ul li::marker,
+.markdown-content.prose ol li::marker {
+  color: hsl(var(--muted-foreground));
+}
+
+/* Ensure consistent text following bold elements and nested lists */
+.markdown-content.prose ul li strong + *,
+.markdown-content.prose ol li strong + *,
+.markdown-content.prose ul li ul li,
+.markdown-content.prose ol li ol li,
+.markdown-content.prose ul li ol li,
+.markdown-content.prose ol li ul li {
+  color: hsl(var(--muted-foreground)) !important;
+}
+
+/* Dark mode specific overrides */
+.dark .markdown-content.prose {
+  --tw-prose-invert-body: hsl(var(--foreground));
+  --tw-prose-invert-headings: hsl(var(--foreground));
+  --tw-prose-invert-links: hsl(var(--primary));
+  --tw-prose-invert-bold: hsl(var(--foreground));
+  --tw-prose-invert-bullets: hsl(var(--muted-foreground));
+  --tw-prose-invert-counters: hsl(var(--muted-foreground));
+}
+
+.dark .markdown-content.prose ul li,
+.dark .markdown-content.prose ol li,
+.dark .markdown-content.prose ul li *:not(strong):not(b),
+.dark .markdown-content.prose ol li *:not(strong):not(b) {
+  color: hsl(var(--muted-foreground)) !important;
+}
+
+.dark .markdown-content.prose ul li strong,
+.dark .markdown-content.prose ol li strong,
+.dark .markdown-content.prose strong,
+.dark .markdown-content.prose ul li b,
+.dark .markdown-content.prose ol li b,
+.dark .markdown-content.prose b {
+  color: hsl(var(--foreground)) !important;
+}
+
+/* Nested list indentation and spacing */
+.markdown-content.prose ul ul,
+.markdown-content.prose ol ol,
+.markdown-content.prose ul ol,
+.markdown-content.prose ol ul {
+  margin-left: 1.5rem;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.markdown-content.prose ul li ul li,
+.markdown-content.prose ol li ol li,
+.markdown-content.prose ul li ol li,
+.markdown-content.prose ol li ul li {
+  padding-left: 0.25rem;
+  margin-left: 0.5rem;
+}
+
+/* Dark mode nested lists */
+.dark .markdown-content.prose ul li ul li,
+.dark .markdown-content.prose ol li ol li,
+.dark .markdown-content.prose ul li ol li,
+.dark .markdown-content.prose ol li ul li {
+  color: hsl(var(--muted-foreground)) !important;
+}
+
+/* Markdown headers should override prose styling */
+.prose .markdown-content h1,
+.prose .markdown-content h2,
+.prose .markdown-content h3,
+.prose .markdown-content h4 {
+  color: hsl(var(--foreground)) !important;
+  margin-top: 1.5rem !important;
+  margin-bottom: 0.75rem !important;
+}
+
+.prose .markdown-content h2 {
+  font-size: 1.5rem !important;
+  line-height: 2rem !important;
+  font-weight: 700 !important;
+}
+
+.prose .markdown-content h3 {
+  font-size: 1.25rem !important;
+  line-height: 1.75rem !important;
+  font-weight: 700 !important;
+}
+
+/* Ensure paragraphs have proper spacing */
+.prose .markdown-content p {
+  margin-bottom: 1rem !important;
+  color: hsl(var(--muted-foreground)) !important;
+}
+
+/* Ensure lists have proper styling */
+.prose .markdown-content ul,
+.prose .markdown-content ol {
+  margin-bottom: 1rem !important;
+}
+
+.prose .markdown-content ul li,
+.prose .markdown-content ol li {
+  color: hsl(var(--muted-foreground)) !important;
+  margin-left: 1.5rem !important;
+}
