@@ -93,8 +93,8 @@ JWT_EXPIRATION=7d
 SESSION_SECRET=your_session_secret_here
 
 # Email Configuration
-SMTP_HOST=smtp.gmail.com
-SMTP_PORT=587
+SMTP_HOST=smtp.gmail.com / no hay
+SMTP_PORT=*** //no existe pero gitguardian me dice q leakee mis credenciales y pohyi ya es lgm
 SMTP_SECURE=false
 SMTP_USER=your_email@gmail.com
 SMTP_PASS=your_app_password

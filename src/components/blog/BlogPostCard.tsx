@@ -1,9 +1,10 @@
 
 import React from "react";
 import { Link } from "react-router-dom";
-import { CalendarIcon, Clock } from "lucide-react";
+import { CalendarIcon, Clock, User } from "lucide-react";
 import { BlogFrontMatter } from "@/utils/markdownUtils";
 import { formatDate } from "@/utils/markdownUtils";
+import { getInstructorByName } from "@/data/instructors";
 
 interface BlogPostCardProps {
   post: BlogFrontMatter;
@@ -108,8 +109,30 @@ const BlogPostCard: React.FC<BlogPostCardProps> = ({ post }) => {
               {displayDescription}
             </p>
             
-            <div className="mt-auto text-sm text-muted-foreground">
-              Por <span className="text-card-foreground">{post.author}</span>
+            <div className="mt-auto flex items-center gap-2">
+              {(() => {
+                const authorData = getInstructorByName(post.author);
+                return (
+                  <>
+                    <div className="w-6 h-6 rounded-full overflow-hidden flex-shrink-0">
+                      {authorData?.profilePicture ? (
+                        <img 
+                          src={authorData.profilePicture} 
+                          alt={post.author}
+                          className="w-full h-full object-cover"
+                        />
+                      ) : (
+                        <div className="w-full h-full bg-muted flex items-center justify-center">
+                          <User className="h-3 w-3 text-muted-foreground" />
+                        </div>
+                      )}
+                    </div>
+                    <div className="text-sm text-muted-foreground">
+                      Por <span className="text-card-foreground">{post.author}</span>
+                    </div>
+                  </>
+                );
+              })()}
             </div>
           </div>
         </div>

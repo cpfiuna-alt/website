@@ -9,6 +9,7 @@ import { BlogFrontMatter } from "@/utils/markdownUtils";
 import { formatDate } from "@/utils/markdownUtils";
 import { Container } from "@/components/ui/container";
 import { Avatar } from "@/components/ui/avatar";
+import { getInstructorByName } from "@/data/instructors";
 
 const BlogPost = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -141,7 +142,7 @@ const BlogPost = () => {
               <div className="max-w-3xl mx-auto">
                 <div className="flex items-center space-x-2 mb-4">
                   {frontMatter.tags && frontMatter.tags.slice(0, 2).map((tag, idx) => (
-                    <span key={`header-tag-${idx}`} className="px-3 py-1 text-xs font-medium bg-primary/40 backdrop-blur-sm text-white rounded-full border border-white/30">
+                    <span key={`header-tag-${idx}`} className="text-xs px-2 py-0.5 bg-[#3C83F6E6] text-white rounded-full">
                       {tag}
                     </span>
                   ))}
@@ -152,19 +153,34 @@ const BlogPost = () => {
                 
                 {/* Author and date section */}
                 <div className="flex items-center mt-6">
-                  <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center text-white overflow-hidden mr-3">
-                    <User className="h-5 w-5" />
-                  </div>
-                  <div>
-                    <div className="text-white font-medium">Escrito por {frontMatter.author}</div>
-                    <div className="text-white/70 text-sm flex items-center mt-1">
-                      <CalendarIcon className="h-3 w-3 mr-1" />
-                      {formatDate(frontMatter.date)}
-                      <span className="mx-2">•</span>
-                      <Clock className="h-3 w-3 mr-1" />
-                      {frontMatter.readTime || "5 min"} de lectura
-                    </div>
-                  </div>
+                  {(() => {
+                    const authorData = getInstructorByName(frontMatter.author);
+                    return (
+                      <>
+                        <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center text-white overflow-hidden mr-3">
+                          {authorData?.profilePicture ? (
+                            <img 
+                              src={authorData.profilePicture} 
+                              alt={frontMatter.author}
+                              className="w-full h-full object-cover"
+                            />
+                          ) : (
+                            <User className="h-5 w-5" />
+                          )}
+                        </div>
+                        <div>
+                          <div className="text-white font-medium">Escrito por {frontMatter.author}</div>
+                          <div className="text-white/70 text-sm flex items-center mt-1">
+                            <CalendarIcon className="h-3 w-3 mr-1" />
+                            {formatDate(frontMatter.date)}
+                            <span className="mx-2">•</span>
+                            <Clock className="h-3 w-3 mr-1" />
+                            {frontMatter.readTime || "5 min"} de lectura
+                          </div>
+                        </div>
+                      </>
+                    );
+                  })()}
                 </div>
               </div>
             </div>
@@ -200,21 +216,35 @@ const BlogPost = () => {
             
             {/* Author bio */}
             <div className="glass-card-static p-6 mb-12">
-              <div className="flex items-start gap-4">
-                <Avatar className="h-16 w-16 rounded-full">
-                  <div className="bg-primary/20 h-full w-full flex items-center justify-center text-primary">
-                    <User className="h-8 w-8" />
+              {(() => {
+                const authorData = getInstructorByName(frontMatter.author);
+                return (
+                  <div className="flex items-start gap-4">
+                    <Avatar className="h-16 w-16 rounded-full">
+                      {authorData?.profilePicture ? (
+                        <img 
+                          src={authorData.profilePicture} 
+                          alt={frontMatter.author}
+                          className="h-full w-full object-cover rounded-full"
+                        />
+                      ) : (
+                        <div className="bg-primary/20 h-full w-full flex items-center justify-center text-primary">
+                          <User className="h-8 w-8" />
+                        </div>
+                      )}
+                    </Avatar>
+                    <div>
+                      <h3 className="text-lg font-semibold mb-1">{frontMatter.author || "No se pudo obtener el nombre"}</h3>
+                      <p className="text-sm text-muted-foreground mb-2">
+                        {authorData?.title || "No se pudo obtener el título"}
+                      </p>
+                      <p className="text-sm">
+                        {authorData?.bio || "No se pudo obtener la descripción"}
+                      </p>
+                    </div>
                   </div>
-                </Avatar>
-                <div>
-                  <h3 className="text-lg font-semibold mb-1">{frontMatter.author}</h3>
-                  <p className="text-sm text-muted-foreground mb-2">Coordinador de Competencias</p>
-                  <p className="text-sm">
-                    Apasionado por la programación competitiva y la enseñanza de algoritmos. Ha participado en 
-                    múltiples competencias nacionales e internacionales, incluyendo el ICPC Latinoamericano.
-                  </p>
-                </div>
-              </div>
+                );
+              })()}
             </div>
             
             {/* Related articles */}

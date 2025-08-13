@@ -659,7 +659,7 @@ const LearningRoadmaps = ({ selectedRoadmap: propSelectedRoadmap, setSelectedRoa
               key={roadmap.id}
               // COMMENTED OUT: Click functionality
               // onClick={() => handleRoadmapSelection(roadmap.id === selectedRoadmap ? null : roadmap.id)}
-              className={`glass-card p-4 text-center transition-all h-full hover:shadow-neon-blue`}
+              className={`glass-card p-4 text-center transition-all h-full hover:shadow-neon-blue flex flex-col justify-center items-center`}
               // COMMENTED OUT: Selected state styling
               // className={`glass-card p-4 text-center transition-all h-full ${
               //   roadmap.id === selectedRoadmap 

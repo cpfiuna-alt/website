@@ -37,5 +37,5 @@ Yb      .8'    888        888   888  888       .dP
   
   Sabias que la primera computadora de Paraguay fue instalada en 1970 en el
   Centro Nacional de Computacion (CNC) de la Universidad Nacional de Asuncion?
-  Era una IBM 1130 con 16KB de memoria principal. ¡Ahora tu telefono es
+  Era una IBM 1130 con 16KB de memoria principal. Ahora tu telefono es
   aproximadamente 1 millon de veces mas potente!

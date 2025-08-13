@@ -67,7 +67,7 @@ export const secretariaMembers = [
     name: "Gabriel Park",
     role: "POO",
     image: "/miembros/gabrielpark.png",
-    bio: "Siempre entre hardware, código… y alguna que otra partida de Fortnite.",
+    bio: "Estudiante de Ingeniería Mecatrónica, excampeón de VEX Robotics.",
     social: {
       github: "https://github.com/xX1NoiR1Xx",
       linkedin: "https://linkedin.com/in/#",
@@ -79,7 +79,7 @@ export const secretariaMembers = [
     name: "Mathías Martínez",
     role: "Algoritmos",
     image: "/miembros/mathiasmartinez.png",
-    bio: "Siempre entre hardware, código… y alguna que otra partida de Fortnite.",
+    bio: "Viviendo mi vida entre algoritmos y estructuras de datos.",
     social: {
       github: "https://github.com/#",
       linkedin: "https://linkedin.com/in/#",

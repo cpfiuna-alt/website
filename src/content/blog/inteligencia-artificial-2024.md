@@ -1,14 +1,14 @@
 
 ---
 id: 3
-title: "El estado de la Inteligencia Artificial en 2024"
+title: "El estado de la Inteligencia Artificial en el gran '25"
 excerpt: "Un análisis completo sobre los avances más importantes en IA, su impacto actual y hacia dónde se dirige esta tecnología en el futuro."
 date: "2024-02-10"
-author: "Ana Martínez"
+author: "Oscar Alderete"
 readTime: "15 min"
 tags: ["Inteligencia Artificial", "Machine Learning", "Deep Learning"]
 image: "/images/blog/ai-2024.jpg"
-slug: "inteligencia-artificial-2024"
+slug: "inteligencia-artificial-2025"
 ---
 
 # El estado de la Inteligencia Artificial en 2024
