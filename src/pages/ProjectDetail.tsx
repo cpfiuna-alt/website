@@ -138,7 +138,7 @@ const ProjectDetail = () => {
           />
           
           {/* Add project gallery here */}
-          <ProjectDetailGallery projectSlug={slug || ''} />
+          <ProjectDetailGallery project={project} />
           
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-10 mt-10">
             <div className="lg:col-span-2 order-2 lg:order-1">

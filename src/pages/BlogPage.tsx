@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import Layout from "@/components/Layout";
 import { Card } from "@/components/ui/card";
@@ -200,3 +199,6 @@ const BlogPage: React.FC = () => {
 };
 
 export default BlogPage;
+
+// DEPRECATED: This legacy BlogPage component is superseded by pages/Blog.tsx using dynamic content.
+// Consider deleting this file after confirming no routes reference it.

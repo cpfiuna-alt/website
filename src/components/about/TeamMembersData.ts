@@ -16,7 +16,7 @@ export const teamMembers = [
     name: "Oscar Alderete",
     role: "Vicepresidente",
     image: "/miembros/oscaralderete.png",
-    bio: "Buscando construir soluciones tecnológicas y automatizar mi vida",
+    bio: "Buscando construir soluciones tecnológicas y automatizar mi vida.",
     social: {
       github: "https://github.com/Osukaru17",
       linkedin: "https://linkedin.com/in/oscaralderete/",
@@ -33,14 +33,14 @@ export const teamMembers = [
       github: "https://github.com/ibald92",
       linkedin: "https://linkedin.com/in/juanesibarraa/",
       instagram: "https://instagram.com/ibarra_jeje",
-      email: "mailto:daniel.villalba@fiuna.edu.py",
+      email: "mailto:juan.ibarra@fiuna.edu.py",
     },
   },
   {
     name: "Iván Jara",
     role: "Tesorero",
     image: "/miembros/ivanjara.png",
-    bio: "Fan de la ciencia, la tecnología y los porqués del mundo",
+    bio: "Fan de la ciencia, la tecnología y los porqués del mundo.",
     social: {
       github: "https://github.com/ivanjara019",
       linkedin: "https://linkedin.com/in/ivanjaraa/",
@@ -61,6 +61,30 @@ export const secretariaMembers = [
       linkedin: "https://linkedin.com/in/danivillalba03",
       instagram: "https://instagram.com/danivillalba03", 
       email: "mailto:daniel.villalba@fiuna.edu.py",
+    },
+  },
+  {
+    name: "Gabriel Park",
+    role: "POO",
+    image: "/miembros/gabrielpark.png",
+    bio: "Siempre entre hardware, código… y alguna que otra partida de Fortnite.",
+    social: {
+      github: "https://github.com/xX1NoiR1Xx",
+      linkedin: "https://linkedin.com/in/#",
+      instagram: "https://www.instagram.com/jyp_py", 
+      email: "mailto:jinyoung@fiuna.edu.py",
+    },
+  },
+  {
+    name: "Mathías Martínez",
+    role: "Algoritmos",
+    image: "/miembros/mathiasmartinez.png",
+    bio: "Siempre entre hardware, código… y alguna que otra partida de Fortnite.",
+    social: {
+      github: "https://github.com/#",
+      linkedin: "https://linkedin.com/in/#",
+      instagram: "https://www.instagram.com/martinezmathias_/", 
+      email: "mailto:mathias.martinez@fiuna.edu.py",
     },
   },
 ];

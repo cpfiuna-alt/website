@@ -13,28 +13,40 @@ type ThemeContextType = {
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  // Store system preference separately
-  const [systemTheme, setSystemTheme] = useState<Theme>(() => {
+  // Helper function to get current system theme
+  const getSystemTheme = (): Theme => {
     if (typeof window !== "undefined") {
       return window.matchMedia("(prefers-color-scheme: dark)").matches
         ? "dark"
         : "light";
     }
-    return "dark";
-  });
+    return "dark"; // fallback for SSR
+  };
+
+  // Store system preference separately
+  const [systemTheme, setSystemTheme] = useState<Theme>(getSystemTheme);
 
   const [theme, setTheme] = useState<Theme>(() => {
-    // Always start with system theme, but check for saved preferences
     if (typeof window !== "undefined") {
       const savedTheme = localStorage.getItem("theme") as Theme;
-      return savedTheme || systemTheme;
+      // If user has a saved preference, use it; otherwise use current system theme
+      return savedTheme || getSystemTheme();
     }
-    return systemTheme;
+    return "dark"; // fallback for SSR
   });
 
   // Listen for system preference changes
   useEffect(() => {
     const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+    
+    // Ensure we have the correct initial system theme
+    const currentSystemTheme = mediaQuery.matches ? "dark" : "light";
+    setSystemTheme(currentSystemTheme);
+    
+    // If no saved theme preference, update to match current system theme
+    if (!localStorage.getItem("theme")) {
+      setTheme(currentSystemTheme);
+    }
     
     const handleChange = (e: MediaQueryListEvent) => {
       const newSystemTheme = e.matches ? "dark" : "light";
@@ -52,31 +64,37 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     return () => mediaQuery.removeEventListener("change", handleChange);
   }, []);
 
-  // Apply theme to document with smooth transition
+  // Apply theme to document with optimized smooth transition
   useEffect(() => {
     const root = window.document.documentElement;
     
-    // Add transition class for smooth color transitions
-    root.style.transition = 'color 0.3s ease-in-out, background-color 0.3s ease-in-out';
-    
-    root.classList.remove("light", "dark");
-    root.classList.add(theme);
-    
-    // Store user preference if manually set (different from system)
-    if (theme !== systemTheme) {
-      localStorage.setItem("theme", theme);
-    } else {
-      // If matching system preference, remove stored preference
-      // so we can follow system changes
-      localStorage.removeItem("theme");
-    }
-    
-    // Clean up transition after theme change is complete
-    const cleanup = setTimeout(() => {
-      root.style.transition = '';
-    }, 300);
-    
-    return () => clearTimeout(cleanup);
+    // Use requestAnimationFrame for smoother performance
+    requestAnimationFrame(() => {
+      // Add optimized transition only for essential properties
+      root.style.setProperty('transition', 'background-color 0.2s ease-out, color 0.2s ease-out, border-color 0.2s ease-out');
+      root.style.setProperty('will-change', 'background-color, color, border-color');
+      
+      // Batch DOM updates
+      root.classList.remove("light", "dark");
+      root.classList.add(theme);
+      
+      // Store user preference if manually set (different from system)
+      if (theme !== systemTheme) {
+        localStorage.setItem("theme", theme);
+      } else {
+        // If matching system preference, remove stored preference
+        // so we can follow system changes
+        localStorage.removeItem("theme");
+      }
+      
+      // Clean up transition and will-change after animation is complete
+      const cleanup = setTimeout(() => {
+        root.style.removeProperty('transition');
+        root.style.removeProperty('will-change');
+      }, 200);
+      
+      return () => clearTimeout(cleanup);
+    });
   }, [theme, systemTheme]);
 
   const toggleTheme = () => {

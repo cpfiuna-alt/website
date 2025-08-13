@@ -42,7 +42,7 @@ export function useLatestContent(limit: number = 4) {
         const allContent: LatestContentItem[] = [
           // Transform blog posts
           ...blogPosts.map(post => ({
-            id: String(post.frontMatter.id || post.slug),
+            id: `blog-${post.frontMatter.id || post.slug}`,
             title: post.frontMatter.title,
             excerpt: post.frontMatter.excerpt || post.frontMatter.description || '',
             date: post.frontMatter.date,
@@ -53,7 +53,7 @@ export function useLatestContent(limit: number = 4) {
           
           // Transform events
           ...events.map(event => ({
-            id: String(event.frontMatter.id || event.slug),
+            id: `event-${event.frontMatter.id || event.slug}`,
             title: event.frontMatter.title,
             excerpt: event.frontMatter.description || '',
             date: event.frontMatter.date,
@@ -65,7 +65,7 @@ export function useLatestContent(limit: number = 4) {
           
           // Transform projects
           ...projects.map(project => ({
-            id: String(project.frontMatter.id || project.slug),
+            id: `project-${project.frontMatter.id || project.slug}`,
             title: project.frontMatter.title,
             excerpt: project.frontMatter.description || '',
             // Fix to handle missing date properties
@@ -77,7 +77,7 @@ export function useLatestContent(limit: number = 4) {
           
           // Transform courses
           ...courses.map(course => ({
-            id: String(course.frontMatter.id || course.slug),
+            id: `course-${course.frontMatter.id || course.slug}`,
             title: course.frontMatter.title,
             excerpt: course.frontMatter.description || '',
             // Fix - provide default date if not available

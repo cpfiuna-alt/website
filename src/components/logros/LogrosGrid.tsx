@@ -55,7 +55,7 @@ const achievements = [
   },
   {
     id: 3,
-    title: "Primer lugar local en IEEEXtreme 2018",
+    title: "Primer lugar local en la Competencia IEEEXtreme 12.0",
     description: "El equipo del CPF obtuvo el primer lugar en la competencia IEEEXtreme a nivel nacional.",
     icon: <Trophy className="h-8 w-8 text-primary" />,
     year: 2018,
@@ -64,7 +64,7 @@ const achievements = [
   },
   {
     id: 4,
-    title: "Primer lugar en el Intercoding UC",
+    title: "Primer lugar en el Intercoding de la Universidad Católica",
     description: "El equipo del CPF obtuvo el primer lugar en la competencia Intercoding UC.",
     icon: <Trophy className="h-8 w-8 text-primary" />,
     year: 2018,
@@ -190,14 +190,14 @@ const LogrosGrid = () => {
             // >
             <div 
               key={achievement.id}
-              className="glass-card p-6 hover:translate-y-[-5px] hover:shadow-neon-blue transition-all duration-300 group"
+              className="glass-card-static p-6 hover:shadow-neon-blue transition-all duration-300 group"
             >
               <div className="flex justify-center mb-4">
                 {achievement.icon}
               </div>
               <span className="text-sm font-medium text-muted-foreground block text-center">{achievement.year}</span>
               <h3 className="text-xl font-semibold mb-3 text-center">{achievement.title}</h3>
-              <p className="text-muted-foreground text-sm mb-4">{achievement.description}</p>
+              {/*<p className="text-muted-foreground text-sm mb-4">{achievement.description}</p>*/}
               {/*<div className="text-primary text-sm font-medium flex items-center justify-center mt-auto group-hover:underline">
                 Ver más <ArrowRight className="ml-1 h-4 w-4" />
               </div>*/}

@@ -33,12 +33,6 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     window.addEventListener('resize', fixViewport);
     window.addEventListener('orientationchange', fixViewport);
 
-    // Set meta viewport tag to prevent unwanted zoom on input fields in iOS
-    const metaViewport = document.querySelector('meta[name=viewport]');
-    if (metaViewport) {
-      metaViewport.setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0');
-    }
-
     return () => {
       window.removeEventListener('resize', fixViewport);
       window.removeEventListener('orientationchange', fixViewport);

@@ -1,23 +1,25 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { 
   Code, Terminal, Award, Lightbulb, Video, BookOpen, 
   FileText, Users, ExternalLink, ChevronRight, ArrowRight, Compass, Brain
 } from "lucide-react";
+// COMMENTED OUT: RoadmapFlow import since roadmap display is disabled
+// import RoadmapFlow from "./RoadmapFlow";
 
-interface RoadmapResource {
+export interface RoadmapResource {
   name: string;
   url: string;
   type: string;
 }
 
-interface RoadmapLevel {
+export interface RoadmapLevel {
   name: string;
   skills: string[];
   resources: RoadmapResource[];
 }
 
-interface Roadmap {
+export interface Roadmap {
   id: string;
   title: string;
   description: string;
@@ -493,15 +495,15 @@ const learningRoadmaps: Roadmap[] = [
 const RoadmapCardIcon = ({ id }: { id: string }) => {
   switch (id) {
     case "frontend":
-      return <Code className="h-10 w-10 mb-4 text-primary" />;
+      return <Code className="h-10 w-10 mb-4 text-primary mx-auto" />;
     case "backend":
-      return <Terminal className="h-10 w-10 mb-4 text-primary" />;
+      return <Terminal className="h-10 w-10 mb-4 text-primary mx-auto" />;
     case "competitive":
-      return <Award className="h-10 w-10 mb-4 text-primary" />;
+      return <Award className="h-10 w-10 mb-4 text-primary mx-auto" />;
     case "datascience":
-      return <Lightbulb className="h-10 w-10 mb-4 text-primary" />;
+      return <Lightbulb className="h-10 w-10 mb-4 text-primary mx-auto" />;
     case "artificialintelligence":
-      return <Brain className="h-10 w-10 mb-4 text-primary" />;
+      return <Brain className="h-10 w-10 mb-4 text-primary mx-auto" />;
     default:
       return null;
   }
@@ -613,15 +615,32 @@ const RoadmapDetail = ({ roadmap }: RoadmapDetailProps) => {
 };
 
 interface LearningRoadmapsProps {
-  selectedRoadmap: string | null;
-  setSelectedRoadmap: (id: string | null) => void;
+  selectedRoadmap?: string | null;
+  setSelectedRoadmap?: (id: string | null) => void;
 }
 
-const LearningRoadmaps = ({ selectedRoadmap, setSelectedRoadmap }: LearningRoadmapsProps) => {
+const LearningRoadmaps = ({ selectedRoadmap: propSelectedRoadmap, setSelectedRoadmap }: LearningRoadmapsProps) => {
+  // Internal state for when component is used standalone without props
+  const [internalSelectedRoadmap, setInternalSelectedRoadmap] = useState<string | null>(
+    propSelectedRoadmap || "frontend"
+  );
+  
+  // Use either the props or internal state
+  const selectedRoadmap = propSelectedRoadmap !== undefined ? propSelectedRoadmap : internalSelectedRoadmap;
+  
+  // COMMENTED OUT: Roadmap selection functionality
+  // const handleRoadmapSelection = (id: string | null) => {
+  //   if (setSelectedRoadmap) {
+  //     setSelectedRoadmap(id);
+  //   } else {
+  //     setInternalSelectedRoadmap(id);
+  //   }
+  // };
+  
   return (
     <section className="py-16 bg-muted/30 dark:bg-black/20">
       <div className="container mx-auto px-6">
-        <div className="mb-12 text-center">
+        <div className="mb-8 text-center">
           <div className="inline-flex items-center justify-center mb-4 h-12 w-12 rounded-full bg-primary/10">
             <Compass className="h-6 w-6 text-primary" />
           </div>
@@ -634,35 +653,42 @@ const LearningRoadmaps = ({ selectedRoadmap, setSelectedRoadmap }: LearningRoadm
           </p>
         </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-8">
           {learningRoadmaps.map(roadmap => (
-            <button
+            <div
               key={roadmap.id}
-              onClick={() => setSelectedRoadmap(roadmap.id === selectedRoadmap ? null : roadmap.id)}
-              className={`glass-card p-4 text-left transition-all h-full ${
-                roadmap.id === selectedRoadmap 
-                  ? "ring-2 ring-primary shadow-neon-blue" 
-                  : "hover:shadow-neon-blue"
-              }`}
+              // COMMENTED OUT: Click functionality
+              // onClick={() => handleRoadmapSelection(roadmap.id === selectedRoadmap ? null : roadmap.id)}
+              className={`glass-card p-4 text-center transition-all h-full hover:shadow-neon-blue`}
+              // COMMENTED OUT: Selected state styling
+              // className={`glass-card p-4 text-center transition-all h-full ${
+              //   roadmap.id === selectedRoadmap 
+              //     ? "ring-2 ring-primary shadow-neon-blue" 
+              //     : "hover:shadow-neon-blue"
+              // }`}
             >
               <RoadmapCardIcon id={roadmap.id} />
               
               <h3 className="text-lg font-semibold mb-2">{roadmap.title}</h3>
               <p className="text-muted-foreground text-xs mb-4">{roadmap.description}</p>
               
-              <div className="flex items-center text-primary text-sm font-medium">
+              {/* COMMENTED OUT: "Ver ruta" text and its container space */}
+              {/* <div className="flex items-center justify-center text-primary text-sm font-medium">
                 <span>Ver ruta</span>
-                <ChevronRight className={`h-4 w-4 ml-1 transition-transform ${
-                  roadmap.id === selectedRoadmap ? "rotate-90" : ""
-                }`} />
-              </div>
-            </button>
+                <ChevronRight className={`h-4 w-4 ml-1 transition-transform`} />
+              </div> */}
+              {/* COMMENTED OUT: Selected state arrow rotation */}
+              {/* <ChevronRight className={`h-4 w-4 ml-1 transition-transform ${
+                roadmap.id === selectedRoadmap ? "rotate-90" : ""
+              }`} /> */}
+            </div>
           ))}
         </div>
         
-        {selectedRoadmap && (
-          <RoadmapDetail roadmap={learningRoadmaps.find(r => r.id === selectedRoadmap)!} />
-        )}
+        {/* COMMENTED OUT: Roadmap flow display logic */}
+        {/* {selectedRoadmap && (
+          <RoadmapFlow roadmap={learningRoadmaps.find(r => r.id === selectedRoadmap)!} />
+        )} */}
       </div>
     </section>
   );

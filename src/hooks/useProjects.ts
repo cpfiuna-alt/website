@@ -62,7 +62,8 @@ export function useProjects() {
                 demoLink: frontMatter.demoLink || frontMatter.demoUrl || "",
                 githubStats: frontMatter.githubStats || { stars: 0, forks: 0, issues: 0, contributors: 0 },
                 github: frontMatter.github || frontMatter.githubLink,
-                demo: frontMatter.demo || frontMatter.demoLink
+                demo: frontMatter.demo || frontMatter.demoLink,
+                gallery: frontMatter.gallery || [] // Add gallery field
               };
               
               return projectData;

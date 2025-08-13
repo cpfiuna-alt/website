@@ -1,4 +1,3 @@
-
 import { useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
@@ -19,7 +18,11 @@ const HeroActions = ({ onMount }: HeroActionsProps) => {
   }, [onMount]);
 
   return (
-    <div ref={ctaRef} className="flex flex-col sm:flex-row items-center justify-center gap-4 opacity-0">
+    <div
+      ref={ctaRef}
+      className="flex flex-col sm:flex-row items-center justify-center gap-4 opacity-0 will-change-transform"
+      style={{ minHeight: "3.25rem" }}
+    >
       <Link
         to="/nosotros"
         className="w-full sm:w-auto inline-flex items-center justify-center px-6 py-3 rounded-full bg-primary text-primary-foreground font-medium transition-all hover:scale-105 hover:shadow-neon-blue"

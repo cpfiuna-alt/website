@@ -17,7 +17,7 @@ const Index = () => {
         <News />
         <AboutClub />
         <Features />
-        <SocialMedia />
+        {/*<SocialMedia />*/}
       </div>
     </Layout>
   );

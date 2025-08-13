@@ -117,7 +117,8 @@ const ProjectsDocsHub: React.FC = () => {
                     
                     <p className="text-xl text-muted-foreground">
                       Centro de documentación completa para todos los proyectos del Club de Programación FIUNA. Explora guías técnicas, APIs, tutoriales y recursos para cada uno de nuestros desarrollos.
-                    </p>                  </div>
+                    </p>                  
+                    </div>
                 </div>
               </section>
 

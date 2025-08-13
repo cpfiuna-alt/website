@@ -5,7 +5,7 @@ description: "Aprende los fundamentos de C++ y su aplicación en la programació
 level: "Intermedio"
 duration: "8 semanas"
 instructor: "Daniel Villalba"
-image: "images/cursos/curso-cpp-banner.jpg"
+image: "/images/cursos/curso-cpp-banner.jpg"
 tags: ["C++", "Programación", "Algoritmos"]
 slug: "introduccion-cpp"
 youtubeUrl: "none"

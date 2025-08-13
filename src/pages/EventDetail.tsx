@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import Layout from "@/components/layout/Layout";
 import { EventFrontMatter } from "@/utils/markdownUtils";
 import { getEventBySlug } from "@/utils/eventsService";
 import NotFound from "./NotFound";
 import EventDetailContainer from "@/components/events/EventDetailContainer";
 import EventDetailSkeleton from "@/components/events/EventDetailSkeleton";
+import { ChevronLeft } from "lucide-react";
 
 const EventDetail = () => {
   const { slug } = useParams<{ slug: string }>();

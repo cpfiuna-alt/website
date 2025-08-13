@@ -5,7 +5,7 @@ description: "Aprende los fundamentos del desarrollo web frontend creando sitios
 level: "Principiante"
 duration: "5 semanas"
 instructor: "David Giménez"
-image: "images/cursos/curso-webdev-banner.jpg"
+image: "/images/cursos/curso-webdev-banner.jpg"
 tags: ["HTML", "CSS", "Frontend", "Web"]
 slug: "desarrollo-web-html-css"
 youtubeUrl: "none"

@@ -5,7 +5,7 @@ description: "Aprendé los fundamentos de Python desde cero. Curso básico para 
 level: "Principiante"
 duration: "6 semanas"
 instructor: "Esteban Ibarra"
-image: "images/cursos/curso-python-banner.jpg"
+image: "/images/cursos/curso-python-banner.jpg"
 tags: ["Python", "Programación", "Básico"]
 slug: "introduccion-python"
 youtubeUrl: "none"

@@ -1,4 +1,3 @@
-
 import { useRef, useEffect } from "react";
 
 interface HeroSubtitleProps {
@@ -19,7 +18,8 @@ const HeroSubtitle = ({ onMount }: HeroSubtitleProps) => {
   return (
     <p 
       ref={subtitleRef}
-      className="text-lg md:text-2xl text-muted-foreground max-w-3xl mx-auto opacity-0"
+      className="text-lg md:text-2xl text-muted-foreground max-w-3xl mx-auto opacity-0 will-change-transform py-3"
+      style={{minHeight:'2.5em'}}
     >
       Por amor al código y la innovación
     </p>

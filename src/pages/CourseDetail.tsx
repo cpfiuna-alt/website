@@ -282,7 +282,7 @@ const CourseDetail = () => {
             
             <TabsContent value="overview" className="space-y-8">
               <div className="prose prose-lg dark:prose-invert max-w-none">
-                <MarkdownRenderer content={content} />
+                <MarkdownRenderer content={extractDescriptionOnly(content)} />
               </div>
               
               <div className="glass-card-static p-6">
@@ -485,7 +485,8 @@ function extractSyllabus(content: string): { title: string; topics: string[] }[]
   const syllabus: { title: string; topics: string[] }[] = [];
   
   // Look for section that starts with "### " which typically denotes weeks in our markdown
-  const regex = /### (.*?)\n([\s\S]*?)(?=### |$)/g;
+  // Updated regex to handle both Unix (\n) and Windows (\r\n) line endings
+  const regex = /### (.*?)[\r\n]([\s\S]*?)(?=### |## |$)/g;
   let match;
   
   while ((match = regex.exec(content)) !== null) {
@@ -494,11 +495,12 @@ function extractSyllabus(content: string): { title: string; topics: string[] }[]
     
     // Extract topics (bullet points)
     const topics: string[] = [];
-    const topicLines = weekContent.split('\n');
+    const topicLines = weekContent.split(/\r?\n/);
     
     for (const line of topicLines) {
-      if (line.trim().startsWith('- ')) {
-        topics.push(line.trim().substring(2));
+      const trimmedLine = line.trim();
+      if (trimmedLine.startsWith('- ')) {
+        topics.push(trimmedLine.substring(2));
       }
     }
     
@@ -508,20 +510,6 @@ function extractSyllabus(content: string): { title: string; topics: string[] }[]
         topics
       });
     }
-  }
-  
-  // If we couldn't extract syllabus (different format), return some defaults
-  if (syllabus.length === 0) {
-    return [
-      {
-        title: "Semana 1: Introducción",
-        topics: ["Fundamentos básicos", "Configuración del entorno", "Primeros pasos"]
-      },
-      {
-        title: "Semana 2: Conceptos fundamentales",
-        topics: ["Estructuras básicas", "Ejercicios prácticos", "Estudio de casos"]
-      }
-    ];
   }
   
   return syllabus;
@@ -546,6 +534,33 @@ function extractInstructorBio(content: string, instructorName: string): string {
   
   // Default fallback if no matching structure is found
   return "Error de carga del perfil del instructor. Por favor, contacta al administrador del curso.";
+}
+
+// Helper function to extract only the description part (before syllabus sections)
+function extractDescriptionOnly(content: string): string {
+  // Split content by ### headers (which mark syllabus sections like "### Semana X")
+  const sections = content.split(/### /);
+  
+  // The first section should be the description
+  let descriptionContent = sections[0].trim();
+  
+  // Remove any ## Instructor section if it exists in the description
+  const instructorSectionRegex = /## Instructor(?:a)?[\s\S]*$/i;
+  descriptionContent = descriptionContent.replace(instructorSectionRegex, '').trim();
+  
+  // Remove "## Contenido del curso" section and everything after it
+  const contenidoSectionRegex = /## Contenido del curso[\s\S]*$/i;
+  descriptionContent = descriptionContent.replace(contenidoSectionRegex, '').trim();
+  
+  // Remove "## Metodología" section and everything after it if it appears before syllabus
+  const metodologiaSectionRegex = /## Metodología[\s\S]*$/i;
+  descriptionContent = descriptionContent.replace(metodologiaSectionRegex, '').trim();
+  
+  // Remove "## Requisitos" section and everything after it if it appears before syllabus
+  const requisitosSectionRegex = /## Requisitos[\s\S]*$/i;
+  descriptionContent = descriptionContent.replace(requisitosSectionRegex, '').trim();
+  
+  return descriptionContent;
 }
 
 export default CourseDetail;

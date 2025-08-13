@@ -1,5 +1,6 @@
 import React from "react";
-import { Upload } from "lucide-react";
+import { Upload, X } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 interface ResourceUploadModalProps {
   isOpen: boolean;
@@ -29,117 +30,156 @@ const ResourceUploadModal = ({ isOpen, onClose, onSubmit, resourceTypes }: Resou
   };
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
-      <div className="glass-card w-full max-w-xl p-6 animate-fade-in">
-        <div className="flex justify-between items-center mb-6">
-          <h3 className="text-xl font-semibold">Subir nuevo recurso</h3>
-          <button 
-            onClick={onClose}
-            className="text-muted-foreground hover:text-foreground"
-          >
-            ✕
-          </button>
-        </div>
-        
-        <form onSubmit={handleSubmit}>
-          <div className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium mb-1">Título</label>
-              <input 
-                type="text" 
-                required
-                className="w-full px-4 py-2 rounded-lg bg-background/50 border border-muted focus:outline-none focus:ring-2 focus:ring-primary"
-                placeholder="Nombre del recurso"
-              />
-            </div>
-            
-            <div>
-              <label className="block text-sm font-medium mb-1">Descripción</label>
-              <textarea 
-                required
-                rows={3}
-                className="w-full px-4 py-2 rounded-lg bg-background/50 border border-muted focus:outline-none focus:ring-2 focus:ring-primary"
-                placeholder="Breve descripción del recurso"
-              ></textarea>
-            </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium mb-1">Tipo</label>
-                <select 
-                  required
-                  className="w-full px-4 py-2 rounded-lg bg-background/50 border border-muted focus:outline-none focus:ring-2 focus:ring-primary"
-                >
-                  <option value="">Seleccionar tipo</option>
-                  {resourceTypes.map(type => (
-                    <option key={type} value={type}>{type}</option>
-                  ))}
-                </select>
-              </div>
-              
-              <div>
-                <label className="block text-sm font-medium mb-1">Autor</label>
+    <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm overflow-y-auto">
+      <div 
+        className="min-h-screen flex items-start justify-center p-4 pt-8 pb-8"
+        onClick={(e) => {
+          // Close modal if clicking on the backdrop (not the modal content)
+          if (e.target === e.currentTarget) {
+            onClose();
+          }
+        }}
+      >
+        <div 
+          className="glass-card-static w-full max-w-2xl relative"
+          onClick={(e) => {
+            // Prevent modal from closing when clicking inside the card
+            e.stopPropagation();
+          }}
+        >
+          {/* Header with close button */}
+          <div className="flex justify-between items-center p-6 border-b border-muted/20">
+            <h3 className="text-xl font-semibold">Subir nuevo recurso</h3>
+            <button 
+              onClick={onClose}
+              className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+            >
+              <X className="h-4 w-4" />
+              <span className="sr-only">Cerrar</span>
+            </button>
+          </div>
+          
+          {/* Form content */}
+          <div className="p-6">
+            <form onSubmit={handleSubmit} className="space-y-6">
+              {/* Title */}
+              <div className="space-y-2">
+                <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                  Título
+                </label>
                 <input 
                   type="text" 
                   required
-                  className="w-full px-4 py-2 rounded-lg bg-background/50 border border-muted focus:outline-none focus:ring-2 focus:ring-primary"
-                  placeholder="Tu nombre"
+                  className="w-full px-3 py-2 rounded-lg bg-background border border-muted focus:outline-none focus:ring-2 focus:ring-primary transition-colors"
+                  placeholder="Nombre del recurso"
                 />
               </div>
-            </div>
-            
-            <div>
-              <label className="block text-sm font-medium mb-1">Etiquetas (separadas por comas)</label>
-              <input 
-                type="text" 
-                className="w-full px-4 py-2 rounded-lg bg-background/50 border border-muted focus:outline-none focus:ring-2 focus:ring-primary"
-                placeholder="React, JavaScript, Tutorial"
-              />
-            </div>
-            
-            <div>
-              <label className="block text-sm font-medium mb-1">Archivo</label>
-              <div className="border border-dashed border-muted rounded-lg p-8 text-center bg-background/50">
-                <Upload className="h-8 w-8 mx-auto mb-2 text-muted-foreground" />
-                <p className="text-sm text-muted-foreground mb-2">
-                  Arrastra y suelta archivos aquí o haz clic para seleccionar
-                </p>
-                <p className="text-xs text-muted-foreground">
-                  Formatos soportados: PDF, ZIP, PPT, DOC, MP4 (máx. 100MB)
-                </p>
-                <input 
-                  type="file" 
-                  className="hidden" 
-                  id="resource-file" 
+              
+              {/* Description */}
+              <div className="space-y-2">
+                <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                  Descripción
+                </label>
+                <textarea 
                   required
+                  rows={3}
+                  className="w-full px-3 py-2 rounded-lg bg-background border border-muted focus:outline-none focus:ring-2 focus:ring-primary transition-colors resize-none"
+                  placeholder="Breve descripción del recurso"
                 />
-                <button 
-                  type="button"
-                  onClick={() => document.getElementById('resource-file')?.click()}
-                  className="mt-4 px-4 py-2 rounded-lg bg-secondary text-secondary-foreground hover:bg-secondary/80 transition-colors"
-                >
-                  Seleccionar archivo
-                </button>
               </div>
-            </div>
+              
+              {/* Type and Author */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                    Tipo
+                  </label>
+                  <select 
+                    required
+                    className="w-full px-3 py-2 rounded-lg bg-background border border-muted focus:outline-none focus:ring-2 focus:ring-primary transition-colors"
+                  >
+                    <option value="">Seleccionar tipo</option>
+                    {resourceTypes.map(type => (
+                      <option key={type} value={type}>{type}</option>
+                    ))}
+                  </select>
+                </div>
+                
+                <div className="space-y-2">
+                  <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                    Autor
+                  </label>
+                  <input 
+                    type="text" 
+                    required
+                    className="w-full px-3 py-2 rounded-lg bg-background border border-muted focus:outline-none focus:ring-2 focus:ring-primary transition-colors"
+                    placeholder="Tu nombre"
+                  />
+                </div>
+              </div>
+              
+              {/* Tags */}
+              <div className="space-y-2">
+                <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                  Etiquetas
+                </label>
+                <input 
+                  type="text" 
+                  className="w-full px-3 py-2 rounded-lg bg-background border border-muted focus:outline-none focus:ring-2 focus:ring-primary transition-colors"
+                  placeholder="React, JavaScript, Tutorial (separadas por comas)"
+                />
+                <p className="text-xs text-muted-foreground">
+                  Separa las etiquetas con comas para mejor categorización
+                </p>
+              </div>
+              
+              {/* File Upload */}
+              <div className="space-y-2">
+                <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                  Archivo
+                </label>
+                <div className="border-2 border-dashed border-muted/50 rounded-lg p-6 text-center bg-muted/10 hover:bg-muted/20 transition-colors">
+                  <Upload className="h-8 w-8 mx-auto mb-3 text-muted-foreground" />
+                  <p className="text-sm text-muted-foreground mb-2">
+                    Arrastra y suelta archivos aquí o haz clic para seleccionar
+                  </p>
+                  <p className="text-xs text-muted-foreground mb-4">
+                    Formatos soportados: PDF, ZIP, PPT, DOC, MP4 (máx. 100MB)
+                  </p>
+                  <input 
+                    type="file" 
+                    className="hidden" 
+                    id="resource-file" 
+                    required
+                    accept=".pdf,.zip,.ppt,.pptx,.doc,.docx,.mp4,.mov,.avi"
+                  />
+                  <Button 
+                    type="button"
+                    variant="secondary"
+                    onClick={() => document.getElementById('resource-file')?.click()}
+                  >
+                    Seleccionar archivo
+                  </Button>
+                </div>
+              </div>
+              
+              {/* Action Buttons */}
+              <div className="flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2 pt-4 border-t border-muted/20">
+                <Button 
+                  type="button"
+                  variant="outline"
+                  onClick={onClose}
+                  className="mt-2 sm:mt-0"
+                >
+                  Cancelar
+                </Button>
+                <Button type="submit">
+                  Subir recurso
+                </Button>
+              </div>
+            </form>
           </div>
-          
-          <div className="flex justify-end gap-3 mt-6">
-            <button 
-              type="button"
-              onClick={onClose}
-              className="px-4 py-2 rounded-lg border border-muted bg-transparent hover:bg-muted/20 transition-colors"
-            >
-              Cancelar
-            </button>
-            <button 
-              type="submit"
-              className="px-4 py-2 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 transition-colors"
-            >
-              Subir recurso
-            </button>
-          </div>
-        </form>
+        </div>
       </div>
     </div>
   );

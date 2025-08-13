@@ -27,7 +27,7 @@ const TeamMemberCard = ({ member, index }: TeamMemberCardProps) => {
       className="opacity-0 animate-fade-in"
       style={{ animationDelay: `${0.1 * (index + 1)}s`, animationFillMode: "forwards" }}
     >
-      <div className="glass-card overflow-hidden hover:shadow-neon-blue transition-all duration-300 h-full flex flex-col">
+      <div className="glass-card-static overflow-hidden hover:shadow-neon-blue transition-all duration-300 h-full flex flex-col">
         <div className="bg-gradient-to-br from-primary/20 to-primary/5 py-8">
           <div className="h-28 w-28 rounded-full mx-auto mb-4 overflow-hidden border-4 border-white/10">
             <img 

@@ -1,7 +1,7 @@
 
 import React from "react";
 import { Link } from "react-router-dom";
-import { ArrowLeft } from "lucide-react";
+import { ChevronLeft } from "lucide-react";
 import { EventFrontMatter } from "@/utils/markdownUtils";
 
 interface EventDetailHeaderProps {
@@ -30,17 +30,22 @@ const EventDetailHeader = ({ event }: EventDetailHeaderProps) => {
   };
 
   return (
-    <section className="relative pt-4">
-      <div className="container mx-auto px-6 mb-6">
-        <Link
-          to="/eventos"
-          className="inline-flex items-center text-sm text-muted-foreground hover:text-primary transition-colors"
-        >
-          <ArrowLeft className="mr-2 h-4 w-4" />
-          Volver a eventos
-        </Link>
+    <section className="relative">
+      {/* Superimposed "Volver" button aligned with banner text */}
+      <div className="absolute top-6 left-0 right-0 z-30">
+        <div className="container mx-auto px-6">
+          <div className="max-w-3xl">
+            <Link
+              to="/eventos"
+              className="inline-flex items-center text-white/90 hover:text-primary transition-colors bg-black/20 backdrop-blur-sm rounded-lg px-3 py-2"
+            >
+              <ChevronLeft className="h-4 w-4 mr-1" />
+              Volver a eventos
+            </Link>
+          </div>
+        </div>
       </div>
-
+      
       <div className="relative w-full h-[300px] md:h-[500px] mb-12">
         <div className="absolute inset-0 bg-black/40 z-10 "></div>
         <img

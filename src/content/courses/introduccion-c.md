@@ -5,7 +5,7 @@ description: "Aprende los fundamentos de C y su aplicación en la programación 
 level: "Intermedio"
 duration: "8 semanas"
 instructor: "David Giménez"
-image: "images/cursos/curso-c-banner.jpg"
+image: "/images/cursos/curso-c-banner.jpg"
 tags: ["C", "Programación", "Algoritmos"]
 slug: "introduccion-cpp"
 youtubeUrl: "none"

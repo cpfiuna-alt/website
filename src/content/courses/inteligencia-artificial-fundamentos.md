@@ -5,7 +5,7 @@ description: "Explora los conceptos básicos de la inteligencia artificial, apre
 level: "Intermedio"
 duration: "10 semanas"
 instructor: "Oscar Alderete"
-image: "images/cursos/curso-ia-banner.jpg"
+image: "/images/cursos/curso-ia-banner.jpg"
 tags: ["Inteligencia Artificial", "Machine Learning", "Python"]
 slug: "inteligencia-artificial-fundamentos"
 youtubeUrl: "none"

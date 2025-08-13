@@ -63,6 +63,7 @@ export interface ProjectFrontMatter {
   githubLink?: string;
   demoLink?: string;
   githubStats?: GitHubStats;
+  gallery?: string[]; // Array of image URLs for project gallery
 }
 
 // Type for GitHub stats

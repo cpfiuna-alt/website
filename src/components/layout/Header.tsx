@@ -69,7 +69,7 @@ const Header = () => {
                     <>
                       {item.name}
                       {isActive && (
-                        <span className="absolute bottom-0 left-0 w-full h-0.5 bg-primary rounded-full" />
+                        <span className="absolute bottom-0 left-0 w-full h-0.5 bg-primary rounded-full animate-fade-in-scale-x" />
                       )}
                     </>
                   )}
@@ -97,7 +97,7 @@ const Header = () => {
                 <BookOpen className="h-4 w-4 mr-1" />
                 <span className="whitespace-nowrap">Docs</span>
                 {isActive && (
-                  <span className="absolute bottom-0 left-0 w-full h-0.5 bg-primary rounded-full" />
+                  <span className="absolute bottom-0 left-0 w-full h-0.5 bg-primary rounded-full animate-fade-in-scale-x" />
                 )}
               </>
             )}

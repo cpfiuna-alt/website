@@ -1,15 +1,35 @@
 
-/* Glass elements */
+/* Optimized theme transitions */
+.theme-transition {
+  transition: background-color 0.2s ease-out, color 0.2s ease-out, border-color 0.2s ease-out;
+  will-change: background-color, color, border-color;
+}
+
+/* Reduce motion for accessibility and performance */
+@media (prefers-reduced-motion: reduce) {
+  .theme-transition {
+    transition: none;
+  }
+}
+
+/* Glass elements with optimized transitions */
 .glass {
   @apply bg-white/10 dark:bg-black/20 backdrop-blur-md border border-white/20 dark:border-white/10 rounded-xl;
+  transition: background-color 0.2s ease-out, border-color 0.2s ease-out;
 }
 
 .glass-card {
-  @apply relative backdrop-blur-md bg-white/20 dark:bg-black/30 border border-white/20 dark:border-white/10 rounded-xl shadow-xl overflow-hidden transition-all duration-300 hover:translate-y-[-5px];
+  @apply relative backdrop-blur-md bg-white/20 dark:bg-black/30 border border-white/20 dark:border-white/10 rounded-xl shadow-xl overflow-hidden;
+  transition: transform 0.2s ease-out, background-color 0.2s ease-out, border-color 0.2s ease-out;
+}
+
+.glass-card:hover {
+  transform: translateY(-5px);
 }
 
 .glass-card-static {
   @apply relative backdrop-blur-md bg-white/20 dark:bg-black/30 border border-white/20 dark:border-white/10 rounded-xl shadow-xl overflow-hidden;
+  transition: background-color 0.2s ease-out, border-color 0.2s ease-out;
 }
 
 .glow-border {

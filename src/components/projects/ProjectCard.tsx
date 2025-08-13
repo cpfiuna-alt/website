@@ -70,7 +70,7 @@ const ProjectCard = ({ project }: ProjectCardProps) => {
         </div>
       </div>
       <div className="p-6">
-        <Link to={`/projects/${project.slug}`}>
+        <Link to={`/proyectos/${project.slug}`}>
           <h3 className="text-xl font-semibold mb-3 group-hover:text-primary transition-colors text-card-foreground">
             {project.title}
           </h3>
@@ -89,7 +89,7 @@ const ProjectCard = ({ project }: ProjectCardProps) => {
             Código
           </a>
           <Link
-            to={`/projects/${project.slug}`}
+            to={`/proyectos/${project.slug}`}
             className="inline-flex items-center justify-center px-4 py-2 rounded-full bg-primary text-primary-foreground text-sm font-medium transition-all hover:scale-105 hover:shadow-neon-blue"
           >
             Ver detalles

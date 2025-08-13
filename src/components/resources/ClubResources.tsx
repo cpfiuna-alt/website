@@ -1,82 +1,28 @@
-
 import React, { useState } from "react";
-import { Download, FileText, Search } from "lucide-react";
-
-interface Resource {
-  id: string;
-  title: string;
-  description: string;
-  type: string;
-  author: string;
-  date: string;
-  downloadUrl: string;
-  fileSize: string;
-  format: string;
-  tags: string[];
-}
-
-const sampleCustomResources: Resource[] = [
-  {
-    id: "1",
-    title: "Introducción a Algoritmos y Estructuras de Datos",
-    description: "Curso completo sobre los fundamentos de algoritmos y estructuras de datos",
-    type: "Curso",
-    author: "Prof. María López",
-    date: "2023-10-15",
-    downloadUrl: "#",
-    fileSize: "45MB",
-    format: "PDF",
-    tags: ["Algoritmos", "Estructuras de Datos", "Python"]
-  },
-  {
-    id: "2",
-    title: "Desarrollo Web con React - Material de Taller",
-    description: "Presentación y código de ejemplo del taller de React realizado en FIUNA",
-    type: "Presentación",
-    author: "Juan Pérez",
-    date: "2024-02-20",
-    downloadUrl: "#",
-    fileSize: "12MB",
-    format: "ZIP",
-    tags: ["React", "JavaScript", "Frontend"]
-  },
-  {
-    id: "3",
-    title: "Herramientas para Machine Learning en Python",
-    description: "Guía práctica sobre las principales bibliotecas y herramientas para ML",
-    type: "Material de Referencia",
-    author: "Carlos Gómez",
-    date: "2023-11-30",
-    downloadUrl: "#",
-    fileSize: "28MB",
-    format: "PDF",
-    tags: ["Machine Learning", "Python", "Data Science"]
-  },
-  {
-    id: "4",
-    title: "Competencia ACM-ICPC - Problemas Resueltos",
-    description: "Compilación de problemas y soluciones de competencias anteriores",
-    type: "Material de Práctica",
-    author: "Equipo </cpf>",
-    date: "2024-01-10",
-    downloadUrl: "#",
-    fileSize: "8MB",
-    format: "PDF",
-    tags: ["Competitive Programming", "Algoritmos", "C++"]
-  }
-];
-
-const availableTags = Array.from(
-  new Set(sampleCustomResources.flatMap(resource => resource.tags))
-);
-
-const resourceTypes = ["Curso", "Presentación", "Material de Referencia", "Material de Práctica", "Software", "Otros"];
+import { Download, FileText, Search, ExternalLink } from "lucide-react";
+import clubResourcesService, { Resource } from "@/services/clubResourcesService";
 
 interface ResourceCardProps {
   resource: Resource;
 }
 
 const ResourceCard = ({ resource }: ResourceCardProps) => {
+  const downloadInfo = clubResourcesService.getSafeDownloadUrl(resource);
+  
+  const handleDownload = () => {
+    if (downloadInfo.isValid) {
+      // Open external URLs in a new tab for security
+      if (downloadInfo.isExternal) {
+        window.open(downloadInfo.url, '_blank', 'noopener,noreferrer');
+      } else {
+        window.location.href = downloadInfo.url;
+      }
+    } else {
+      console.error('Invalid download URL:', downloadInfo.url);
+      alert('Error: URL de descarga no válida');
+    }
+  };
+
   return (
     <div className="glass-card-static p-6">
       <div className="flex items-start justify-between mb-3">
@@ -107,13 +53,19 @@ const ResourceCard = ({ resource }: ResourceCardProps) => {
         <div>{new Date(resource.date).toLocaleDateString('es-ES')}</div>
       </div>
       
-      <a 
-        href={resource.downloadUrl} 
-        className="flex items-center justify-center gap-2 w-full px-4 py-2 rounded-lg bg-primary/10 hover:bg-primary/20 text-primary transition-colors"
+      <button 
+        onClick={handleDownload}
+        disabled={!downloadInfo.isValid}
+        className={`flex items-center justify-center gap-2 w-full px-4 py-2 rounded-lg transition-colors ${
+          downloadInfo.isValid
+            ? 'bg-primary/10 hover:bg-primary/20 text-primary cursor-pointer'
+            : 'bg-muted/50 text-muted-foreground cursor-not-allowed'
+        }`}
       >
         <Download className="h-4 w-4" />
         <span>Descargar ({resource.fileSize})</span>
-      </a>
+        {downloadInfo.isExternal && <ExternalLink className="h-3 w-3" />}
+      </button>
     </div>
   );
 };
@@ -135,6 +87,9 @@ const FilterBar = ({
   selectedTags,
   handleTagToggle
 }: FilterBarProps) => {
+  const resourceTypes = clubResourcesService.getResourceTypes();
+  const availableTags = clubResourcesService.getAllTags();
+
   return (
     <div className="glass-card-static p-6 mb-8">
       <div className="flex flex-col lg:flex-row gap-6">
@@ -200,20 +155,11 @@ const ClubResources = () => {
     );
   };
 
-  const filteredResources = sampleCustomResources.filter(resource => {
-    const matchesSearch = 
-      resource.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
-      resource.description.toLowerCase().includes(searchTerm.toLowerCase());
-    
-    const matchesTags = 
-      selectedTags.length === 0 || 
-      selectedTags.some(tag => resource.tags.includes(tag));
-    
-    const matchesType = 
-      selectedType === null || 
-      resource.type === selectedType;
-    
-    return matchesSearch && matchesTags && matchesType;
+  // Filter resources using the service
+  const filteredResources = clubResourcesService.filterResources({
+    searchTerm: searchTerm || undefined,
+    type: selectedType || undefined,
+    tags: selectedTags.length > 0 ? selectedTags : undefined
   });
 
   return (

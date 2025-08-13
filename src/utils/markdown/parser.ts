@@ -67,6 +67,39 @@ export function parseMarkdown(content: string) {
         const key = line.slice(0, colonIndex).trim();
         let value = line.slice(colonIndex + 1).trim();
         
+        // Check if this is the start of a YAML-style array (key: followed by no value)
+        if (value === '' || value === null) {
+          // Look ahead to see if the next lines are array items
+          let yamlArrayItems = [];
+          let nextLineIndex = i + 1;
+          
+          // Collect YAML array items (lines starting with -)
+          while (nextLineIndex < lines.length) {
+            const nextLine = lines[nextLineIndex].trim();
+            if (nextLine.startsWith('- ')) {
+              // Extract the value after the dash
+              const itemValue = nextLine.slice(2).trim();
+              // Remove quotes if present
+              const cleanValue = itemValue.replace(/^["'](.*)["']$/, '$1');
+              yamlArrayItems.push(cleanValue);
+              nextLineIndex++;
+            } else if (nextLine === '' || nextLine.startsWith('#')) {
+              // Skip empty lines and comments
+              nextLineIndex++;
+            } else {
+              // End of array
+              break;
+            }
+          }
+          
+          if (yamlArrayItems.length > 0) {
+            frontMatter[key] = yamlArrayItems;
+            // Skip the lines we've already processed
+            i = nextLineIndex - 1;
+            continue;
+          }
+        }
+        
         // Check if this is the start of a multiline array or object
         if ((value === '[' || value === '{' || value.endsWith('[') || value.endsWith('{'))) {
           isInMultiline = true;

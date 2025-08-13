@@ -16,7 +16,7 @@ export interface ProjectConfig {
 }
 
 export const projectsConfig: ProjectConfig[] = [
-  {
+  /*{
     id: 'cpf-website',
     name: 'CPF Website',
     description: 'Sitio web oficial del Club de Programación FIUNA. Plataforma moderna para mostrar proyectos, eventos y recursos educativos.',
@@ -108,7 +108,7 @@ export const projectsConfig: ProjectConfig[] = [
     maintainers: ['Daniel Villalba'],
     featured: false,
     order: 6
-  }
+  }*/
 ];
 
 export function getProjectById(id: string): ProjectConfig | undefined {

@@ -10,7 +10,7 @@ export interface InstructorProfile {
 export const instructors: Record<string, InstructorProfile> = {
   "David Giménez": {
     name: "David Giménez",
-    bio: "Estudiante de Ingeniería Mecatrónica con experiencia en desarrollo web y programación competitiva. Ha trabajado en proyectos de software para startups, ganado competencia internacionales y es un apasionado de la enseñanza y la comunidad tecnológica.",
+    bio: "Estudiante de Ingeniería Mecatrónica con experiencia en desarrollo web y programación competitiva. Ha colaborado en proyectos de software para startups, obtenido premios en competencias internacionales y disfruta compartir su conocimiento para impulsar el crecimiento de la comunidad tecnológica.",
     expertise: ["C", "C++", "Python", "Algoritmos", "Programación Competitiva", "Estructuras de Datos"],
     experience: "4+ años",
     profilePicture: "/miembros/davidgimenez.png"
@@ -24,7 +24,7 @@ export const instructors: Record<string, InstructorProfile> = {
   },
   "Oscar Alderete": {
     name: "Oscar Alderete",
-    bio: "Ingeniero de Software especializado en desarrollo frontend con más de 6 años de experiencia profesional. Ha trabajado en startups y empresas internacionales desarrollando aplicaciones React de alta complejidad. Contribuidor activo en proyectos de código abierto y creador de contenido educativo sobre desarrollo web moderno. ¡Prepárate para llevar tus habilidades de desarrollo web al siguiente nivel con React!.",
+    bio: "Estudiante de Ingeniería Mecatrónica y Electrónica con tres años de experiencia en Python y desarrollo de soluciones tecnológicas. Especializado en la integración de inteligencia artificial y el desarrollo de agentes y sistemas inteligentes. Cuenta con amplia experiencia en trabajo con equipos multidisciplinarios y se apasiona por las tendencias tecnológicas actuales.",
     expertise: ["React", "Next.js", "TypeScript", "Frontend Architecture"],
     experience: "7+ años",
     profilePicture: "/miembros/oscaralderete.png"
