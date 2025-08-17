@@ -53,7 +53,7 @@ export const teamMembers = [
 export const secretariaMembers = [
   {
     name: "Daniel Villalba",
-    role: "Sistemas Embebidos",
+    /*role: "Sistemas Embebidos",*/
     image: "/miembros/danielvillalba.png",
     bio: "Siempre entre hardware, código… y alguna que otra partida de Fortnite.",
     social: {
@@ -65,7 +65,7 @@ export const secretariaMembers = [
   },
   {
     name: "Gabriel Park",
-    role: "POO",
+    /*role: "POO",*/
     image: "/miembros/gabrielpark.png",
     bio: "Estudiante de Ingeniería Mecatrónica, excampeón de VEX Robotics.",
     social: {
@@ -77,7 +77,7 @@ export const secretariaMembers = [
   },
   {
     name: "Mathías Martínez",
-    role: "Algoritmos",
+    /*role: "Algoritmos",*/
     image: "/miembros/mathiasmartinez.png",
     bio: "Viviendo mi vida entre algoritmos y estructuras de datos.",
     social: {

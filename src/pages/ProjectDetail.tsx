@@ -149,7 +149,7 @@ const ProjectDetail = () => {
               <ProjectDetailSidebar project={project} relatedProjects={relatedProjects} />
               
               <div className="mt-8">
-                <div className="flex justify-between mb-4">
+                {/*<div className="flex justify-between mb-4">
                   <h3 className="text-lg font-semibold">Estadísticas</h3>
                   <span className="text-muted-foreground text-sm">
                     <Calendar className="h-4 w-4 inline mr-1" />
@@ -160,7 +160,7 @@ const ProjectDetail = () => {
                 <ProjectGithubStats 
                   repoUrl={project.githubLink || "#"} 
                   stats={githubStats} 
-                />
+                />*/}
                 
                 <div className="flex gap-4 mt-8">
                   <a

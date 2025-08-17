@@ -18,6 +18,8 @@ export interface EventFrontMatter {
   id: string;
   title: string;
   date: string;
+  startDate?: string;
+  endDate?: string;
   location: string;
   type: string;
   description: string;

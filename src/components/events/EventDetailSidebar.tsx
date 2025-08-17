@@ -25,7 +25,20 @@ const EventDetailSidebar = ({ event, isFull = false }: EventDetailSidebarProps) 
               <CalendarIcon className="h-5 w-5 text-primary mr-3 mt-0.5" />
               <div>
                 <div className="font-medium">Fecha</div>
-                <div className="text-muted-foreground">{formatDate(event.date)}</div>
+                <div className="text-muted-foreground">
+                  {event.startDate ? (
+                    event.endDate && event.startDate !== event.endDate ? (
+                      <>
+                        <div>Inicio: {formatDate(event.startDate)}</div>
+                        <div>Fin: {formatDate(event.endDate)}</div>
+                      </>
+                    ) : (
+                      formatDate(event.startDate)
+                    )
+                  ) : (
+                    formatDate(event.date)
+                  )}
+                </div>
               </div>
             </div>
             

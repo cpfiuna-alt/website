@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import Layout from "@/components/layout/Layout";
 import EventsHero from "@/components/events/EventsHero";
 import EventFilter, { EventType } from "@/components/events/EventFilter";
@@ -33,7 +33,7 @@ const eventTypeImages = {
 };
 
 // Function to get Spanish label for event types
-export const getEventTypeLabel = (type: string): string => {
+const getEventTypeLabel = (type: string): string => {
   const eventType = eventTypes.find(et => et.value === type);
   return eventType ? eventType.label : type;
 };
@@ -44,21 +44,23 @@ const Events = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const { events: allEventsRaw, loading } = useEvents();
 
-  // Ensure all events have images
-  const allEvents = allEventsRaw.map(event => {
-    // If event has no image or placeholder image, replace with type-specific image
-    if (!event.image || event.image === "/placeholder.svg") {
-      return {
-        ...event,
-        image: eventTypeImages[event.type as keyof typeof eventTypeImages] || eventTypeImages.default
-      };
-    }
-    return event;
-  });
+  // Ensure all events have images - memoized to prevent unnecessary re-renders
+  const allEvents = useMemo(() => {
+    return allEventsRaw.map(event => {
+      // If event has no image or placeholder image, replace with type-specific image
+      if (!event.image || event.image === "/placeholder.svg") {
+        return {
+          ...event,
+          image: eventTypeImages[event.type as keyof typeof eventTypeImages] || eventTypeImages.default
+        };
+      }
+      return event;
+    });
+  }, [allEventsRaw]);
 
-  // Filter events based on type, upcoming/past status, and search term
-  const filteredEvents = allEvents.filter(
-    (event) => {
+  // Filter events based on type, upcoming/past status, and search term - memoized
+  const filteredEvents = useMemo(() => {
+    return allEvents.filter((event) => {
       const matchesType = filter === "all" || event.type === filter;
       const matchesStatus = showPast ? true : event.isUpcoming;
       const matchesSearch = !searchTerm || 
@@ -67,17 +69,20 @@ const Events = () => {
       event.location.toLowerCase().includes(searchTerm.toLowerCase());
       
       return matchesType && matchesStatus && matchesSearch;
-    }
-  );
+    });
+  }, [allEvents, filter, showPast, searchTerm]);
 
+  // Event search handler - memoized to prevent unnecessary re-renders
+  const handleSearch = useMemo(() => {
+    return (e: React.ChangeEvent<HTMLInputElement>) => {
+      setSearchTerm(e.target.value);
+    };
+  }, []);
+
+  // Show loading state while events are being loaded
   if (loading) {
     return <EventsLoadingState />;
   }
-
-  // Event search handler
-  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchTerm(e.target.value);
-  };
 
   return (
     <Layout>

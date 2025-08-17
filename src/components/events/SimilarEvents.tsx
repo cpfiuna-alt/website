@@ -35,7 +35,15 @@ const SimilarEvents = ({ events }: SimilarEventsProps) => {
               </h3>              <div className="flex items-center text-xs text-muted-foreground">
                 <Calendar className="h-3 w-3 mr-1" />
                 <span>
-                  {formatDate(event.date)}
+                  {event.startDate ? (
+                    event.endDate && event.startDate !== event.endDate ? (
+                      `${formatDate(event.startDate)} - ${formatDate(event.endDate)}`
+                    ) : (
+                      formatDate(event.startDate)
+                    )
+                  ) : (
+                    formatDate(event.date)
+                  )}
                 </span>
               </div>
             </div>

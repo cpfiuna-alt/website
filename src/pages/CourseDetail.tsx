@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import Layout from "@/components/layout/Layout";
 import { Link, useParams, useNavigate } from "react-router-dom";
-import { ArrowLeft, ChevronRight, Award, FileCode, Calendar, Clock, User, BookOpen, Youtube, AlertCircle } from "lucide-react";
+import { ArrowLeft, ChevronLeft, ChevronRight, Award, FileCode, Calendar, Clock, User, BookOpen, Youtube, AlertCircle } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { getContentBySlug } from "@/utils/staticSiteGenerator";
 import { CourseFrontMatter } from "@/utils/markdownUtils";
@@ -124,18 +124,25 @@ const CourseDetail = () => {
   
   return (
     <Layout>
-      <article className="relative pt-24 pb-16">
+      <article className="relative pb-16">
         {/* Course Hero */}
         <div className="relative w-full bg-gradient-to-r from-primary/10 to-primary/5 dark:from-primary/20 dark:to-primary/10 mb-12">
+          {/* Superimposed "Volver" button aligned with banner text */}
+          <div className="absolute top-6 left-0 right-0 z-30">
+            <div className="container mx-auto px-6">
+              <div className="max-w-3xl">
+                <Link
+                  to="/recursos"
+                  className="inline-flex items-center text-foreground/90 hover:text-primary transition-colors backdrop-blur-sm rounded-lg px-3 py-2"
+                >
+                  <ChevronLeft className="h-4 w-4 mr-1" />
+                  Volver a recursos
+                </Link>
+              </div>
+            </div>
+          </div>
+          
           <div className="container mx-auto px-6 py-12">
-            {/* Back to courses button */}
-            <Link 
-              to="/recursos"
-              className="inline-flex items-center text-sm text-muted-foreground hover:text-primary transition-colors mb-6"
-            >
-              <ArrowLeft className="mr-2 h-4 w-4" />
-              Volver a recursos
-            </Link>
             
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-center">
               <div className="lg:col-span-2">

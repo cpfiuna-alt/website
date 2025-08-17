@@ -64,7 +64,7 @@ const EventCard = ({ event, getEventTypeLabel }: EventCardProps) => {
       </Link>
       <div className="p-6">
         <Link to={`/eventos/${event.slug}`}>
-          <h3 className="text-xl font-semibold mb-3 group-hover:text-primary transition-colors">
+          <h3 className="text-xl font-semibold mb-3 text-foreground group-hover:text-primary transition-colors duration-200">
             {event.title}
           </h3>
         </Link>
@@ -78,7 +78,15 @@ const EventCard = ({ event, getEventTypeLabel }: EventCardProps) => {
         <div className="space-y-2 mb-4">          <div className="flex items-center text-sm text-muted-foreground">
             <Calendar className="h-4 w-4 mr-2" />
             <span>
-              {formatDate(event.date)}
+              {event.startDate ? (
+                event.endDate && event.startDate !== event.endDate ? (
+                  `${formatDate(event.startDate)} - ${formatDate(event.endDate)}`
+                ) : (
+                  formatDate(event.startDate)
+                )
+              ) : (
+                formatDate(event.date)
+              )}
             </span>
           </div>
           <div className="flex items-center text-sm text-muted-foreground">

@@ -70,9 +70,14 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     
     // Use requestAnimationFrame for smoother performance
     requestAnimationFrame(() => {
-      // Add optimized transition only for essential properties
-      root.style.setProperty('transition', 'background-color 0.2s ease-out, color 0.2s ease-out, border-color 0.2s ease-out');
-      root.style.setProperty('will-change', 'background-color, color, border-color');
+      // Only add transition on subsequent changes, not initial load
+      const isInitialMount = !root.classList.contains('light') && !root.classList.contains('dark');
+      
+      if (!isInitialMount) {
+        // Add optimized transition only for essential properties and only on theme changes
+        root.style.setProperty('transition', 'background-color 0.15s ease-out, color 0.15s ease-out, border-color 0.15s ease-out');
+        root.style.setProperty('will-change', 'background-color, color, border-color');
+      }
       
       // Batch DOM updates
       root.classList.remove("light", "dark");
@@ -88,12 +93,14 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
       }
       
       // Clean up transition and will-change after animation is complete
-      const cleanup = setTimeout(() => {
-        root.style.removeProperty('transition');
-        root.style.removeProperty('will-change');
-      }, 200);
-      
-      return () => clearTimeout(cleanup);
+      if (!isInitialMount) {
+        const cleanup = setTimeout(() => {
+          root.style.removeProperty('transition');
+          root.style.removeProperty('will-change');
+        }, 150);
+        
+        return () => clearTimeout(cleanup);
+      }
     });
   }, [theme, systemTheme]);
 

@@ -20,7 +20,10 @@
 
 .glass-card {
   @apply relative backdrop-blur-md bg-white/20 dark:bg-black/30 border border-white/20 dark:border-white/10 rounded-xl shadow-xl overflow-hidden;
-  transition: transform 0.2s ease-out, background-color 0.2s ease-out, border-color 0.2s ease-out;
+  transition: transform 0.15s ease-out;
+  /* Prevent initial flash by ensuring consistent background */
+  background-color: hsl(var(--background) / 0.2);
+  border-color: hsl(var(--border) / 0.2);
 }
 
 .glass-card:hover {

@@ -67,12 +67,17 @@ const ContactForm = () => {
       return;
     }
 
+    // Add debugging
+    console.log("Form submission started");
+    console.log("Form data:", formData);
+    console.log("Google Apps Script URL:", "https://script.google.com/macros/s/AKfycbw3j5FMVQnOqfwu-wn2w24qf6mM73SRZfbfraDycz__YKS5lfjCR21S7UCQ2LoO1s4X/exec");
+
     try {
       const response = await fetch(
         "https://script.google.com/macros/s/AKfycbw3j5FMVQnOqfwu-wn2w24qf6mM73SRZfbfraDycz__YKS5lfjCR21S7UCQ2LoO1s4X/exec",
         {
           method: "POST",
-          mode: "no-cors", // Add this
+          mode: "no-cors",
           headers: {
             "Content-Type": "application/json",
           },
@@ -80,7 +85,10 @@ const ContactForm = () => {
         }
       );
 
-      // Remove response.ok check since no-cors won't give us response details
+      console.log("Fetch completed (no-cors mode - can't read response)");
+      console.log("Check your Google Sheets to verify if data was received");
+
+      // Since we can't read the response in no-cors mode, we assume success
       toast({
         title: "Mensaje enviado",
         description: "Hemos recibido tu mensaje. Te responderemos a la brevedad.",
@@ -94,12 +102,12 @@ const ContactForm = () => {
         message: "",
       });
     } catch (error) {
+      console.error("Form submission error:", error);
       toast({
         title: "Error",
         description: "Hubo un problema al enviar tu mensaje. Por favor intenta de nuevo.",
         variant: "destructive",
       });
-      console.error("Form submission error:", error);
     } finally {
       setIsSubmitting(false);
     }

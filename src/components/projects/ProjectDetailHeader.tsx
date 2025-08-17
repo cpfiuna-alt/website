@@ -20,7 +20,15 @@ const ProjectDetailHeader: React.FC<ProjectDetailHeaderProps> = ({
       <div className="flex flex-wrap items-center gap-3 mb-4">
         <Badge 
           variant="default" 
-          className={getStatusBadgeVariant(project.status)}
+          className={`${getStatusBadgeVariant(project.status)} hover:!bg-[var(--badge-bg)] hover:!text-[var(--badge-text)]`}
+          style={{
+            '--badge-bg': project.status?.toLowerCase() === 'completado' || project.status?.toLowerCase() === 'completed' 
+              ? '#10B981E6' 
+              : project.status?.toLowerCase() === 'abandonado' || project.status?.toLowerCase() === 'planned'
+              ? '#9CA3AFE6'
+              : '#F59E0BE6',
+            '--badge-text': '#ffffff'
+          } as React.CSSProperties}
         >
           {project.status || "En desarrollo"}
         </Badge>
@@ -44,7 +52,7 @@ const ProjectDetailHeader: React.FC<ProjectDetailHeaderProps> = ({
           <Badge 
             key={index}
             variant="secondary" 
-            className="bg-[#3C83F6E6] text-white text-xs px-3 py-1 rounded-full border-none"
+            className="bg-[#3C83F6E6] text-white text-xs px-3 py-1 rounded-full border-none hover:bg-[#3C83F6E6]"
           >
             {tag.replace(/"/g, '')}
           </Badge>

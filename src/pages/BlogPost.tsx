@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import Layout from "@/components/layout/Layout";
 import { Link, useParams, useNavigate } from "react-router-dom";
-import { CalendarIcon, Clock, User, Tag, ArrowLeft, ThumbsUp, Bookmark, Share2 } from "lucide-react";
+import { CalendarIcon, Clock, User, Tag, ChevronLeft, ThumbsUp, Bookmark, Share2 } from "lucide-react";
 import MarkdownRenderer from "@/components/MarkdownRenderer";
 import { getContentBySlug, getAllBlogPosts } from "@/utils/staticSiteGenerator";
 import { BlogFrontMatter } from "@/utils/markdownUtils";
@@ -99,7 +99,7 @@ const BlogPost = () => {
                 to="/blog"
                 className="inline-flex items-center text-primary hover:underline"
               >
-                <ArrowLeft className="mr-2 h-4 w-4" />
+                <ChevronLeft className="mr-2 h-4 w-4" />
                 Volver al blog
               </Link>
             </div>
@@ -114,19 +114,23 @@ const BlogPost = () => {
   return (
     <Layout>
       <article className="relative pb-16">
-        {/* Back to blog button */}
-        <div className="container mx-auto px-6 py-6">
-          <Link 
-            to="/blog"
-            className="inline-flex items-center text-sm text-muted-foreground hover:text-primary transition-colors"
-          >
-            <ArrowLeft className="mr-2 h-4 w-4" />
-            Volver al blog
-          </Link>
-        </div>
-        
         {/* Cover image and header */}
         <div className="relative w-full h-[400px] md:h-[500px] mb-8 overflow-hidden">
+          {/* Superimposed "Volver" button aligned with banner text */}
+          <div className="absolute top-6 left-0 right-0 z-30">
+            <div className="container mx-auto px-6">
+              <div className="max-w-3xl">
+                <Link
+                  to="/blog"
+                  className="inline-flex items-center text-white/90 hover:text-primary transition-colors backdrop-blur-sm rounded-lg px-3 py-2"
+                >
+                  <ChevronLeft className="h-4 w-4 mr-1" />
+                  Volver al blog
+                </Link>
+              </div>
+            </div>
+          </div>
+          
           <div className="absolute inset-0 bg-black/50 z-10"></div>
           <img 
             src={frontMatter.image || "/placeholder.svg"} 

@@ -5,6 +5,7 @@ import Features from "@/components/home/Features";
 import News from "@/components/home/News";
 import AboutClub from "@/components/home/AboutClub";
 import SocialMedia from "@/components/home/SocialMedia";
+import BlogNewsletter from "@/components/blog/BlogNewsletter";
 import { useIsMobile } from "@/hooks/use-mobile";
 
 const Index = () => {
@@ -19,6 +20,7 @@ const Index = () => {
         <Features />
         {/*<SocialMedia />*/}
       </div>
+      <BlogNewsletter />
     </Layout>
   );
 };

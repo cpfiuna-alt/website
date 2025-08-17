@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { parseMarkdown, EventFrontMatter } from '@/utils/markdownUtils';
-import { isUpcomingEvent, getPrimaryDate } from '@/utils/markdown/formatters';
+import { isUpcomingEventWithFields, getPrimaryDateWithFields } from '@/utils/markdown/formatters';
 
 // Import all event markdown files
 const eventFiles = import.meta.glob('../content/events/*.md', { query: '?raw', import: 'default', eager: true });
@@ -21,13 +21,15 @@ export function useEvents() {
           const { frontMatter } = parseMarkdown(content as string);
           
           // Calculate isUpcoming based on date comparison
-          const isUpcoming = isUpcomingEvent(frontMatter.date);
+          const isUpcoming = isUpcomingEventWithFields(frontMatter.date, frontMatter.startDate, frontMatter.endDate);
 
           // Ensure frontMatter has all required fields
           const eventData: EventFrontMatter = {
             id: frontMatter.id || slug,
             title: frontMatter.title || "Untitled Event",
             date: frontMatter.date || new Date().toISOString(),
+            startDate: frontMatter.startDate,
+            endDate: frontMatter.endDate,
             location: frontMatter.location || "TBD",
             description: frontMatter.description || "",
             image: frontMatter.image || "/placeholder.svg",
@@ -36,7 +38,7 @@ export function useEvents() {
             slug,
             time: frontMatter.time || "TBD",
             organizer: frontMatter.organizer,
-            registrationLink: frontMatter.registrationUrl,
+            registrationLink: frontMatter.registrationLink || frontMatter.registrationUrl,
             speakers: frontMatter.speakers,
             topics: frontMatter.topics,
             prerequisites: frontMatter.prerequisites,
@@ -64,7 +66,8 @@ export function useEvents() {
       
       // Sort events by date (newest first)
       parsedEvents.sort((a, b) => {
-        return getPrimaryDate(b.date).getTime() - getPrimaryDate(a.date).getTime();
+        return getPrimaryDateWithFields(b.date, b.startDate, b.endDate).getTime() - 
+               getPrimaryDateWithFields(a.date, a.startDate, a.endDate).getTime();
       });
       
       setEvents(parsedEvents);

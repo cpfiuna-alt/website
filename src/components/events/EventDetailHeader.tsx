@@ -37,7 +37,7 @@ const EventDetailHeader = ({ event }: EventDetailHeaderProps) => {
           <div className="max-w-3xl">
             <Link
               to="/eventos"
-              className="inline-flex items-center text-white/90 hover:text-primary transition-colors bg-black/20 backdrop-blur-sm rounded-lg px-3 py-2"
+              className="inline-flex items-center text-white/90 hover:text-primary transition-colors backdrop-blur-sm rounded-lg px-3 py-2"
             >
               <ChevronLeft className="h-4 w-4 mr-1" />
               Volver a eventos

@@ -110,6 +110,48 @@ export function isUpcomingEvent(dateString: string): boolean {
   }
 }
 
+// Function to check if an event is upcoming using separate startDate/endDate fields
+export function isUpcomingEventWithFields(dateString: string, startDate?: string, endDate?: string): boolean {
+  try {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // Reset time to beginning of day
+    
+    // If we have separate start/end dates, use them with proper parsing
+    if (startDate || endDate) {
+      // Use the same parsing logic as parseDateString
+      const parseDate = (dateStr: string): Date => {
+        // If it's a YYYY-MM-DD format, parse it manually to avoid timezone issues
+        const isoDateMatch = dateStr.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+        if (isoDateMatch) {
+          const [, year, month, day] = isoDateMatch;
+          return new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
+        }
+        
+        // If it's a DD-MM-YYYY format, parse it manually
+        const ddmmyyyyMatch = dateStr.match(/^(\d{2})-(\d{2})-(\d{4})$/);
+        if (ddmmyyyyMatch) {
+          const [, day, month, year] = ddmmyyyyMatch;
+          return new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
+        }
+        
+        // For other formats, use regular Date constructor
+        return new Date(dateStr);
+      };
+      
+      const eventEndDate = endDate ? parseDate(endDate) : (startDate ? parseDate(startDate) : null);
+      if (eventEndDate) {
+        return eventEndDate >= today;
+      }
+    }
+    
+    // Fallback to parsing the main date field
+    return isUpcomingEvent(dateString);
+  } catch (error) {
+    console.error('Error checking if event is upcoming with fields:', error);
+    return false;
+  }
+}
+
 // Function to get the primary date for sorting (start date for ranges)
 export function getPrimaryDate(dateString: string): Date {
   try {
@@ -117,6 +159,42 @@ export function getPrimaryDate(dateString: string): Date {
     return startDate;
   } catch (error) {
     console.error('Error getting primary date:', error);
+    return new Date();
+  }
+}
+
+// Function to get the primary date using separate startDate/endDate fields
+export function getPrimaryDateWithFields(dateString: string, startDate?: string, endDate?: string): Date {
+  try {
+    // If we have a separate start date, use it with proper parsing
+    if (startDate) {
+      // Use the same parsing logic as parseDateString
+      const parseDate = (dateStr: string): Date => {
+        // If it's a YYYY-MM-DD format, parse it manually to avoid timezone issues
+        const isoDateMatch = dateStr.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+        if (isoDateMatch) {
+          const [, year, month, day] = isoDateMatch;
+          return new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
+        }
+        
+        // If it's a DD-MM-YYYY format, parse it manually
+        const ddmmyyyyMatch = dateStr.match(/^(\d{2})-(\d{2})-(\d{4})$/);
+        if (ddmmyyyyMatch) {
+          const [, day, month, year] = ddmmyyyyMatch;
+          return new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
+        }
+        
+        // For other formats, use regular Date constructor
+        return new Date(dateStr);
+      };
+      
+      return parseDate(startDate);
+    }
+    
+    // Fallback to parsing the main date field
+    return getPrimaryDate(dateString);
+  } catch (error) {
+    console.error('Error getting primary date with fields:', error);
     return new Date();
   }
 }
