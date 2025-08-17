@@ -23,6 +23,7 @@ const MediaKit = lazy(() => import('./pages/MediaKit'));
 const Press = lazy(() => import('./pages/Press'));
 const Transparency = lazy(() => import('./pages/Transparency'));
 const Estatuto = lazy(() => import('./pages/Estatuto'));
+const Reglamento = lazy(() => import('./pages/Reglamento'));
 const CourseDetail = lazy(() => import('./pages/CourseDetail'));
 const Documentation = lazy(() => import('./pages/Documentation'));
 const Community = lazy(() => import('./pages/Community'));
@@ -57,6 +58,7 @@ const App = () => (
               <Route path="/prensa" element={<Press />} />
               <Route path="/transparencia" element={<Transparency />} />
               <Route path="/estatuto" element={<Estatuto />} />
+              <Route path="/reglamento" element={<Reglamento />} />
               <Route path="/comunidad" element={<Community />} />
               <Route path="/documentacion/*" element={<Documentation />} />
               <Route path="*" element={<NotFound />} />

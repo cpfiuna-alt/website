@@ -72,6 +72,8 @@ const Footer = () => {
       pageName = "Community";
     } else if (path === "/estatuto" || path === "/statute") {
       pageName = "Estatuto";
+    } else if (path === "/reglamento" || path === "/regulation") {
+      pageName = "Reglamento";
     } else if (path.startsWith("/documentacion") || path.startsWith("/documentation")) {
       pageName = "Documentation";
     }

@@ -52,7 +52,8 @@ export const footerLinks = {
     { name: "Privacidad", to: "/privacidad" },
     { name: "Código de Conducta", to: "/codigo-de-conducta" },
     { name: "Transparencia", to: "/transparencia" },
-    { name: "Estatuto", to: "/estatuto" }
+    { name: "Estatuto", to: "/estatuto" },
+    { name: "Reglamento", to: "/reglamento" }
   ],
   resources: [
     { name: "Kit de Medios", to: "/kit-de-medios" },
