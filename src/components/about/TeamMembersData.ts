@@ -81,8 +81,8 @@ export const secretariaMembers = [
     image: "/miembros/mathiasmartinez.png",
     bio: "Viviendo mi vida entre algoritmos y estructuras de datos.",
     social: {
-      github: "https://github.com/#",
-      linkedin: "https://linkedin.com/in/#",
+      github: "https://github.com/mathiasmartinez16",
+      linkedin: "https://linkedin.com/in/mathiasmartinez16",
       instagram: "https://www.instagram.com/martinezmathias_/", 
       email: "mailto:mathias.martinez@fiuna.edu.py",
     },
