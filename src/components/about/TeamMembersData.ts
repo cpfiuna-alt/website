@@ -70,7 +70,7 @@ export const secretariaMembers = [
     bio: "Estudiante de Ingeniería Mecatrónica, excampeón de VEX Robotics.",
     social: {
       github: "https://github.com/xX1NoiR1Xx",
-      linkedin: "https://linkedin.com/in/#",
+      linkedin: "https://linkedin.com/in/jyppy",
       instagram: "https://www.instagram.com/jyp_py", 
       email: "mailto:jinyoung@fiuna.edu.py",
     },
