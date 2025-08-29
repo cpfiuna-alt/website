@@ -6,7 +6,7 @@ description: "Sistema de monitoreo y control para cultivos hidropónicos mediant
 image: "https://images.unsplash.com/photo-1585184394271-4c0a47dc59c9?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
 tags: ["IoT", "Arduino", "React", "MQTT", "Hardware"]
 githubLink: "https://github.com/cpfiuna/hidroponia-iot"
-demoLink: "https://hidroponia.cpf.com.py"
+demoLink: "https://hidroponia.cpfiuna.io"
 category: "tools"
 featured: false
 slug: "hidroponia-iot"

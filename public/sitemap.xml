@@ -2,92 +2,98 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://cpf.com.py/</loc>
-    <lastmod>2024-09-01</lastmod>
+    <loc>https://cpfiuna.io/</loc>
+    <lastmod>2025-08-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://cpf.com.py/about</loc>
+    <loc>https://cpfiuna.io/nosotros</loc>
     <lastmod>2024-09-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://cpf.com.py/events</loc>
+    <loc>https://cpfiuna.io/eventos</loc>
     <lastmod>2024-09-01</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://cpf.com.py/projects</loc>
+    <loc>https://cpfiuna.io/proyectos</loc>
     <lastmod>2024-09-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://cpf.com.py/resources</loc>
+    <loc>https://cpfiuna.io/recursos</loc>
     <lastmod>2024-09-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://cpf.com.py/blog</loc>
+    <loc>https://cpfiuna.io/blog</loc>
     <lastmod>2024-09-01</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://cpf.com.py/contact</loc>
+    <loc>https://cpfiuna.io/contacto</loc>
     <lastmod>2024-09-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://cpf.com.py/logros</loc>
+    <loc>https://cpfiuna.io/logros</loc>
     <lastmod>2024-09-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://cpf.com.py/community</loc>
+    <loc>https://cpfiuna.io/comunidad</loc>
     <lastmod>2024-09-01</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://cpf.com.py/privacy</loc>
+    <loc>https://cpfiuna.io/privacidad</loc>
     <lastmod>2024-09-01</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.4</priority>
   </url>
   <url>
-    <loc>https://cpf.com.py/code-of-conduct</loc>
+    <loc>https://cpfiuna.io/codigo-de-conducta</loc>
     <lastmod>2024-09-01</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.4</priority>
   </url>
   <url>
-    <loc>https://cpf.com.py/media-kit</loc>
+    <loc>https://cpfiuna.io/kit-de-medios</loc>
     <lastmod>2024-09-01</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://cpf.com.py/press</loc>
+    <loc>https://cpfiuna.io/prensa</loc>
     <lastmod>2024-09-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://cpf.com.py/transparency</loc>
+    <loc>https://cpfiuna.io/transparencia</loc>
     <lastmod>2024-09-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://cpf.com.py/estatuto</loc>
+    <loc>https://cpfiuna.io/estatuto</loc>
     <lastmod>2024-09-01</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://cpfiuna.io/reglamento</loc>
+    <lastmod>2025-08-29</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.5</priority>
   </url>

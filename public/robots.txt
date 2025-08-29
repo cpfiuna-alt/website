@@ -4,7 +4,7 @@ User-agent: *
 Allow: /
 
 # Sitemap location
-Sitemap: https://cpf.com.py/sitemap.xml
+Sitemap: https://cpfiuna.io/sitemap.xml
 
 # Disallow access to administrative areas
 Disallow: /admin/

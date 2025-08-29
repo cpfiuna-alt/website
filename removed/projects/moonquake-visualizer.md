@@ -5,7 +5,7 @@ description: "Visualizador 3D de datos sísmicos lunares recopilados durante las
 image: "https://images.unsplash.com/photo-1614313913007-2b4ae8ce32d6?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
 tags: ["React", "Three.js", "NASA Data", "WebGL", "3D"]
 githubLink: "https://github.com/cpfiuna/moonquake-visualizer"
-demoLink: "https://moonquake.cpf.com.py"
+demoLink: "https://moonquake.cpfiuna.io"
 category: "space"
 featured: true
 status: ""

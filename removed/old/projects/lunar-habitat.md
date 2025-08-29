@@ -6,7 +6,7 @@ description: "Proyecto conceptual de una base lunar sostenible con simulaciones 
 image: "https://images.unsplash.com/photo-1516339901601-2e1b62dc0c45?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
 tags: ["React", "3D Modeling", "Simulation", "Architecture", "Sustainability"]
 githubLink: "https://github.com/cpfiuna/lunar-habitat"
-demoLink: "https://lunar-habitat.cpf.com.py"
+demoLink: "https://lunar-habitat.cpfiuna.io"
 category: "space"
 featured: false
 slug: "lunar-habitat"

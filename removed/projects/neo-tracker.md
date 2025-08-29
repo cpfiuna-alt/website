@@ -5,7 +5,7 @@ description: "Aplicación web 3D que visualiza objetos cercanos a la Tierra (NEO
 image: "https://images.unsplash.com/photo-1614728263952-84ea256f9679?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
 tags: ["React", "Three.js", "NASA API", "WebGL", "3D"]
 githubLink: "https://github.com/cpfiuna/neo-tracker"
-demoLink: "https://neo-tracker.cpf.com.py"
+demoLink: "https://neo-tracker.cpfiuna.io"
 category: "space"
 featured: true
 status: "Completado"
@@ -64,4 +64,4 @@ Actualmente estamos trabajando en:
 
 Invitamos a colaboradores interesados en astronomía, visualización de datos o desarrollo web a contribuir al proyecto. Todos los aspectos del código son de código abierto y valoramos las contribuciones de la comunidad.
 
-Para más información, visita nuestro [repositorio en GitHub](https://github.com/cpfiuna/neo-tracker) o prueba la [demostración en vivo](https://neo-tracker.cpf.com.py).
+Para más información, visita nuestro [repositorio en GitHub](https://github.com/cpfiuna/neo-tracker) o prueba la [demostración en vivo](https://neo-tracker.cpfiuna.io).

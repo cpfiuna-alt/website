@@ -10,7 +10,7 @@ export const siteConfig = {
   name: "Club de Programación FIUNA",
   shortName: "CPF",
   description: "Club de Programación de la Facultad de Ingeniería de la Universidad Nacional de Asunción",
-  url: "https://cpf.com.py", // TODO: Replace with actual URL
+  url: "https://cpfiuna.io",
   ogImage: "/og-image.png",
   themeColor: "#0070f3",
   backgroundColor: "#1A1A1A",
@@ -24,11 +24,11 @@ export const contactInfo = {
     address: "Facultad de Ingeniería\nCampus Universitario\nSan Lorenzo - Paraguay",
   },
   socials: {
-    github: "https://github.com/cpfiuna", // TODO: Replace with actual URL
+    github: "https://github.com/cpfiuna",
     discord: "https://discord.gg/vU4zQb3FAn", 
     twitter: "https://twitter.com/cpfiuna", // Updated to lowercase
-    instagram: "https://instagram.com/cpfiuna", // TODO: Replace with actual URL
-    youtube: "https://youtube.com/@cpfiuna", // TODO: Replace with actual URL
+    instagram: "https://instagram.com/cpfiuna",
+    youtube: "https://youtube.com/@cpfiuna",
   },
 };
 
