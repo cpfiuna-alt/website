@@ -70,7 +70,7 @@ const ContactForm = () => {
     // Add debugging
     console.log("Form submission started");
     console.log("Form data:", formData);
-    console.log("Google Apps Script URL:", "https://script.google.com/macros/s/AKfycbw3j5FMVQnOqfwu-wn2w24qf6mM73SRZfbfraDycz__YKS5lfjCR21S7UCQ2LoO1s4X/exec");
+    console.log("Google Apps Script URL:", "https://script.google.com/macros/s/AKfycbynlr3Xpmri02vBuBc31ERUMaUub9otj4K648nxXD5jGq6GE8F5LK0ixv9l35EohkXA/exec");
 
     try {
       const response = await fetch(
