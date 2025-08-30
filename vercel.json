@@ -1,13 +1,5 @@
 
 {
-  "redirects": [
-    {
-      "source": "https://www.cpfiuna.io/(.*)",
-      "destination": "https://cpfiuna.io/$1",
-      "permanent": true,
-      "statusCode": 301
-    }
-  ],
   "rewrites": [
     {
       "source": "/(.*)",
