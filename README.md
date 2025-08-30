@@ -125,7 +125,7 @@ Este proyecto está bajo la licencia MIT. Ver el archivo [LICENSE](LICENSE) para
 
 Para consultas sobre el sitio web o el Club de Programación FIUNA, por favor contacta a través de:
 - Email: [club.programacion@ing.una.py](mailto:club.programacion@ing.una.py)
-- Discord: [Servidor del Club de Programación FIUNA](https://discord.gg/clubprogramacionfiuna)
+- Discord: [Servidor del Club de Programación FIUNA](https://discord.gg/UtRpKw2ay4)
 - GitHub: [github.com/cpfiuna](https://github.com/cpfiuna)
 
 ---

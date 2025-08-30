@@ -25,7 +25,7 @@ export const contactInfo = {
   },
   socials: {
     github: "https://github.com/cpfiuna",
-    discord: "https://discord.gg/vU4zQb3FAn", 
+    discord: "https://discord.gg/UtRpKw2ay4", 
     twitter: "https://twitter.com/cpfiuna", // Updated to lowercase
     instagram: "https://instagram.com/cpfiuna",
     youtube: "https://youtube.com/@cpfiuna",
