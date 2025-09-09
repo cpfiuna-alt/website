@@ -10,5 +10,4 @@ Sitemap: https://cpfiuna.io/sitemap.xml
 Disallow: /admin/
 Disallow: /wp-admin/
 
-# Crawl-delay directive (optional)
-Crawl-delay: 10
+# No crawl delay to encourage faster indexing
