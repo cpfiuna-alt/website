@@ -1,12 +1,5 @@
 
 {
-  "redirects": [
-    {
-      "source": "https://www.cpfiuna.io/:path*",
-      "destination": "https://cpfiuna.io/:path*",
-      "permanent": true
-    }
-  ],
   "rewrites": [
     {
       "source": "/(.*)",
