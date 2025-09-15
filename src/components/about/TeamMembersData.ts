@@ -3,7 +3,7 @@ export const teamMembers = [
   {
     name: "David Giménez",
     role: "Presidente",
-    image: "/miembros/davidgimenez.png",
+    image: "/miembros/backlight/davidgimenez.png",
     bio: "¿Qué se pone acá?, no sé, pero me gusta programar y aprender cosas nuevas.",
     social: {
       github: "https://github.com/davidgimenezs",
@@ -15,7 +15,7 @@ export const teamMembers = [
   {
     name: "Oscar Alderete",
     role: "Vicepresidente",
-    image: "/miembros/oscaralderete.png",
+    image: "/miembros/backlight/oscaralderete.png",
     bio: "Buscando construir soluciones tecnológicas y automatizar mi vida.",
     social: {
       github: "https://github.com/Osukaru17",
@@ -27,7 +27,7 @@ export const teamMembers = [
   {
     name: "Esteban Ibarra",
     role: "Secretario",
-    image: "/miembros/estebanibarra.png",
+    image: "/miembros/backlight/estebanibarra.png",
     bio: "Encargado de la organización de eventos y gestión de la comunicación del club.",
     social: {
       github: "https://github.com/ibald92",
@@ -39,7 +39,7 @@ export const teamMembers = [
   {
     name: "Iván Jara",
     role: "Tesorero",
-    image: "/miembros/ivanjara.png",
+    image: "/miembros/backlight/ivanjara.png",
     bio: "Fan de la ciencia, la tecnología y los porqués del mundo.",
     social: {
       github: "https://github.com/ivanjara019",
@@ -54,7 +54,7 @@ export const secretariaMembers = [
   {
     name: "Daniel Villalba",
     /*role: "Sistemas Embebidos",*/
-    image: "/miembros/danielvillalba.png",
+    image: "/miembros/backlight/danielvillalba.png",
     bio: "Siempre entre hardware, código… y alguna que otra partida de Fortnite.",
     social: {
       github: "https://github.com/DaniVillalba03",
@@ -66,7 +66,7 @@ export const secretariaMembers = [
   {
     name: "Gabriel Park",
     /*role: "POO",*/
-    image: "/miembros/gabrielpark.png",
+    image: "/miembros/backlight/gabrielpark.png",
     bio: "Estudiante de Ingeniería Mecatrónica, excampeón de VEX Robotics.",
     social: {
       github: "https://github.com/xX1NoiR1Xx",
@@ -78,7 +78,7 @@ export const secretariaMembers = [
   {
     name: "Mathías Martínez",
     /*role: "Algoritmos",*/
-    image: "/miembros/mathiasmartinez.png",
+    image: "/miembros/backlight/mathiasmartinez.png",
     bio: "Viviendo mi vida entre algoritmos y estructuras de datos.",
     social: {
       github: "https://github.com/mathiasmartinez16",
