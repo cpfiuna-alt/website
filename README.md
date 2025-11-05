@@ -1,6 +1,5 @@
-# Club de Programación FIUNA - Sitio Web Oficial
-
 <div align="center">
+  <h1>Club de Programación FIUNA - Sitio Web Oficial</h1>
   <img src="public/cpf-logo.png" alt="Logo del Club de Programación FIUNA" width="200" />
   <p><em>Sitio web oficial del Club de Programación de la Facultad de Ingeniería de la Universidad Nacional de Asunción</em></p>
 </div>
