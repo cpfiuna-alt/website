@@ -49,7 +49,7 @@ const ContactInfo = () => {
                 <SiGithub className="h-5 w-5" />
               </a>
               <a 
-                href="https://discord.com/invite/fncpNatR" 
+                href="https://discord.com/invite/UtRpKw2ay4" 
                 className="text-muted-foreground hover:text-primary transition-colors"
                 target="_blank"
                 rel="noopener noreferrer"
