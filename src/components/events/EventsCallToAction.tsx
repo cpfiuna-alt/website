@@ -3,9 +3,9 @@ import React from "react";
 import { featureFlags } from "@/config/site";
 
 const EventsCallToAction = () => {
-  // Use admission form if enabled, otherwise fall back to contact
-  const joinClubLink = featureFlags.admissionForm.enabled ? "/admision" : "/contacto";
-  const joinClubText = featureFlags.admissionForm.enabled ? "Unite al club" : "Contáctanos";
+  // CTA on the events page should always link to contact
+  const joinClubLink = "/contacto";
+  const joinClubText = "Contáctanos";
 
   return (
     <section className="py-20 px-6 bg-muted/50 dark:bg-black/60 text-center">
