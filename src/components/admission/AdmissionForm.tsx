@@ -42,9 +42,43 @@ const GOOGLE_FORMS_CONFIG = {
   }
 };
 
+type FormState = {
+  nombres: string;
+  apellidos: string;
+  cedula: string;
+  email: string;
+  telefono: string;
+  universidad: string;
+  universidadOtra: string;
+  carrera: string;
+  carreraOtra: string;
+  experienciaProgramacion: string;
+  areasInteres: string[];
+  areasInteresOtra: string;
+  herramientasLenguajes: string[];
+  herramientasLenguajesOtro: string;
+  actividadesInteres: string[];
+  actividadesInteresOtra: string;
+  colaboracionActiva: string;
+  comentarios1: string;
+  comentarios2: string;
+  comoSeEntero: string;
+  tiempoDisponible: string;
+  nivelCompromiso: string;
+  proyectosPrevios: string;
+  liderazgoExperiencia: string;
+  objetivosPlazo: string;
+  fortalezasPrincipales: string[];
+  fortalezasPrincipalesOtra: string;
+  desafiosInteres: string[];
+  desafiosInteresOtro: string;
+  aprendizajePreferido: string;
+  contribucionEsperada: string;
+}
+
 const AdmissionForm = () => {
   const { toast } = useToast();
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormState>({
     // Datos Personales
     nombres: "",
     apellidos: "",
@@ -85,6 +119,7 @@ const AdmissionForm = () => {
 
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [errors, setErrors] = useState<Record<string, string>>({});
 
   const carreras = [
     "Ingeniería Civil",
@@ -215,12 +250,120 @@ const AdmissionForm = () => {
         ? [...(prev[field as keyof typeof prev] as string[]), value]
         : (prev[field as keyof typeof prev] as string[]).filter(item => item !== value)
     }));
+    // clear errors for this checkbox group
+    clearError(field);
+  };
+
+  const validateForm = () => {
+    const fd = formData as FormState;
+    const missing: Array<{ key: string; label: string }> = [];
+    const errorsObj: Record<string, string> = {};
+
+    const pushMissing = (key: string, label: string) => {
+      missing.push({ key, label });
+      errorsObj[key] = `${label} es obligatorio.`;
+    };
+
+    if (!fd.nombres?.trim()) pushMissing('nombres', 'Nombres');
+    if (!fd.apellidos?.trim()) pushMissing('apellidos', 'Apellidos');
+    if (!fd.cedula?.trim()) pushMissing('cedula', 'Número de Cédula');
+    if (!fd.email?.trim()) pushMissing('email', 'Correo Electrónico');
+    if (!fd.telefono?.trim()) pushMissing('telefono', 'Número de Teléfono');
+
+    if (!fd.universidad) pushMissing('universidad', 'Universidad');
+    if (fd.universidad === 'otra' && !fd.universidadOtra?.trim()) pushMissing('universidadOtra', 'Especifica tu universidad');
+
+    if (!fd.carrera) pushMissing('carrera', 'Carrera');
+    if (fd.carrera === 'otra' && !fd.carreraOtra?.trim()) pushMissing('carreraOtra', 'Especifica tu carrera');
+
+    if (!fd.experienciaProgramacion) pushMissing('experienciaProgramacion', 'Experiencia en programación');
+    if (!fd.areasInteres || fd.areasInteres.length === 0) pushMissing('areasInteres', 'Áreas de interés');
+    if (!fd.actividadesInteres || fd.actividadesInteres.length === 0) pushMissing('actividadesInteres', 'Actividades de interés');
+    if (!fd.colaboracionActiva) pushMissing('colaboracionActiva', 'Colaboración activa');
+
+    if (!fd.tiempoDisponible) pushMissing('tiempoDisponible', 'Tiempo disponible');
+    if (!fd.nivelCompromiso) pushMissing('nivelCompromiso', 'Nivel de compromiso');
+
+    if (!fd.fortalezasPrincipales || fd.fortalezasPrincipales.length === 0) pushMissing('fortalezasPrincipales', 'Fortalezas principales');
+    if (!fd.desafiosInteres || fd.desafiosInteres.length === 0) pushMissing('desafiosInteres', 'Desafíos de interés');
+
+    if (!fd.objetivosPlazo?.trim()) pushMissing('objetivosPlazo', 'Objetivos a corto/mediano plazo');
+    if (!fd.aprendizajePreferido) pushMissing('aprendizajePreferido', 'Estilo de aprendizaje');
+    if (!fd.contribucionEsperada?.trim()) pushMissing('contribucionEsperada', 'Contribución esperada');
+
+    if (!fd.comoSeEntero) pushMissing('comoSeEntero', 'Cómo te enteraste del club');
+
+    setErrors(errorsObj);
+    return { valid: missing.length === 0, missing };
+  };
+
+  const focusFirstMissing = (missing: Array<{ key: string; label: string }>) => {
+    if (!missing || missing.length === 0) return;
+    const firstKey = missing[0].key;
+
+    const selectorMap: Record<string, string> = {
+      nombres: '#nombres',
+      apellidos: '#apellidos',
+      cedula: '#cedula',
+      email: '#email',
+      telefono: '#telefono',
+      universidad: '#universidad',
+      universidadOtra: '#universidadOtra',
+      carrera: '#carrera',
+      carreraOtra: '#carreraOtra',
+      experienciaProgramacion: 'input[name="experienciaProgramacion"]',
+      areasInteres: 'input[type="checkbox"]',
+      actividadesInteres: 'input[type="checkbox"]',
+      colaboracionActiva: 'input[name="colaboracionActiva"]',
+      tiempoDisponible: 'input[name="tiempoDisponible"]',
+      nivelCompromiso: 'input[name="nivelCompromiso"]',
+      fortalezasPrincipales: 'input[type="checkbox"]',
+      desafiosInteres: 'input[type="checkbox"]',
+      objetivosPlazo: '#objetivosPlazo',
+      aprendizajePreferido: 'input[name="aprendizajePreferido"]',
+      contribucionEsperada: '#contribucionEsperada',
+      comoSeEntero: '#comoSeEntero',
+    };
+
+    const selector = selectorMap[firstKey] || null;
+    try {
+      let el: Element | null = null;
+      if (selector) el = document.querySelector(selector);
+      if (!el) el = document.querySelector('input, select, textarea');
+      if (el && (el as HTMLElement).focus) (el as HTMLElement).focus();
+    } catch (err) {
+      // ignore focus errors in non-browser/test env
+    }
+  };
+
+  const clearError = (key: string) => {
+    if (!errors[key]) return;
+    setErrors(prev => {
+      const copy = { ...prev };
+      delete copy[key];
+      return copy;
+    });
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    
+
+    const result = validateForm();
+    if (!result.valid) {
+      console.debug('Validation failed, missing:', result.missing);
+      const labels = result.missing.map(m => m.label).slice(0, 6);
+      const more = result.missing.length > 6 ? ` y ${result.missing.length - 6} más` : '';
+      toast({
+        title: 'Campos obligatorios incompletos',
+        description: `${labels.join(', ')}${more}. Por favor completá los campos marcados con *.`,
+        variant: 'destructive',
+      });
+      focusFirstMissing(result.missing);
+      setIsSubmitting(false);
+      return;
+    }
+
     try {
       if (GOOGLE_FORMS_CONFIG.enabled) {
         // Submit to Google Forms
@@ -229,16 +372,16 @@ const AdmissionForm = () => {
         // Simulate form submission for testing
         await new Promise(resolve => setTimeout(resolve, 2000));
       }
-      
+
       toast({
         title: "Solicitud enviada",
         description: "Hemos recibido tu solicitud. Te contactaremos en las próximas 48-72 horas.",
         variant: "default",
       });
-      
+
       setIsSubmitted(true);
       resetForm();
-      
+
       // Scroll to top to show success message
       window.scrollTo({ top: 0, behavior: 'smooth' });
     } catch (error) {
@@ -316,7 +459,7 @@ const AdmissionForm = () => {
 
     // Iterate through actual form data fields
     for (const [key, entryId] of Object.entries(fieldToEntryMapping)) {
-      const value = (formData as any)[key];
+      const value = (formData as FormState)[key as keyof FormState];
 
       if (Array.isArray(value)) {
         // Checkbox groups: append each selected option as a separate entry param
@@ -369,7 +512,7 @@ const AdmissionForm = () => {
     // Debug: Log what we're sending
     console.log('=== Form Submission Debug ===');
     console.log('Submitting to:', GOOGLE_FORMS_CONFIG.actionUrl);
-    for (let pair of formDataToSubmit.entries()) {
+    for (const pair of formDataToSubmit.entries()) {
       console.log(pair[0], '=', pair[1]);
     }
     console.log('=== End Debug ===');
@@ -432,7 +575,7 @@ const AdmissionForm = () => {
           <h3 className="text-xl font-semibold">¡Solicitud Enviada Exitosamente!</h3>
           <p className="text-muted-foreground max-w-md">
             Gracias por tu interés en unirte al Club de Programación FIUNA. 
-            Revisaremos tu solicitud y te contactaremos en las próximas 48-72 horas.
+            Revisaremos tu solicitud y te contactaremos lo antes posible.
           </p>
           <button 
             onClick={() => setIsSubmitted(false)}
@@ -473,10 +616,15 @@ const AdmissionForm = () => {
                 type="text"
                 required
                 value={formData.nombres}
-                onChange={(e) => setFormData(prev => ({ ...prev, nombres: e.target.value }))}
-                className="w-full px-4 py-2 rounded-md border border-input bg-background focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all"
+                onChange={(e) => { setFormData(prev => ({ ...prev, nombres: e.target.value })); clearError('nombres'); }}
+                aria-invalid={!!errors.nombres}
+                aria-describedby={errors.nombres ? 'nombres-error' : undefined}
+                className={`w-full px-4 py-2 rounded-md border border-input bg-background focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all${errors.nombres ? ' border-red-600' : ''}`}
                 placeholder="Ej: Juan Carlos"
               />
+              {errors.nombres && (
+                <p id="nombres-error" className="text-sm text-red-600 mt-1">{errors.nombres}</p>
+              )}
             </div>
             
             <div className="space-y-2">
@@ -486,10 +634,15 @@ const AdmissionForm = () => {
                 type="text"
                 required
                 value={formData.apellidos}
-                onChange={(e) => setFormData(prev => ({ ...prev, apellidos: e.target.value }))}
-                className="w-full px-4 py-2 rounded-md border border-input bg-background focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all"
+                onChange={(e) => { setFormData(prev => ({ ...prev, apellidos: e.target.value })); clearError('apellidos'); }}
+                aria-invalid={!!errors.apellidos}
+                aria-describedby={errors.apellidos ? 'apellidos-error' : undefined}
+                className={`w-full px-4 py-2 rounded-md border border-input bg-background focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all${errors.apellidos ? ' border-red-600' : ''}`}
                 placeholder="Ej: González Pérez"
               />
+              {errors.apellidos && (
+                <p id="apellidos-error" className="text-sm text-red-600 mt-1">{errors.apellidos}</p>
+              )}
             </div>
             
             <div className="space-y-2">
@@ -499,10 +652,15 @@ const AdmissionForm = () => {
                 type="text"
                 required
                 value={formData.cedula}
-                onChange={(e) => setFormData(prev => ({ ...prev, cedula: e.target.value }))}
-                className="w-full px-4 py-2 rounded-md border border-input bg-background focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all"
+                onChange={(e) => { setFormData(prev => ({ ...prev, cedula: e.target.value })); clearError('cedula'); }}
+                aria-invalid={!!errors.cedula}
+                aria-describedby={errors.cedula ? 'cedula-error' : undefined}
+                className={`w-full px-4 py-2 rounded-md border border-input bg-background focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all${errors.cedula ? ' border-red-600' : ''}`}
                 placeholder="Ej: 1.234.567"
               />
+              {errors.cedula && (
+                <p id="cedula-error" className="text-sm text-red-600 mt-1">{errors.cedula}</p>
+              )}
             </div>
             
             <div className="space-y-2">
@@ -512,10 +670,15 @@ const AdmissionForm = () => {
                 type="email"
                 required
                 value={formData.email}
-                onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
-                className="w-full px-4 py-2 rounded-md border border-input bg-background focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all"
+                onChange={(e) => { setFormData(prev => ({ ...prev, email: e.target.value })); clearError('email'); }}
+                aria-invalid={!!errors.email}
+                aria-describedby={errors.email ? 'email-error' : undefined}
+                className={`w-full px-4 py-2 rounded-md border border-input bg-background focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all${errors.email ? ' border-red-600' : ''}`}
                 placeholder="nombre@fiuna.edu.py"
               />
+              {errors.email && (
+                <p id="email-error" className="text-sm text-red-600 mt-1">{errors.email}</p>
+              )}
             </div>
             
             <div className="space-y-2">
@@ -525,10 +688,15 @@ const AdmissionForm = () => {
                 type="tel"
                 required
                 value={formData.telefono}
-                onChange={(e) => setFormData(prev => ({ ...prev, telefono: e.target.value }))}
-                className="w-full px-4 py-2 rounded-md border border-input bg-background focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all"
+                onChange={(e) => { setFormData(prev => ({ ...prev, telefono: e.target.value })); clearError('telefono'); }}
+                aria-invalid={!!errors.telefono}
+                aria-describedby={errors.telefono ? 'telefono-error' : undefined}
+                className={`w-full px-4 py-2 rounded-md border border-input bg-background focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all${errors.telefono ? ' border-red-600' : ''}`}
                 placeholder="Ej: 0981 123 456"
               />
+              {errors.telefono && (
+                <p id="telefono-error" className="text-sm text-red-600 mt-1">{errors.telefono}</p>
+              )}
             </div>
             
             <div className="space-y-2">
@@ -539,13 +707,18 @@ const AdmissionForm = () => {
                 aria-label="Seleccionar universidad"
                 required
                 value={formData.universidad}
-                onChange={(e) => setFormData(prev => ({ ...prev, universidad: e.target.value }))}
-                className="w-full px-4 py-2 rounded-md border border-input bg-background focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all"
+                onChange={(e) => { setFormData(prev => ({ ...prev, universidad: e.target.value })); clearError('universidad'); }}
+                aria-invalid={!!errors.universidad}
+                aria-describedby={errors.universidad ? 'universidad-error' : undefined}
+                className={`w-full px-4 py-2 rounded-md border border-input bg-background focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all${errors.universidad ? ' border-red-600' : ''}`}
               >
                 <option value="">Selecciona tu universidad</option>
                 <option value="una">Universidad Nacional de Asunción</option>
                 <option value="otra">Otra</option>
               </select>
+              {errors.universidad && (
+                <p id="universidad-error" className="text-sm text-red-600 mt-1">{errors.universidad}</p>
+              )}
             </div>
           </div>
           
@@ -556,10 +729,15 @@ const AdmissionForm = () => {
                 id="universidadOtra"
                 type="text"
                 value={formData.universidadOtra}
-                onChange={(e) => setFormData(prev => ({ ...prev, universidadOtra: e.target.value }))}
-                className="w-full px-4 py-2 rounded-md border border-input bg-background focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all"
+                onChange={(e) => { setFormData(prev => ({ ...prev, universidadOtra: e.target.value })); clearError('universidadOtra'); }}
+                aria-invalid={!!errors.universidadOtra}
+                aria-describedby={errors.universidadOtra ? 'universidadOtra-error' : undefined}
+                className={`w-full px-4 py-2 rounded-md border border-input bg-background focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all${errors.universidadOtra ? ' border-red-600' : ''}`}
                 placeholder="Nombre de tu universidad"
               />
+              {errors.universidadOtra && (
+                <p id="universidadOtra-error" className="text-sm text-red-600 mt-1">{errors.universidadOtra}</p>
+              )}
             </div>
           )}
           
@@ -571,8 +749,10 @@ const AdmissionForm = () => {
               aria-label="Seleccionar carrera"
               required
               value={formData.carrera}
-              onChange={(e) => setFormData(prev => ({ ...prev, carrera: e.target.value }))}
-              className="w-full px-4 py-2 rounded-md border border-input bg-background focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all"
+              onChange={(e) => { setFormData(prev => ({ ...prev, carrera: e.target.value })); clearError('carrera'); }}
+              aria-invalid={!!errors.carrera}
+              aria-describedby={errors.carrera ? 'carrera-error' : undefined}
+              className={`w-full px-4 py-2 rounded-md border border-input bg-background focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all${errors.carrera ? ' border-red-600' : ''}`}
             >
               <option value="">Selecciona tu carrera</option>
               {carreras.map((carrera) => (
@@ -581,6 +761,9 @@ const AdmissionForm = () => {
                 </option>
               ))}
             </select>
+            {errors.carrera && (
+              <p id="carrera-error" className="text-sm text-red-600 mt-1">{errors.carrera}</p>
+            )}
           </div>
           
           {formData.carrera === "otra" && (
@@ -590,10 +773,15 @@ const AdmissionForm = () => {
                 id="carreraOtra"
                 type="text"
                 value={formData.carreraOtra}
-                onChange={(e) => setFormData(prev => ({ ...prev, carreraOtra: e.target.value }))}
-                className="w-full px-4 py-2 rounded-md border border-input bg-background focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all"
+                onChange={(e) => { setFormData(prev => ({ ...prev, carreraOtra: e.target.value })); clearError('carreraOtra'); }}
+                aria-invalid={!!errors.carreraOtra}
+                aria-describedby={errors.carreraOtra ? 'carreraOtra-error' : undefined}
+                className={`w-full px-4 py-2 rounded-md border border-input bg-background focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all${errors.carreraOtra ? ' border-red-600' : ''}`}
                 placeholder="Nombre de tu carrera"
               />
+              {errors.carreraOtra && (
+                <p id="carreraOtra-error" className="text-sm text-red-600 mt-1">{errors.carreraOtra}</p>
+              )}
             </div>
           )}
         </div>
@@ -621,12 +809,18 @@ const AdmissionForm = () => {
                     name="experienciaProgramacion"
                     value={opcion.value}
                     checked={formData.experienciaProgramacion === opcion.value}
-                    onChange={(e) => setFormData(prev => ({ ...prev, experienciaProgramacion: e.target.value }))}
-                    className="text-primary focus:ring-primary"
+                    onChange={(e) => { setFormData(prev => ({ ...prev, experienciaProgramacion: e.target.value })); clearError('experienciaProgramacion'); }}
+                    className={`text-primary focus:ring-primary${errors.experienciaProgramacion ? ' border-red-600' : ''}`}
+                    aria-invalid={!!errors.experienciaProgramacion}
+                    aria-describedby={errors.experienciaProgramacion ? 'experienciaProgramacion-error' : undefined}
                   />
                   <span className="text-sm">{opcion.label}</span>
                 </label>
               ))}
+                    {errors.experienciaProgramacion && (
+                      <p id="experienciaProgramacion-error" className="text-sm text-red-600 mt-1">{errors.experienciaProgramacion}</p>
+                    )}
+            
             </div>
           </div>
           
@@ -642,6 +836,8 @@ const AdmissionForm = () => {
                     checked={formData.areasInteres.includes(area)}
                     onChange={(e) => handleCheckboxChange('areasInteres', area, e.target.checked)}
                     className="text-primary focus:ring-primary"
+                    aria-invalid={!!errors.areasInteres}
+                    aria-describedby={errors.areasInteres ? 'areasInteres-error' : undefined}
                   />
                   <span className="text-sm">{area}</span>
                 </label>
@@ -655,6 +851,9 @@ const AdmissionForm = () => {
                 className="w-full px-4 py-2 rounded-md border border-input bg-background focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all"
                 placeholder="Especifica qué otras áreas te interesan"
               />
+            )}
+            {errors.areasInteres && (
+              <p id="areasInteres-error" className="text-sm text-red-600 mt-1">{errors.areasInteres}</p>
             )}
           </div>
           
@@ -698,6 +897,8 @@ const AdmissionForm = () => {
                     checked={formData.actividadesInteres.includes(actividad)}
                     onChange={(e) => handleCheckboxChange('actividadesInteres', actividad, e.target.checked)}
                     className="text-primary focus:ring-primary"
+                    aria-invalid={!!errors.actividadesInteres}
+                    aria-describedby={errors.actividadesInteres ? 'actividadesInteres-error' : undefined}
                   />
                   <span className="text-sm">{actividad}</span>
                 </label>
@@ -712,6 +913,9 @@ const AdmissionForm = () => {
                 placeholder="Especifica qué otras actividades te interesan"
               />
             )}
+            {errors.actividadesInteres && (
+              <p id="actividadesInteres-error" className="text-sm text-red-600 mt-1">{errors.actividadesInteres}</p>
+            )}
           </div>
           
           {/* Colaboración activa */}
@@ -725,12 +929,17 @@ const AdmissionForm = () => {
                     name="colaboracionActiva"
                     value={opcion.value}
                     checked={formData.colaboracionActiva === opcion.value}
-                    onChange={(e) => setFormData(prev => ({ ...prev, colaboracionActiva: e.target.value }))}
-                    className="text-primary focus:ring-primary"
+                    onChange={(e) => { setFormData(prev => ({ ...prev, colaboracionActiva: e.target.value })); clearError('colaboracionActiva'); }}
+                    className={`text-primary focus:ring-primary${errors.colaboracionActiva ? ' border-red-600' : ''}`}
+                    aria-invalid={!!errors.colaboracionActiva}
+                    aria-describedby={errors.colaboracionActiva ? 'colaboracionActiva-error' : undefined}
                   />
                   <span className="text-sm">{opcion.label}</span>
                 </label>
               ))}
+            {errors.colaboracionActiva && (
+              <p id="colaboracionActiva-error" className="text-sm text-red-600 mt-1">{errors.colaboracionActiva}</p>
+            )}
             </div>
           </div>
           
@@ -772,12 +981,17 @@ const AdmissionForm = () => {
                     name="tiempoDisponible"
                     value={opcion.value}
                     checked={formData.tiempoDisponible === opcion.value}
-                    onChange={(e) => setFormData(prev => ({ ...prev, tiempoDisponible: e.target.value }))}
-                    className="text-primary focus:ring-primary"
+                    onChange={(e) => { setFormData(prev => ({ ...prev, tiempoDisponible: e.target.value })); clearError('tiempoDisponible'); }}
+                    className={`text-primary focus:ring-primary${errors.tiempoDisponible ? ' border-red-600' : ''}`}
+                    aria-invalid={!!errors.tiempoDisponible}
+                    aria-describedby={errors.tiempoDisponible ? 'tiempoDisponible-error' : undefined}
                   />
                   <span className="text-sm">{opcion.label}</span>
                 </label>
               ))}
+            {errors.tiempoDisponible && (
+              <p id="tiempoDisponible-error" className="text-sm text-red-600 mt-1">{errors.tiempoDisponible}</p>
+            )}
             </div>
           </div>
 
@@ -792,12 +1006,17 @@ const AdmissionForm = () => {
                     name="nivelCompromiso"
                     value={opcion.value}
                     checked={formData.nivelCompromiso === opcion.value}
-                    onChange={(e) => setFormData(prev => ({ ...prev, nivelCompromiso: e.target.value }))}
-                    className="text-primary focus:ring-primary"
+                    onChange={(e) => { setFormData(prev => ({ ...prev, nivelCompromiso: e.target.value })); clearError('nivelCompromiso'); }}
+                    className={`text-primary focus:ring-primary${errors.nivelCompromiso ? ' border-red-600' : ''}`}
+                    aria-invalid={!!errors.nivelCompromiso}
+                    aria-describedby={errors.nivelCompromiso ? 'nivelCompromiso-error' : undefined}
                   />
                   <span className="text-sm">{opcion.label}</span>
                 </label>
               ))}
+            {errors.nivelCompromiso && (
+              <p id="nivelCompromiso-error" className="text-sm text-red-600 mt-1">{errors.nivelCompromiso}</p>
+            )}
             </div>
           </div>
 
@@ -808,7 +1027,7 @@ const AdmissionForm = () => {
             <textarea
               id="proyectosPrevios"
               value={formData.proyectosPrevios}
-              onChange={(e) => setFormData(prev => ({ ...prev, proyectosPrevios: e.target.value }))}
+              onChange={(e) => { setFormData(prev => ({ ...prev, proyectosPrevios: e.target.value })); clearError('proyectosPrevios'); }}
               rows={4}
               className="w-full px-4 py-2 rounded-md border border-input bg-background focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all"
               placeholder="Ej: Desarrollé una app móvil para organizar tareas usando React Native y Firebase. Me gustó porque aprendí sobre autenticación y bases de datos en tiempo real..."
@@ -821,7 +1040,7 @@ const AdmissionForm = () => {
             <textarea
               id="liderazgoExperiencia"
               value={formData.liderazgoExperiencia}
-              onChange={(e) => setFormData(prev => ({ ...prev, liderazgoExperiencia: e.target.value }))}
+              onChange={(e) => { setFormData(prev => ({ ...prev, liderazgoExperiencia: e.target.value })); clearError('liderazgoExperiencia'); }}
               rows={3}
               className="w-full px-4 py-2 rounded-md border border-input bg-background focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all"
               placeholder="Ej: Coordiné un grupo de estudio para el examen de Algoritmos, organizamos sesiones semanales y creamos material de apoyo..."
@@ -840,6 +1059,8 @@ const AdmissionForm = () => {
                     checked={formData.fortalezasPrincipales.includes(fortaleza)}
                     onChange={(e) => handleCheckboxChange('fortalezasPrincipales', fortaleza, e.target.checked)}
                     className="text-primary focus:ring-primary"
+                    aria-invalid={!!errors.fortalezasPrincipales}
+                    aria-describedby={errors.fortalezasPrincipales ? 'fortalezasPrincipales-error' : undefined}
                   />
                   <span className="text-sm">{fortaleza}</span>
                 </label>
@@ -853,6 +1074,9 @@ const AdmissionForm = () => {
                 className="w-full px-4 py-2 rounded-md border border-input bg-background focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all"
                 placeholder="Especifica tu otra fortaleza principal"
               />
+            )}
+            {errors.fortalezasPrincipales && (
+              <p id="fortalezasPrincipales-error" className="text-sm text-red-600 mt-1">{errors.fortalezasPrincipales}</p>
             )}
           </div>
 
@@ -868,6 +1092,8 @@ const AdmissionForm = () => {
                     checked={formData.desafiosInteres.includes(desafio)}
                     onChange={(e) => handleCheckboxChange('desafiosInteres', desafio, e.target.checked)}
                     className="text-primary focus:ring-primary"
+                    aria-invalid={!!errors.desafiosInteres}
+                    aria-describedby={errors.desafiosInteres ? 'desafiosInteres-error' : undefined}
                   />
                   <span className="text-sm">{desafio}</span>
                 </label>
@@ -882,6 +1108,9 @@ const AdmissionForm = () => {
                 placeholder="Especifica qué otros desafíos te interesan"
               />
             )}
+            {errors.desafiosInteres && (
+              <p id="desafiosInteres-error" className="text-sm text-red-600 mt-1">{errors.desafiosInteres}</p>
+            )}
           </div>
 
           {/* Objetivos a corto/mediano plazo */}
@@ -892,11 +1121,16 @@ const AdmissionForm = () => {
               id="objetivosPlazo"
               required
               value={formData.objetivosPlazo}
-              onChange={(e) => setFormData(prev => ({ ...prev, objetivosPlazo: e.target.value }))}
+              onChange={(e) => { setFormData(prev => ({ ...prev, objetivosPlazo: e.target.value })); clearError('objetivosPlazo'); }}
               rows={3}
-              className="w-full px-4 py-2 rounded-md border border-input bg-background focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all"
+              className={`w-full px-4 py-2 rounded-md border border-input bg-background focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all${errors.objetivosPlazo ? ' border-red-600' : ''}`}
               placeholder="Ej: Quiero especializarme en desarrollo web, conseguir una pasantía en una empresa de tech, y eventualmente trabajar en productos que impacten positivamente..."
+              aria-invalid={!!errors.objetivosPlazo}
+              aria-describedby={errors.objetivosPlazo ? 'objetivosPlazo-error' : undefined}
             />
+            {errors.objetivosPlazo && (
+              <p id="objetivosPlazo-error" className="text-sm text-red-600 mt-1">{errors.objetivosPlazo}</p>
+            )}
           </div>
 
           {/* Estilo de aprendizaje preferido */}
@@ -910,12 +1144,17 @@ const AdmissionForm = () => {
                     name="aprendizajePreferido"
                     value={opcion.value}
                     checked={formData.aprendizajePreferido === opcion.value}
-                    onChange={(e) => setFormData(prev => ({ ...prev, aprendizajePreferido: e.target.value }))}
-                    className="text-primary focus:ring-primary"
+                    onChange={(e) => { setFormData(prev => ({ ...prev, aprendizajePreferido: e.target.value })); clearError('aprendizajePreferido'); }}
+                    className={`text-primary focus:ring-primary${errors.aprendizajePreferido ? ' border-red-600' : ''}`}
+                    aria-invalid={!!errors.aprendizajePreferido}
+                    aria-describedby={errors.aprendizajePreferido ? 'aprendizajePreferido-error' : undefined}
                   />
                   <span className="text-sm">{opcion.label}</span>
                 </label>
               ))}
+            {errors.aprendizajePreferido && (
+              <p id="aprendizajePreferido-error" className="text-sm text-red-600 mt-1">{errors.aprendizajePreferido}</p>
+            )}
             </div>
           </div>
 
@@ -927,11 +1166,16 @@ const AdmissionForm = () => {
               id="contribucionEsperada"
               required
               value={formData.contribucionEsperada}
-              onChange={(e) => setFormData(prev => ({ ...prev, contribucionEsperada: e.target.value }))}
+              onChange={(e) => { setFormData(prev => ({ ...prev, contribucionEsperada: e.target.value })); clearError('contribucionEsperada'); }}
               rows={4}
-              className="w-full px-4 py-2 rounded-md border border-input bg-background focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all"
+              className={`w-full px-4 py-2 rounded-md border border-input bg-background focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all${errors.contribucionEsperada ? ' border-red-600' : ''}`}
               placeholder="Ej: Me gustaría ayudar a organizar talleres de React para principiantes, contribuir al desarrollo de la página web del club, y ser mentor de nuevos miembros..."
+              aria-invalid={!!errors.contribucionEsperada}
+              aria-describedby={errors.contribucionEsperada ? 'contribucionEsperada-error' : undefined}
             />
+            {errors.contribucionEsperada && (
+              <p id="contribucionEsperada-error" className="text-sm text-red-600 mt-1">{errors.contribucionEsperada}</p>
+            )}
           </div>
         </div>
 
@@ -956,8 +1200,10 @@ const AdmissionForm = () => {
               aria-label="Seleccionar cómo se enteró del club"
               required
               value={formData.comoSeEntero}
-              onChange={(e) => setFormData(prev => ({ ...prev, comoSeEntero: e.target.value }))}
-              className="w-full px-4 py-2 rounded-md border border-input bg-background focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all"
+              onChange={(e) => { setFormData(prev => ({ ...prev, comoSeEntero: e.target.value })); clearError('comoSeEntero'); }}
+              className={`w-full px-4 py-2 rounded-md border border-input bg-background focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all${errors.comoSeEntero ? ' border-red-600' : ''}`}
+              aria-invalid={!!errors.comoSeEntero}
+              aria-describedby={errors.comoSeEntero ? 'comoSeEntero-error' : undefined}
             >
               <option value="">Selecciona una opción</option>
               {comoSeEnteroOpciones.map((opcion) => (
@@ -966,6 +1212,9 @@ const AdmissionForm = () => {
                 </option>
               ))}
             </select>
+            {errors.comoSeEntero && (
+              <p id="comoSeEntero-error" className="text-sm text-red-600 mt-1">{errors.comoSeEntero}</p>
+            )}
           </div>
 
           {/* Comentarios adicionales */}
