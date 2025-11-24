@@ -2,21 +2,21 @@ import React, { useEffect, useState } from "react";
 import { X } from "lucide-react";
 import { Link } from "react-router-dom";
 
-const COOKIE_CONSENT_KEY = "cookie-consent-v1";
+import { setCookieConsent, hasCookieConsent } from "@/lib/consent";
 
 const CookieConsent = () => {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
     // Check if user has already consented
-    const hasConsent = localStorage.getItem(COOKIE_CONSENT_KEY);
+    const hasConsent = hasCookieConsent();
     if (!hasConsent) {
       setIsVisible(true);
     }
   }, []);
 
   const acceptCookies = () => {
-    localStorage.setItem(COOKIE_CONSENT_KEY, "true");
+    setCookieConsent('true');
     setIsVisible(false);
   };
 

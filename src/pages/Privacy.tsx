@@ -15,14 +15,14 @@ const Privacy = () => {
             </Link>
           </div>
 
-          <div className="text-center mb-10">
+            <div className="text-center mb-10">
             <Shield className="h-12 w-12 text-primary mx-auto mb-4" />
             <h1 className="text-3xl md:text-5xl font-bold mb-4">Política de <span className="gradient-text">Privacidad</span></h1>
             <p className="text-lg text-muted-foreground">
               Cómo recopilamos, utilizamos y protegemos tu información
             </p>
             <div className="mt-4 text-sm">
-              <span className="text-muted-foreground">Última actualización:</span> 10 de Mayo de 2025
+              <span className="text-muted-foreground">Última actualización:</span> 24 de Noviembre de 2025
             </div>
           </div>
 
@@ -30,13 +30,13 @@ const Privacy = () => {
             {/* Introduction section */}
             <div className="glass-card-static p-6">
               <h2 className="text-xl font-semibold mb-4 flex items-center">
-                <span className="text-primary mr-2">1.</span> Introducción
+              <span className="text-primary mr-2">1.</span> Introducción
               </h2>
               <p className="text-muted-foreground">
-                El Club de Programación FIUNA ("nosotros", "nuestro" o "CPF") se compromete a proteger la privacidad de
-                los datos personales que recopilamos de nuestros miembros, visitantes y colaboradores. Esta Política de
-                Privacidad explica cómo recopilamos, utilizamos, compartimos y protegemos su información cuando
-                interactúa con nuestro sitio web, participa en nuestros eventos o se une a nuestra comunidad.
+              El Club de Programación FIUNA ("El club", "Club", "nosotros", "nuestro", "{"</cpf>"}" o "CPF") se compromete a proteger la privacidad de
+              los datos personales que recopilamos de nuestros miembros, visitantes y colaboradores. Esta Política de
+              Privacidad explica cómo recopilamos, utilizamos, compartimos y protegemos su información cuando
+              interactúa con nuestro sitio web, participa en nuestros eventos o se une a nuestra comunidad.
               </p>
             </div>
 
@@ -57,10 +57,10 @@ const Privacy = () => {
                   </p>
                 </div>
                 <div className="bg-primary/10 p-4 rounded-lg border border-primary/20">
-                  <h3 className="text-md font-medium mb-2" style={{ color: "#3b7fed" }}>Información académica</h3>
-                  <p className="text-sm text-muted-foreground">
-                    Carrera, casa de estudios y unidad académica (cuando sea relevante).
-                  </p>
+                      <h3 className="text-md font-medium mb-2" style={{ color: "#3b7fed" }}>Información académica</h3>
+                      <p className="text-sm text-muted-foreground">
+                        Recopilamos detalles relativos a su formación y contexto académico cuando corresponde, por ejemplo: universidad (si corresponde, Universidad Nacional de Asunción u otra), facultad (por ejemplo, Facultad de Ingeniería u otra), carrera (nombre de la carrera o especialidad) y otros datos académicos relevantes.
+                      </p>
                 </div>
                 <div className="bg-primary/10 p-4 rounded-lg border border-primary/20">
                   <h3 className="text-md font-medium mb-2" style={{ color: "#3b7fed" }}>Información de uso</h3>
@@ -74,6 +74,15 @@ const Privacy = () => {
                     Mensajes que nos envía a través de formularios de contacto o correo electrónico.
                   </p>
                 </div>
+              </div>
+              <div className="bg-primary/10 p-4 rounded-lg border border-primary/20">
+                <h3 className="text-md font-medium mb-2" style={{ color: "#3b7fed" }}>Cookies y tecnologías</h3>
+                <p className="text-sm text-muted-foreground mb-2">
+                  Nuestro sitio web utiliza cookies y tecnologías similares para mejorar su experiencia, analizar el tráfico y medir el rendimiento del sitio. Utilizamos herramientas de analítica hospedadas por terceros, incluyendo <strong>Vercel Web Analytics</strong> y <strong>Vercel Speed Insights</strong>, que recopilan información sobre visitas, páginas vistas y métricas de rendimiento. Estos servicios no exponen datos personales identificables desde el navegador, pero pueden recopilar identificadores anónimos.
+                </p>
+                <p className="text-sm text-muted-foreground">
+                  Puede controlar o desactivar las cookies a través de la configuración de su navegador. Además, si nuestro sistema de consentimiento de cookies está habilitado, podrá permitir o denegar la activación de herramientas de analítica desde la interfaz.
+                </p>
               </div>
             </div>
 
@@ -93,6 +102,10 @@ const Privacy = () => {
                 <li className="flex items-start">
                   <span className="text-primary mr-2">•</span>
                   <span>Comunicarnos con usted sobre eventos, actividades y oportunidades.</span>
+                </li>
+                <li className="flex items-start">
+                  <span className="text-primary mr-2">•</span>
+                  <span>Analizar el uso y rendimiento del sitio (por ejemplo, mediante Vercel Web Analytics y Vercel Speed Insights) para mejorar la experiencia y detectar problemas técnicos.</span>
                 </li>
                 <li className="flex items-start">
                   <span className="text-primary mr-2">•</span>
@@ -165,20 +178,12 @@ const Privacy = () => {
               </ul>
             </div>
 
-            {/* Cookies section */}
-            <div className="glass-card-static p-6">
-              <h2 className="text-xl font-semibold mb-4 flex items-center">
-                <span className="text-primary mr-2">7.</span> Cookies y tecnologías
-              </h2>
-              <p className="text-muted-foreground">
-                Nuestro sitio web utiliza cookies y tecnologías similares para mejorar su experiencia, analizar el tráfico y personalizar el contenido. Puede controlar las cookies a través de la configuración de su navegador.
-              </p>
-            </div>
+            {/* Cookies moved into section 2 above */}
             
             {/* Third-party links section */}
             <div className="glass-card-static p-6">
               <h2 className="text-xl font-semibold mb-4 flex items-center">
-                <span className="text-primary mr-2">8.</span> Enlaces a sitios de terceros
+                <span className="text-primary mr-2">7.</span> Enlaces a sitios de terceros
               </h2>
               <p className="text-muted-foreground">
                 Nuestro sitio web puede contener enlaces a otros sitios web. No somos responsables de las prácticas de privacidad de esos sitios y le recomendamos revisar sus políticas de privacidad.
@@ -188,7 +193,7 @@ const Privacy = () => {
             {/* Contact section */}
             <div className="glass-card-static p-6">
               <h2 className="text-xl font-semibold mb-4 flex items-center">
-              <span className="text-primary mr-2">9.</span> Contacto
+                <span className="text-primary mr-2">8.</span> Contacto
               </h2>
               <p className="text-muted-foreground mb-4">
               Si tiene preguntas o inquietudes sobre esta Política de Privacidad, puede contactarnos en:
