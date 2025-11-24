@@ -130,4 +130,4 @@ Para consultas sobre el sitio web o el Club de Programación FIUNA, por favor co
 
 ---
 
-Desarrollado con ❤️ por miembros del Club de Programación FIUNA
+Desarrollado con el ❤️ por miembros del Club de Programación FIUNA
