@@ -423,7 +423,7 @@ const AdmissionForm = () => {
 
       toast({
         title: "Solicitud enviada",
-        description: "Hemos recibido tu solicitud. Te contactaremos en las próximas 48-72 horas.",
+        description: "Hemos recibido tu solicitud. Te contactaremos lo antes posible..",
         variant: "default",
       });
 
