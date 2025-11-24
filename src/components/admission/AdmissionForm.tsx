@@ -16,6 +16,8 @@ const GOOGLE_FORMS_CONFIG = {
     email: "entry.762187120",
     telefono: "entry.1256368352",
     universidad: "entry.1592837502",
+    facultad: "entry.906060603",
+    facultadOtra: "entry.1408593755",
     universidadOtra: "entry.1271897015",
     carrera: "entry.557362533",
     carreraOtra: "entry.204427330",
@@ -50,6 +52,8 @@ type FormState = {
   telefono: string;
   universidad: string;
   universidadOtra: string;
+  facultad: string;
+  facultadOtra: string;
   carrera: string;
   carreraOtra: string;
   experienciaProgramacion: string;
@@ -86,6 +90,8 @@ const AdmissionForm = () => {
     email: "",
     telefono: "",
     universidad: "",
+    facultad: "",
+    facultadOtra: "",
     universidadOtra: "",
     carrera: "",
     carreraOtra: "",
@@ -129,7 +135,8 @@ const AdmissionForm = () => {
     "Ingeniería Industrial",
     "Ingeniería Mecánica",
     "Ingeniería Mecatrónica",
-    "Otra"
+    // Note: 'Otra' removed here; non-engineering or other-faculty careers are captured
+    // in the `carreraOtra` free-text field.
   ];
 
   const experienciaOpciones = [
@@ -254,6 +261,38 @@ const AdmissionForm = () => {
     clearError(field);
   };
 
+  // Clear dependent fields when parent selections change to avoid submitting hidden values
+  const handleUniversityChange = (value: string) => {
+    setFormData(prev => {
+      if (value === 'una') {
+        // switching to UNA: clear any previous 'otra' university and any free-text career/faculty
+        return { ...prev, universidad: value, universidadOtra: '', facultad: '', facultadOtra: '', carrera: '', carreraOtra: '' };
+      }
+      // value === 'otra' or other: clear UNA-specific fields
+      return { ...prev, universidad: value, facultad: '', facultadOtra: '', carrera: '', carreraOtra: '' };
+    });
+    clearError('universidad');
+    clearError('facultad');
+    clearError('facultadOtra');
+    clearError('carrera');
+    clearError('carreraOtra');
+  };
+
+  const handleFacultadChange = (value: string) => {
+    setFormData(prev => {
+      if (value === 'facultad-ingenieria') {
+        // show engineering careers: clear facultadOtra but keep carrera (user may have it)
+        return { ...prev, facultad: value, facultadOtra: '' };
+      }
+      // other faculty: clear carrera dropdown and keep facultadOtra for input
+      return { ...prev, facultad: value, carrera: '', carreraOtra: '' };
+    });
+    clearError('facultad');
+    clearError('facultadOtra');
+    clearError('carrera');
+    clearError('carreraOtra');
+  };
+
   const validateForm = () => {
     const fd = formData as FormState;
     const missing: Array<{ key: string; label: string }> = [];
@@ -272,9 +311,16 @@ const AdmissionForm = () => {
 
     if (!fd.universidad) pushMissing('universidad', 'Universidad');
     if (fd.universidad === 'otra' && !fd.universidadOtra?.trim()) pushMissing('universidadOtra', 'Especifica tu universidad');
+    if (fd.universidad === 'una' && !fd.facultad) pushMissing('facultad', 'Facultad');
+    if (fd.facultad === 'otra' && !fd.facultadOtra?.trim()) pushMissing('facultadOtra', 'Especifica tu facultad');
 
-    if (!fd.carrera) pushMissing('carrera', 'Carrera');
-    if (fd.carrera === 'otra' && !fd.carreraOtra?.trim()) pushMissing('carreraOtra', 'Especifica tu carrera');
+    // Carrera requirement depends on faculty/university
+    if (fd.universidad === 'una' && fd.facultad === 'facultad-ingenieria') {
+      if (!fd.carrera) pushMissing('carrera', 'Carrera');
+    } else {
+      // For other faculties or external universities, require a free-text career field
+      if (!fd.carreraOtra?.trim()) pushMissing('carreraOtra', 'Carrera');
+    }
 
     if (!fd.experienciaProgramacion) pushMissing('experienciaProgramacion', 'Experiencia en programación');
     if (!fd.areasInteres || fd.areasInteres.length === 0) pushMissing('areasInteres', 'Áreas de interés');
@@ -309,6 +355,8 @@ const AdmissionForm = () => {
       telefono: '#telefono',
       universidad: '#universidad',
       universidadOtra: '#universidadOtra',
+      facultad: '#facultad',
+      facultadOtra: '#facultadOtra',
       carrera: '#carrera',
       carreraOtra: '#carreraOtra',
       experienciaProgramacion: 'input[name="experienciaProgramacion"]',
@@ -404,6 +452,10 @@ const AdmissionForm = () => {
       switch (field) {
         case 'universidad':
           return value === 'una' ? 'Universidad Nacional de Asunción' : value === 'otra' ? 'Otra' : value;
+        case 'facultad':
+          if (value === 'facultad-ingenieria') return 'Facultad de Ingeniería';
+          if (value === 'otra') return 'Otra';
+          return value;
         case 'carrera':
           // carreras array defined above — try to find original label
           if (value === 'otra') return 'Otra';
@@ -437,6 +489,8 @@ const AdmissionForm = () => {
       email: GOOGLE_FORMS_CONFIG.fieldMapping.email,
       telefono: GOOGLE_FORMS_CONFIG.fieldMapping.telefono,
       universidad: GOOGLE_FORMS_CONFIG.fieldMapping.universidad,
+      facultad: GOOGLE_FORMS_CONFIG.fieldMapping.facultad,
+      facultadOtra: GOOGLE_FORMS_CONFIG.fieldMapping.facultadOtra,
       universidadOtra: GOOGLE_FORMS_CONFIG.fieldMapping.universidadOtra,
       carrera: GOOGLE_FORMS_CONFIG.fieldMapping.carrera,
       carreraOtra: GOOGLE_FORMS_CONFIG.fieldMapping.carreraOtra,
@@ -537,6 +591,8 @@ const AdmissionForm = () => {
       email: "",
       telefono: "",
       universidad: "",
+      facultad: "",
+      facultadOtra: "",
       universidadOtra: "",
       carrera: "",
       carreraOtra: "",
@@ -707,7 +763,7 @@ const AdmissionForm = () => {
                 aria-label="Seleccionar universidad"
                 required
                 value={formData.universidad}
-                onChange={(e) => { setFormData(prev => ({ ...prev, universidad: e.target.value })); clearError('universidad'); }}
+                onChange={(e) => { handleUniversityChange(e.target.value); }}
                 aria-invalid={!!errors.universidad}
                 aria-describedby={errors.universidad ? 'universidad-error' : undefined}
                 className={`w-full px-4 py-2 rounded-md border border-input bg-background focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all${errors.universidad ? ' border-red-600' : ''}`}
@@ -721,14 +777,59 @@ const AdmissionForm = () => {
               )}
             </div>
           </div>
-          
+
+          {formData.universidad === "una" && (
+            <div className="mt-4 space-y-2">
+              <label htmlFor="facultad" className="text-sm font-medium">Facultad *</label>
+              <select
+                id="facultad"
+                name="facultad"
+                aria-label="Seleccionar facultad"
+                required
+                value={formData.facultad}
+                onChange={(e) => { handleFacultadChange(e.target.value); }}
+                aria-invalid={!!errors.facultad}
+                aria-describedby={errors.facultad ? 'facultad-error' : undefined}
+                className={`w-full px-4 py-2 rounded-md border border-input bg-background focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all${errors.facultad ? ' border-red-600' : ''}`}
+              >
+                <option value="">Selecciona tu facultad</option>
+                <option value="facultad-ingenieria">Facultad de Ingeniería</option>
+                <option value="otra">Otra</option>
+              </select>
+              {errors.facultad && (
+                <p id="facultad-error" className="text-sm text-red-600 mt-1">{errors.facultad}</p>
+              )}
+
+              {formData.facultad === "otra" && (
+                <div className="mt-4 space-y-2">
+                  <label htmlFor="facultadOtra" className="text-sm font-medium">Especifica tu facultad *</label>
+                  <input
+                    id="facultadOtra"
+                    type="text"
+                    value={formData.facultadOtra}
+                    required
+                    onChange={(e) => { setFormData(prev => ({ ...prev, facultadOtra: e.target.value })); clearError('facultadOtra'); }}
+                    aria-invalid={!!errors.facultadOtra}
+                    aria-describedby={errors.facultadOtra ? 'facultadOtra-error' : undefined}
+                    className={`w-full px-4 py-2 rounded-md border border-input bg-background focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all${errors.facultadOtra ? ' border-red-600' : ''}`}
+                    placeholder="Nombre de tu facultad"
+                  />
+                  {errors.facultadOtra && (
+                    <p id="facultadOtra-error" className="text-sm text-red-600 mt-1">{errors.facultadOtra}</p>
+                  )}
+                </div>
+              )}
+            </div>
+          )}
+
           {formData.universidad === "otra" && (
             <div className="mt-4 space-y-2">
-              <label htmlFor="universidadOtra" className="text-sm font-medium">Especifica tu universidad</label>
+              <label htmlFor="universidadOtra" className="text-sm font-medium">Especifica tu universidad *</label>
               <input
                 id="universidadOtra"
                 type="text"
                 value={formData.universidadOtra}
+                required
                 onChange={(e) => { setFormData(prev => ({ ...prev, universidadOtra: e.target.value })); clearError('universidadOtra'); }}
                 aria-invalid={!!errors.universidadOtra}
                 aria-describedby={errors.universidadOtra ? 'universidadOtra-error' : undefined}
@@ -741,47 +842,53 @@ const AdmissionForm = () => {
             </div>
           )}
           
-          <div className="mt-4 space-y-2">
-            <label htmlFor="carrera" className="text-sm font-medium">Carrera *</label>
-            <select
-              id="carrera"
-              name="carrera"
-              aria-label="Seleccionar carrera"
-              required
-              value={formData.carrera}
-              onChange={(e) => { setFormData(prev => ({ ...prev, carrera: e.target.value })); clearError('carrera'); }}
-              aria-invalid={!!errors.carrera}
-              aria-describedby={errors.carrera ? 'carrera-error' : undefined}
-              className={`w-full px-4 py-2 rounded-md border border-input bg-background focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all${errors.carrera ? ' border-red-600' : ''}`}
-            >
-              <option value="">Selecciona tu carrera</option>
-              {carreras.map((carrera) => (
-                <option key={carrera} value={carrera.toLowerCase().replace(/ /g, "-")}>
-                  {carrera}
-                </option>
-              ))}
-            </select>
-            {errors.carrera && (
-              <p id="carrera-error" className="text-sm text-red-600 mt-1">{errors.carrera}</p>
-            )}
-          </div>
-          
-          {formData.carrera === "otra" && (
+          {formData.universidad && (
             <div className="mt-4 space-y-2">
-              <label htmlFor="carreraOtra" className="text-sm font-medium">Especifica tu carrera</label>
-              <input
-                id="carreraOtra"
-                type="text"
-                value={formData.carreraOtra}
-                onChange={(e) => { setFormData(prev => ({ ...prev, carreraOtra: e.target.value })); clearError('carreraOtra'); }}
-                aria-invalid={!!errors.carreraOtra}
-                aria-describedby={errors.carreraOtra ? 'carreraOtra-error' : undefined}
-                className={`w-full px-4 py-2 rounded-md border border-input bg-background focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all${errors.carreraOtra ? ' border-red-600' : ''}`}
-                placeholder="Nombre de tu carrera"
-              />
-              {errors.carreraOtra && (
-                <p id="carreraOtra-error" className="text-sm text-red-600 mt-1">{errors.carreraOtra}</p>
-              )}
+            <label htmlFor="carrera" className="text-sm font-medium">Carrera *</label>
+            {formData.universidad === "una" && formData.facultad === "facultad-ingenieria" ? (
+              <>
+                <select
+                  id="carrera"
+                  name="carrera"
+                  aria-label="Seleccionar carrera"
+                  required
+                  value={formData.carrera}
+                  onChange={(e) => { setFormData(prev => ({ ...prev, carrera: e.target.value })); clearError('carrera'); }}
+                  aria-invalid={!!errors.carrera}
+                  aria-describedby={errors.carrera ? 'carrera-error' : undefined}
+                  className={`w-full px-4 py-2 rounded-md border border-input bg-background focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all${errors.carrera ? ' border-red-600' : ''}`}
+                >
+                  <option value="">Selecciona tu carrera</option>
+                  {carreras.map((carrera) => (
+                    <option key={carrera} value={carrera.toLowerCase().replace(/ /g, "-")}>
+                      {carrera}
+                    </option>
+                  ))}
+                </select>
+                {errors.carrera && (
+                  <p id="carrera-error" className="text-sm text-red-600 mt-1">{errors.carrera}</p>
+                )}
+
+                {/* 'Otra' option removed from engineering carreras; use carreraOtra in other flows */}
+              </>
+            ) : (
+              <>
+                <input
+                  id="carreraOtra"
+                  type="text"
+                  value={formData.carreraOtra}
+                  required
+                  onChange={(e) => { setFormData(prev => ({ ...prev, carreraOtra: e.target.value })); clearError('carreraOtra'); }}
+                  aria-invalid={!!errors.carreraOtra}
+                  aria-describedby={errors.carreraOtra ? 'carreraOtra-error' : undefined}
+                  className={`w-full px-4 py-2 rounded-md border border-input bg-background focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all${errors.carreraOtra ? ' border-red-600' : ''}`}
+                  placeholder="Nombre de tu carrera"
+                />
+                {errors.carreraOtra && (
+                  <p id="carreraOtra-error" className="text-sm text-red-600 mt-1">{errors.carreraOtra}</p>
+                )}
+              </>
+            )}
             </div>
           )}
         </div>
