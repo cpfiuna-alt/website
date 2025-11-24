@@ -1,12 +1,16 @@
-
 import React from "react";
 import { Link } from "react-router-dom";
+import { featureFlags } from "@/config/site";
 
 interface ResourcesCallToActionProps {
-  onOpenUploadModal: () => void;
+  onOpenUploadModal?: () => void;
 }
 
 const ResourcesCallToAction = ({ onOpenUploadModal }: ResourcesCallToActionProps) => {
+  // Use admission form if enabled, otherwise fall back to contact
+  const joinClubLink = featureFlags.admissionForm.enabled ? "/admision" : "/contacto";
+  const joinClubText = featureFlags.admissionForm.enabled ? "Unite al club" : "Contactá con el club";
+
   return (
     <section className="py-20 px-6 bg-muted/50 dark:bg-black/60 text-center">
       <div className="container mx-auto max-w-4xl">
@@ -41,10 +45,10 @@ const ResourcesCallToAction = ({ onOpenUploadModal }: ResourcesCallToActionProps
           </button>
           */}
           <Link
-            to="/contacto"
+            to={joinClubLink}
             className="inline-flex items-center justify-center px-6 py-3 rounded-full border border-primary bg-transparent text-primary font-medium transition-all hover:scale-105 hover:bg-primary/10 hover:shadow-neon-blue"
           >
-            Contactá con el club
+            {joinClubText}
           </Link>
         </div>
       </div>

@@ -1,7 +1,12 @@
 
 import React from "react";
+import { featureFlags } from "@/config/site";
 
 const EventsCallToAction = () => {
+  // Use admission form if enabled, otherwise fall back to contact
+  const joinClubLink = featureFlags.admissionForm.enabled ? "/admision" : "/contacto";
+  const joinClubText = featureFlags.admissionForm.enabled ? "Unite al club" : "Contáctanos";
+
   return (
     <section className="py-20 px-6 bg-muted/50 dark:bg-black/60 text-center">
       <div className="container mx-auto">
@@ -12,10 +17,10 @@ const EventsCallToAction = () => {
             nos encantaría escucharlas.
           </p>
           <a
-            href="/contacto"
+            href={joinClubLink}
             className="w-full sm:w-auto inline-flex items-center justify-center px-6 py-3 rounded-full bg-primary text-primary-foreground font-medium transition-all hover:scale-105 hover:shadow-neon-blue"
           >
-            Contáctanos
+            {joinClubText}
           </a>
         </div>
       </div>

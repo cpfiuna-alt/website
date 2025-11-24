@@ -1,11 +1,12 @@
 import { useState, useEffect } from "react";
 import { NavLink } from "react-router-dom";
 import { Menu, X, BookOpen } from "lucide-react";
+import { featureFlags } from "@/config/site";
 import Logo from "@/components/ui/Logo";
 import ThemeToggle from "@/components/ui/ThemeToggle";
 
 // Shorter nav labels to prevent wrapping
-const navigation = [
+const baseNavigation = [
   { name: "Inicio", to: "/" },
   { name: "Nosotros", to: "/nosotros" },
   { name: "Eventos", to: "/eventos" },
@@ -15,6 +16,17 @@ const navigation = [
   { name: "Blog", to: "/blog" },
   { name: "Contacto", to: "/contacto" },
 ];
+
+// Generate dynamic navigation based on feature flags
+const getNavigation = () => {
+  if (featureFlags.admissionForm.enabled && featureFlags.admissionForm.showInNavigation) {
+    // Insert admission link before the last item (usually contact)
+    return [...baseNavigation.slice(0, -1), { name: "Admisión", to: "/admision" }, baseNavigation[baseNavigation.length - 1]];
+  }
+  return baseNavigation;
+};
+
+const navigation = getNavigation();
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -36,12 +48,12 @@ const Header = () => {
 
   return (
     <header
-      className={`fixed top-0 left-0 w-full z-50 transition-all duration-300
+      className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ease-in-out
       ${scrolled 
           ? "py-3 bg-background shadow-sm" 
-          : "py-5 bg-transparent"}`}
+          : "py-8 bg-transparent"}`}
     >
-      <div className="container px-4 mx-auto flex items-center justify-between">
+      <div className="container px-4 mx-auto flex items-center justify-between min-h-[3.5rem]">
         <div className="flex-shrink-0 z-10">
           <Logo />
         </div>

@@ -165,6 +165,9 @@ const ProjectsDocsHub: React.FC = () => {
         <div className="flex flex-wrap gap-4 mb-8">
           <div className="flex-1 min-w-48">
             <select
+              id="project-category-filter"
+              name="categoryFilter"
+              aria-label="Filtrar proyectos por categoría"
               value={selectedCategory}
               onChange={(e) => setSelectedCategory(e.target.value)}
               className="w-full p-2 border border-border rounded-md bg-background"
@@ -179,6 +182,9 @@ const ProjectsDocsHub: React.FC = () => {
           </div>
           <div className="flex-1 min-w-48">
             <select
+              id="project-status-filter"
+              name="statusFilter"
+              aria-label="Filtrar proyectos por estado"
               value={selectedStatus}
               onChange={(e) => setSelectedStatus(e.target.value)}
               className="w-full p-2 border border-border rounded-md bg-background"

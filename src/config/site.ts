@@ -45,9 +45,35 @@ export const navLinks = [
   { name: "Contacto", to: "/contacto" },
 ];
 
+// Feature flags - Control what features are enabled/disabled
+export const featureFlags = {
+  admissionForm: {
+    enabled: true, // Set to false to completely disable admission form and route
+    showInNavigation: false, // Set to true to show "Admisión" link in main navigation
+    showInFooter: false, // Set to true to show "Admisión" link in footer
+  },
+  // To enable admission form visibility:
+  // 1. Set enabled: true (allows access to /admision route)
+  // 2. Set showInNavigation: true (shows link in header navigation)
+  // 3. Set showInFooter: true (shows link in footer)
+  // 
+  // To disable completely:
+  // 1. Set enabled: false (disables route and all visibility)
+};
+
+// Generate dynamic navigation links based on feature flags
+const getFooterMainLinks = () => {
+  const baseLinks = navLinks;
+  if (featureFlags.admissionForm.enabled && featureFlags.admissionForm.showInFooter) {
+    // Insert admission link before the last item (usually contact)
+    return [...baseLinks.slice(0, -1), { name: "Admisión", to: "/admision" }, baseLinks[baseLinks.length - 1]];
+  }
+  return baseLinks;
+};
+
 // Footer links
 export const footerLinks = {
-  main: navLinks,
+  main: getFooterMainLinks(),
   legal: [
     { name: "Privacidad", to: "/privacidad" },
     { name: "Código de Conducta", to: "/codigo-de-conducta" },

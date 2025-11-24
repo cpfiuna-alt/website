@@ -3,8 +3,12 @@ import React from "react";
 import { ChevronRight, Code2, Terminal, Sparkles } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import { featureFlags } from "@/config/site";
 
 const Hero: React.FC = () => {
+  // Use admission form if enabled, otherwise fall back to contact
+  const joinClubLink = featureFlags.admissionForm.enabled ? "/admision" : "/contacto";
+
   return (
     <section className="relative min-h-[90vh] flex flex-col items-center justify-center overflow-hidden hero-glow">
       <div className="container px-4 relative z-10">
@@ -22,7 +26,7 @@ const Hero: React.FC = () => {
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-4">
             <Link
-              to="/contacto"
+              to={joinClubLink}
               className="btn-glow inline-flex items-center bg-primary text-white font-medium py-3 px-6 rounded-lg transition-all"
             >
               Únete al club

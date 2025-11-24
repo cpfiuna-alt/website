@@ -98,7 +98,11 @@ const FilterBar = ({
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
             <input
               type="text"
+              id="resources-search"
+              name="search"
               placeholder="Buscar recursos..."
+              aria-label="Buscar recursos del club"
+              autoComplete="off"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="w-full pl-10 pr-4 py-2 rounded-lg bg-background border border-muted focus:outline-none focus:ring-2 focus:ring-primary"
@@ -108,6 +112,9 @@ const FilterBar = ({
         
         <div className="w-full lg:w-1/4">
           <select
+            id="resources-type-filter"
+            name="typeFilter"
+            aria-label="Filtrar recursos por tipo"
             value={selectedType || ""}
             onChange={(e) => setSelectedType(e.target.value || null)}
             className="w-full px-4 py-2 rounded-lg bg-background border border-muted focus:outline-none focus:ring-2 focus:ring-primary"

@@ -5,7 +5,7 @@ description: "Una plataforma web moderna construida con React y TypeScript que r
 image: "images/projects/website/cpf-website-cover.png"
 tags: ["React", "TypeScript", "Tailwind CSS", "Vite"]
 githubLink: "https://github.com/cpfiuna/website"
-demoLink: "https://cpfiuna.io"
+demoLink: "https://cpfiuna.vercel.app"
 category: "web"
 featured: true
 status: "En desarrollo"

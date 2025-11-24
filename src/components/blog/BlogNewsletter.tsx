@@ -96,7 +96,11 @@ const BlogNewsletter = () => {
         <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3 max-w-lg mx-auto">
           <input
             type="email"
+            id="newsletter-email"
+            name="email"
             placeholder="Tu correo electrónico"
+            aria-label="Correo electrónico para newsletter"
+            autoComplete="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             disabled={isSubmitting}

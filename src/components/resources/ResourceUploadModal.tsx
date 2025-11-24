@@ -157,6 +157,8 @@ const ResourceUploadModal = ({ isOpen, onClose, onSubmit, resourceTypes }: Resou
                       Tipo
                     </label>
                     <select 
+                      id="resource-type"
+                      name="type"
                       required
                       className="w-full px-3 py-2 rounded-lg bg-background border border-muted focus:outline-none focus:ring-2 focus:ring-primary transition-colors"
                     >

@@ -27,7 +27,10 @@ const Reglamento = lazy(() => import('./pages/Reglamento'));
 const CourseDetail = lazy(() => import('./pages/CourseDetail'));
 const Documentation = lazy(() => import('./pages/Documentation'));
 const Community = lazy(() => import('./pages/Community'));
+const Admission = lazy(() => import('./pages/Admission'));
 const NotFound = lazy(() => import('./pages/NotFound'));
+
+import { siteConfig, featureFlags } from "@/config/site";
 
 const queryClient = new QueryClient();
 
@@ -37,7 +40,10 @@ const App = () => (
       <TooltipProvider>
         <Toaster />
         <Sonner />
-        <BrowserRouter>
+        <BrowserRouter future={{
+          v7_startTransition: true,
+          v7_relativeSplatPath: true
+        }}>
           <Suspense fallback={<div className='w-full h-screen flex items-center justify-center text-muted-foreground'>Cargando...</div>}>
             <Routes>
               <Route path="/" element={<Index />} />
@@ -52,6 +58,9 @@ const App = () => (
               <Route path="/blog" element={<Blog />} />
               <Route path="/blog/:slug" element={<BlogPost />} />
               <Route path="/contacto" element={<Contact />} />
+              {featureFlags.admissionForm.enabled && (
+                <Route path="/admision" element={<Admission />} />
+              )}
               <Route path="/privacidad" element={<Privacy />} />
               <Route path="/codigo-de-conducta" element={<CodeOfConduct />} />
               <Route path="/kit-de-medios" element={<MediaKit />} />

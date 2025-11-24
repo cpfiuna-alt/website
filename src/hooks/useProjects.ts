@@ -16,7 +16,7 @@ export function useProjects() {
         
         // If no project files were found, set empty array and return
         if (!projectFiles || Object.keys(projectFiles).length === 0) {
-          console.error("No project files found");
+          console.log("No project files found - this is normal if no projects are published yet");
           setAllProjects([]);
           return;
         }

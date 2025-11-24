@@ -1,7 +1,12 @@
 import React from "react";
-import { PaintBucket } from "lucide-react";
+import { BookOpen } from "lucide-react";
+import { downloadColorPalette } from "@/utils/downloadHelpers";
 
 const ColorsSection = () => {
+  const handleDownloadColors = () => {
+    downloadColorPalette();
+  };
+
   return (
     <div className="glass-card-static p-8 flex flex-col h-full">
       <h3 className="text-xl font-semibold mb-4">Colores</h3>
@@ -54,13 +59,13 @@ const ColorsSection = () => {
         </div>
       </div>
       
-      <a 
-        href="/media-kit/colors.pdf" 
+      <button 
+        onClick={handleDownloadColors}
         className="mt-auto flex items-center justify-center gap-2 px-8 py-3 bg-primary hover:bg-primary/90 text-primary-foreground rounded-full text-sm transition-all hover:shadow-neon-blue hover:scale-105"
       >
-        <PaintBucket className="h-4 w-4" />
-        <span>Descargar paleta de colores</span>
-      </a>
+        <BookOpen className="h-4 w-4" />
+        <span>Descargar manual de marca</span>
+      </button>
     </div>
   );
 };

@@ -20,7 +20,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
         ? "dark"
         : "light";
     }
-    return "dark"; // fallback for SSR
+    return "dark"; // fallback for SSR - prefer dark mode
   };
 
   // Store system preference separately
@@ -29,10 +29,10 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const [theme, setTheme] = useState<Theme>(() => {
     if (typeof window !== "undefined") {
       const savedTheme = localStorage.getItem("theme") as Theme;
-      // If user has a saved preference, use it; otherwise use current system theme
-      return savedTheme || getSystemTheme();
+      // If user has a saved preference, use it; otherwise default to dark mode
+      return savedTheme || "dark";
     }
-    return "dark"; // fallback for SSR
+    return "dark"; // fallback for SSR - prefer dark mode
   });
 
   // Listen for system preference changes
@@ -43,20 +43,19 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     const currentSystemTheme = mediaQuery.matches ? "dark" : "light";
     setSystemTheme(currentSystemTheme);
     
-    // If no saved theme preference, update to match current system theme
+    // If no saved theme preference, keep default dark mode
+    // (don't automatically switch based on system preference unless user wants it)
     if (!localStorage.getItem("theme")) {
-      setTheme(currentSystemTheme);
+      // Only set to dark on first load, don't change existing state
+      setTheme((prev) => prev || "dark");
     }
     
     const handleChange = (e: MediaQueryListEvent) => {
       const newSystemTheme = e.matches ? "dark" : "light";
       setSystemTheme(newSystemTheme);
       
-      // Only update theme if we're following system preference
-      // (no manual override has been set)
-      if (!localStorage.getItem("theme")) {
-        setTheme(newSystemTheme);
-      }
+      // Users must manually toggle theme - we don't automatically follow system changes
+      // This ensures dark mode stays as the default preference
     };
     
     mediaQuery.addEventListener("change", handleChange);

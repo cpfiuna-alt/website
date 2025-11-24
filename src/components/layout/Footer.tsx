@@ -130,7 +130,7 @@ const Footer = () => {
                   <li key={item.name}>
                     <Link
                       to={item.to}
-                      className="text-sm text-muted-foreground hover:text-primary transition-colors flex items-center gap-1"
+                      className="text-sm text-muted-foreground hover:text-primary transition-colors"
                     >
                       {item.name}
                     </Link>

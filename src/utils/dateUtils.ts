@@ -8,9 +8,21 @@ import { es } from 'date-fns/locale';
  * @param formatString Format string (date-fns format)
  * @returns Formatted date string
  */
-export const formatDateEs = (date: Date | number, formatString: string): string => {
+export const formatDateEs = (date: Date | number | string, formatString: string): string => {
   try {
-    return format(date, formatString, { locale: es });
+    // Handle case where date is already a Date object but invalid
+    if (date instanceof Date && isNaN(date.getTime())) {
+      console.warn('Invalid Date object provided to formatDateEs:', date);
+      return 'Fecha desconocida';
+    }
+    
+    const dateObj = new Date(date);
+    // Check if the date is valid
+    if (isNaN(dateObj.getTime())) {
+      console.warn('Invalid date value provided to formatDateEs:', date);
+      return 'Fecha desconocida';
+    }
+    return format(dateObj, formatString, { locale: es });
   } catch (error) {
     console.error('Error formatting date:', error);
     return 'Fecha desconocida';
@@ -22,7 +34,7 @@ export const formatDateEs = (date: Date | number, formatString: string): string 
  * @param date Date to format
  * @returns Formatted date string
  */
-export const formatSpanishDate = (date: Date | number): string => {
+export const formatSpanishDate = (date: Date | number | string): string => {
   return formatDateEs(date, "d 'de' MMMM, yyyy");
 };
 
@@ -31,6 +43,6 @@ export const formatSpanishDate = (date: Date | number): string => {
  * @param date Date to format
  * @returns Formatted date string
  */
-export const formatEventDate = (date: Date | number): string => {
+export const formatEventDate = (date: Date | number | string): string => {
   return formatDateEs(date, "EEEE, d 'de' MMMM, yyyy");
 };

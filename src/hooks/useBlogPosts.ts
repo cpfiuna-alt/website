@@ -40,7 +40,7 @@ export function useBlogPosts() {
         
         // If no blog files were found, set empty arrays and return
         if (!blogFiles || Object.keys(blogFiles).length === 0) {
-          console.error("No blog files found");
+          console.log("No blog files found - this is normal if no blog posts are published yet");
           setBlogPosts([]);
           setAllTags([]);
           return;

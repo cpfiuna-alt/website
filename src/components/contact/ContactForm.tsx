@@ -155,6 +155,7 @@ const ContactForm = () => {
           <select
             id="subject"
             name="subject"
+            aria-label="Seleccionar asunto del mensaje"
             required
             value={formData.subject}
             onChange={handleChange}

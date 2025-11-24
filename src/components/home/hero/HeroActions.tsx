@@ -1,6 +1,7 @@
 import { useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
+import { featureFlags } from "@/config/site";
 
 interface HeroActionsProps {
   onMount?: () => void;
@@ -8,6 +9,9 @@ interface HeroActionsProps {
 
 const HeroActions = ({ onMount }: HeroActionsProps) => {
   const ctaRef = useRef<HTMLDivElement>(null);
+  
+  // Use admission form if enabled, otherwise fall back to contact
+  const joinClubLink = featureFlags.admissionForm.enabled ? "/admision" : "/contacto";
 
   useEffect(() => {
     const cta = ctaRef.current;
@@ -30,7 +34,7 @@ const HeroActions = ({ onMount }: HeroActionsProps) => {
         Conocer más
       </Link>
       <Link
-        to="/contacto"
+        to={joinClubLink}
         className="w-full sm:w-auto inline-flex items-center justify-center px-6 py-3 rounded-full border border-primary bg-transparent text-primary font-medium transition-all hover:scale-105 hover:bg-primary/10 hover:shadow-neon-blue group"
       >
         Únete al club

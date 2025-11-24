@@ -80,7 +80,7 @@ const FallbackNewsCard = ({ index }: { index: number }) => {
     <NewsCard
       key={`fallback-${index}`}
       title={item.title}
-      date={formatDateEs(new Date(item.date), "d MMM yyyy")}
+      date={item.date && !isNaN(new Date(item.date).getTime()) ? formatDateEs(new Date(item.date), "d MMM yyyy") : "Fecha no disponible"}
       excerpt={item.excerpt}
       category={item.category}
       imageSrc={"/placeholder.svg"}
@@ -138,7 +138,7 @@ const News = () => {
               <div key={item.id} className="h-full">
                 <NewsCard
                   title={item.title}
-                  date={formatDateEs(new Date(item.date), "d MMM yyyy")}
+                  date={item.date && !isNaN(new Date(item.date).getTime()) ? formatDateEs(new Date(item.date), "d MMM yyyy") : "Fecha no disponible"}
                   excerpt={item.excerpt}
                   category={item.category}
                   imageSrc={item.imageSrc}

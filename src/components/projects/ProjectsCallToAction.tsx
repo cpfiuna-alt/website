@@ -1,8 +1,13 @@
 
 import React from "react";
 import { Github, User } from "lucide-react";
+import { featureFlags } from "@/config/site";
 
 const ProjectsCallToAction = () => {
+  // Use admission form if enabled, otherwise fall back to contact
+  const joinClubLink = featureFlags.admissionForm.enabled ? "/admision" : "/contacto";
+  const joinClubText = featureFlags.admissionForm.enabled ? "Unite al club" : "Contáctanos";
+
   return (
     <section className="py-20 px-6 bg-muted/50 dark:bg-black/60 text-center">
       <div className="container mx-auto">
@@ -23,11 +28,11 @@ const ProjectsCallToAction = () => {
               GitHub
             </a>
             <a
-              href="/contacto"
+              href={joinClubLink}
               className="inline-flex items-center justify-center px-6 py-3 rounded-full border border-primary bg-transparent text-primary font-medium transition-all hover:scale-105 hover:bg-primary/10 hover:shadow-neon-blue"
             >
               <User className="mr-2 h-5 w-5" />
-              Contáctanos
+              {joinClubText}
             </a>
           </div>
         </div>
