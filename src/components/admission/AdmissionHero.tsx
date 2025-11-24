@@ -9,7 +9,7 @@ const AdmissionHero = () => {
           <h1 className="text-4xl md:text-5xl font-bold mb-6 text-center">
             Únete al{" "}
             <span className="gradient-text">
-              Club de Programación FIUNA
+              Club
             </span>
           </h1>
           <p className="text-xl text-muted-foreground mb-8">
@@ -17,7 +17,7 @@ const AdmissionHero = () => {
             el desarrollo de software y la innovación. Completa tu solicitud 
             de admisión y comienza tu viaje con nosotros.
           </p>
-          <div className="flex flex-wrap justify-center gap-4 text-sm text-muted-foreground">
+          {/*<div className="flex flex-wrap justify-center gap-4 text-sm text-muted-foreground">
             <div className="flex items-center gap-2">
               <div className="w-2 h-2 bg-primary rounded-full"></div>
               <span>Proceso 100% digital</span>
@@ -30,7 +30,7 @@ const AdmissionHero = () => {
               <div className="w-2 h-2 bg-primary rounded-full"></div>
               <span>Comunidad inclusiva</span>
             </div>
-          </div>
+          </div>*/}
         </div>
       </div>
     </section>

@@ -3,19 +3,21 @@ import { Clock, Users, Calendar, Award } from "lucide-react";
 
 const AdmissionInfo = () => {
   const benefits = [
-    "Acceso a talleres y cursos exclusivos",
+    "Talleres y cursos exclusivos",
     "Mentorías personalizadas",
-    "Participación en hackathons",
+    "Participación en competencias",
+    "Invitaciones a eventos especiales",
     "Networking con profesionales",
     "Proyectos colaborativos",
     "Certificaciones",
+    "Y más..."
   ];
 
   const timeline = [
     { step: "Envío de solicitud", time: "Hoy" },
-    { step: "Revisión inicial", time: "24-48h" },
-    { step: "Entrevista (opcional)", time: "3-5 días" },
-    { step: "Respuesta final", time: "1 semana" },
+    { step: "Revisión inicial", time: "5-7 días" },
+    { step: "Entrevista (si hace falta)", time: "1-2 semanas" },
+    { step: "Respuesta final", time: "3-4 semanas" },
   ];
 
   return (
@@ -58,23 +60,26 @@ const AdmissionInfo = () => {
           Información Adicional
         </h3>
         <div className="space-y-4">
-          <div>
+            <div>
             <h4 className="font-medium text-sm mb-2">Requisitos</h4>
             <p className="text-sm text-muted-foreground">
-              Ser estudiante universitario activo, con ganas de aprender y 
-              colaborar en proyectos tecnológicos.
+              Interés por la programación y ganas de aprender y colaborar en proyectos.
+              No se exige un nivel técnico previo: valoramos la actitud, el esfuerzo y la
+              predisposición para participar.
             </p>
-          </div>
-          <div>
+            </div>
+            <div>
             <h4 className="font-medium text-sm mb-2">Compromiso</h4>
             <p className="text-sm text-muted-foreground">
-              Se espera participación activa en al menos 2 actividades por mes.
+              Se espera asistencia a las asambleas y la participación en al menos
+              un proyecto, competencia o actividad al año. Entendemos distintos ritmos,
+              pero se valora la constancia.
             </p>
-          </div>
-          <div>
+            </div>
+            <div>
             <h4 className="font-medium text-sm mb-2">Contacto</h4>
             <p className="text-sm text-muted-foreground">
-              ¿Dudas? Escríbenos a{" "}
+              ¿Dudas? Escríbínos al correo{" "}
               <a 
                 href="mailto:clubdeprogramacion@ing.una.py" 
                 className="text-primary hover:underline"
