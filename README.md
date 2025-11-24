@@ -1,111 +1,86 @@
-# Sitio Web Oficial del Club de Programación FIUNA
+# Sitio Web del Club de Programación FIUNA
 
 <div align="center">
   <img src="https://drive.google.com/uc?export=view&id=1OkDHnnwW2D4ZxtMyyp57greiRR0ZDarF" alt="Logo del Club de Programación FIUNA" width="200" />
   <p><em>Sitio web oficial del Club de Programación de la Facultad de Ingeniería de la Universidad Nacional de Asunción</em></p>
 </div>
 
-## 📋 Estado Actual
+Proyecto público que contiene el sitio estático dinámico del Club de Programación de la Facultad de Ingeniería (FIUNA). Está construido con React + TypeScript y desplegado mediante Vercel.
 
-El sitio web está en desarrollo activo. Las características principales están implementadas, pero algunas secciones aún necesitan contenido real y conexión con servicios backend.
+## Estado actual (resumen)
 
-### ✅ Completado
-- Diseño y estructura principal del sitio
-- Páginas principales (Inicio, Acerca de, Eventos, Proyectos, Recursos, Blog, Contacto)
-- Soporte para temas claro/oscuro
-- Diseño responsivo para todos los dispositivos
-- Sistema de visualización de contenido markdown
-- Animaciones y efectos visuales
+El sitio está funcional en su mayoría: la navegación, páginas públicas, lectura de contenido markdown y la mayoría de componentes UI están implementados. Algunas integraciones de backend y funciones avanzadas siguen pendientes.
 
-### 🚧 En Progreso
-- Conexión de formularios a endpoints backend
-- Reemplazo de contenido de muestra con datos reales
-- Implementación de sistema de autenticación
-- Integración con sistema CMS para administración de contenido
-- Optimización de rendimiento y accesibilidad
+### ✅ Implementado
+- Estructura de páginas públicas: Inicio, Nosotros, Eventos, Proyectos, Recursos, Blog, Documentación, Contacto.
+- Componente de layout con `Header` y `Footer` responsivos.
+- Sistema para renderizar contenido Markdown desde `src/content` y `docs/`.
+- Tema claro/oscuro con persistencia en cliente.
+- Formularios públicos (contacto, admisión) con UI lista — actualmente usan integraciones externas (Google Apps Script) o funcionan en modo `no-cors` según la implementación.
+- Componentes UI reutilizables (botones, inputs, modales) y librerías: TailwindCSS, shadcn, lucide icons, framer-motion.
+- Tipado con TypeScript y compatibilidad Vite 7.
 
-## 🛠️ Tecnologías Utilizadas
+### ⚠️ Pendiente / Falta implementación
+- Backend propio para formularios y autenticación (actualmente se usan scripts externos o placeholders).
+- CMS o panel de administración para editar contenido (actualmente el contenido vive en archivos markdown).
+- Flujos de autenticación / gestión de miembros.
+- Migración de contenido de ejemplo a contenido oficial y verificación de enlaces y assets.
+- Tests automatizados y cobertura (pocas o ninguna pruebas unitarias/integ).
 
-El sitio está construido con tecnologías modernas de desarrollo web:
+## Tecnologías principales
 
-- **React 18**: Biblioteca para construir interfaces de usuario
-- **TypeScript**: Superset de JavaScript tipado
-- **Vite**: Herramienta de compilación ultrarrápida
-- **React Router**: Enrutamiento para aplicaciones React
-- **Tailwind CSS**: Framework CSS utilitario para diseño responsivo
-- **Shadcn/UI**: Componentes de interfaz de usuario reutilizables
-- **Framer Motion**: Biblioteca para animaciones
-- **React Query**: Manejo del estado de datos
-- **Lucide**: Biblioteca de iconos SVG
-- **Recharts**: Biblioteca para visualización de datos
+- React 18 + TypeScript
+- Vite 7 (build rápido)
+- Tailwind CSS
+- shadcn/ui (componentes)
+- Framer Motion (animaciones)
+- React Router
+- React Query
 
-## 🏗️ Estructura del Proyecto
+## Desarrollador: notas rápidas
 
-```
-src/
-  ├── components/        # Componentes reutilizables
-  │   ├── ui/            # Componentes de interfaz básicos
-  │   ├── layout/        # Componentes de estructura (Header, Footer)
-  │   ├── home/          # Componentes específicos de la página principal
-  │   ├── blog/          # Componentes para el blog
-  │   ├── events/        # Componentes para eventos
-  │   ├── projects/      # Componentes para proyectos
-  │   ├── resources/     # Componentes para recursos
-  │   ├── about/         # Componentes para la página acerca de
-  │   ├── logros/        # Componentes para la página de logros
-  │   ├── contact/       # Componentes para la página de contacto
-  │   └── ...
-  ├── content/           # Contenido en formato markdown
-  │   ├── blog/          # Artículos del blog
-  │   ├── events/        # Información de eventos
-  │   ├── projects/      # Información de proyectos
-  │   └── courses/       # Información de cursos
-  ├── context/           # Contextos de React
-  ├── hooks/             # Hooks personalizados
-  ├── lib/               # Utilidades y funciones auxiliares
-  ├── pages/             # Componentes de página
-  ├── styles/            # Estilos globales
-  ├── utils/             # Funciones de utilidad
-  ├── App.tsx            # Componente principal
-  └── main.tsx           # Punto de entrada
+- Node.js: recomendamos usar la versión activa LTS (por ejemplo 18.x/20.x), Vercel suele ejecutar recientes versiones; el proyecto fue verificado con Node compatible con Vite 7.
+- Dependencias relevantes: `@vitejs/plugin-react-swc@^4.x` (compatibilidad con Vite 7), `vite@^7.x`.
+- Si ves errores de tipos JSX en el editor, reinicia el servidor TypeScript en VS Code y asegúrate de usar la versión de TypeScript del workspace. Temporalmente añadimos `src/types/global-jsx.d.ts` como fallback para evitar advertencias del editor en algunas configuraciones.
+
+## Ejecutar localmente
+
+1. Clona el repositorio
+
+```powershell
+git clone https://github.com/cpfiuna-alt/website.git
+cd website
 ```
 
-## 📝 Características Principales
+2. Instala dependencias
 
-- **Diseño Responsivo**: Adaptable a todos los tamaños de pantalla
-- **Tema Claro/Oscuro**: Sistema de temas basado en preferencias del usuario
-- **Animaciones**: Transiciones y efectos visuales fluidos
-- **Contenido Markdown**: Sistema para mostrar contenido estructurado
-- **Rendimiento**: Optimización de carga y renderizado
-- **Accesibilidad**: Enfoque en hacer el sitio accesible para todos
+```powershell
+npm install
+```
 
-## 🚀 Cómo Ejecutar Localmente
+3. Levanta el servidor de desarrollo
 
-1. Clona este repositorio
-   ```bash
-   git clone https://github.com/cpfiuna/website.git
-   cd website
-   ```
+```powershell
+npm run dev
+```
 
-2. Instala las dependencias
-   ```bash
-   npm install
-   ```
+4. Construir para producción
 
-3. Inicia el servidor de desarrollo
-   ```bash
-   npm run dev
-   ```
-
-4. Abre [http://localhost:5173](http://localhost:5173) en tu navegador
-
-## 📦 Compilación para Producción
-
-```bash
+```powershell
 npm run build
 ```
 
-## 🤝 Cómo Contribuir
+5. Ejecutar chequeo de tipos (opcional)
+
+```powershell
+npx tsc --noEmit
+```
+
+## Despliegue
+
+El sitio se despliega mediante Vercel. Si actualizas dependencias importantes (Vite, plugin-react-swc, etc.), puede ser necesario regenerar `package-lock.json` o limpiar `node_modules` en el entorno de construcción. En la CI de Vercel hemos resuelto conflictos de peer deps actualizando `@vitejs/plugin-react-swc` a la versión compatible con Vite 7.
+
+## Contribuir
 
 Agradecemos las contribuciones de todos los miembros del club y la comunidad.
 
@@ -117,11 +92,18 @@ Agradecemos las contribuciones de todos los miembros del club y la comunidad.
 
 Para más detalles, consulta el archivo [CONTRIBUTING.md](CONTRIBUTING.md).
 
-## 📄 Licencia
+## Tareas recomendadas (para próximos pasos)
+
+- Implementar backend de formularios y migrar integraciones a endpoints propios.
+- Añadir autenticación y panel de administración para contenido.
+- Añadir pruebas automáticas y GitHub Actions / Vercel previews.
+- Revisar y eliminar el fallback `src/types/global-jsx.d.ts` cuando el TS server esté correctamente configurado en todos los entornos.
+
+## Licencia
 
 Este proyecto está bajo la licencia MIT. Ver el archivo [LICENSE](LICENSE) para más detalles.
 
-## 📞 Contacto
+## Contacto
 
 Para consultas sobre el sitio web o el Club de Programación FIUNA, por favor contacta a través de:
 - Email: [club.programacion@ing.una.py](mailto:club.programacion@ing.una.py)
