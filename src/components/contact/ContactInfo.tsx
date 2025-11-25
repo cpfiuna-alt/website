@@ -2,6 +2,7 @@
 import React from "react";
 import { MapPin, Mail, Share2 } from "lucide-react";
 import { SiGithub, SiDiscord, SiX, SiInstagram, SiYoutube } from "react-icons/si";
+import { FaGithub, FaDiscord, FaXTwitter, FaInstagram, FaYoutube, FaLinkedin } from "react-icons/fa6";
 
 const ContactInfo = () => {
   return (
@@ -46,7 +47,7 @@ const ContactInfo = () => {
                 rel="noopener noreferrer"
                 aria-label="GitHub"
               >
-                <SiGithub className="h-5 w-5" />
+                <FaGithub className="h-5 w-5" />
               </a>
               <a 
                 href="https://discord.com/invite/fncpNatR" 
@@ -55,7 +56,7 @@ const ContactInfo = () => {
                 rel="noopener noreferrer"
                 aria-label="Discord"
               >
-                <SiDiscord className="h-5 w-5" />
+                <FaDiscord className="h-5 w-5" />
               </a>
               <a 
                 href="https://twitter.com/cpfiuna" 
@@ -64,7 +65,7 @@ const ContactInfo = () => {
                 rel="noopener noreferrer"
                 aria-label="X (formerly Twitter)"
               >
-                <SiX className="h-5 w-5" />
+                <FaXTwitter className="h-5 w-5" />
               </a>
               <a 
                 href="https://instagram.com/cpfiuna" 
@@ -73,7 +74,7 @@ const ContactInfo = () => {
                 rel="noopener noreferrer"
                 aria-label="Instagram"
               >
-                <SiInstagram className="h-5 w-5" />
+                <FaInstagram className="h-5 w-5" />
               </a>
               <a 
                 href="https://www.youtube.com/channel/cpfiuna" 
@@ -82,7 +83,16 @@ const ContactInfo = () => {
                 rel="noopener noreferrer"
                 aria-label="YouTube"
               >
-                <SiYoutube className="h-5 w-5" />
+                <FaYoutube className="h-5 w-5" />
+              </a>
+              <a 
+                href="https://www.linkedin.com/company/cpfiuna" 
+                className="text-muted-foreground hover:text-primary transition-colors"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="LinkedIn"
+              >
+                <FaLinkedin className="h-5 w-5" />
               </a>
               <a 
                 href="mailto:clubdeprogramacion@ing.una.py" 

@@ -8,14 +8,15 @@ Yb      .8'    888        888   888  888       .dP
                           888                      
                          o888o                     
                                          
-/* TEAM */
+/* ABOUT US */
   Club de Programacion FIUNA
   Site: https://cpfiuna.io
-  Twitter: @cpfiuna
-  Instagram: @cpfiuna
-  GitHub: https://github.com/cpfiuna
-  Discord: https://discord.gg/UtRpKw2ay4
   Location: San Lorenzo, Paraguay
+  
+  Desarrollador: David Gimenez
+  Q&A (Windows): Esteban Ibarra, Gabriel Park
+  Q&A (Android): Oscar Alderete, Mathias Martinez
+  Q&A (iOS)    : Ivan Jara, Daniel Villalba
 
 /* THANKS */
   Gracias a todos los miembros y colaboradores del Club de Programacion FIUNA!

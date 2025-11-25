@@ -1,7 +1,7 @@
 
 import { Link } from "react-router-dom";
 import { Mail, FileEdit, BugIcon } from "lucide-react";
-import { SiGithub, SiDiscord, SiX, SiInstagram, SiYoutube } from "react-icons/si";
+import { FaGithub, FaDiscord, FaXTwitter, FaInstagram, FaYoutube, FaLinkedin } from "react-icons/fa6";
 import Logo from "@/components/ui/Logo";
 import { contactInfo, footerLinks } from "@/config/site";
 const Footer = () => {
@@ -9,27 +9,32 @@ const Footer = () => {
     {
       name: "GitHub",
       href: contactInfo.socials.github,
-      icon: SiGithub,
+      icon: FaGithub,
     },
     {
       name: "Discord",
       href: contactInfo.socials.discord,
-      icon: SiDiscord,
+      icon: FaDiscord,
     },
     {
       name: "X",
       href: contactInfo.socials.twitter,
-      icon: SiX,
+      icon: FaXTwitter,
     },
     {
       name: "Instagram",
       href: contactInfo.socials.instagram,
-      icon: SiInstagram,
+      icon: FaInstagram,
     },
     {
       name: "YouTube",
       href: contactInfo.socials.youtube,
-      icon: SiYoutube,
+      icon: FaYoutube,
+    },
+    {
+      name: "LinkedIn",
+      href: contactInfo.socials.linkedin,
+      icon: FaLinkedin,
     },
     {
       name: "Email",

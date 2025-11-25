@@ -29,6 +29,7 @@ export const contactInfo = {
     twitter: "https://twitter.com/cpfiuna", // Updated to lowercase
     instagram: "https://instagram.com/cpfiuna",
     youtube: "https://youtube.com/@cpfiuna",
+    linkedin: "https://www.linkedin.com/company/cpfiuna",
   },
 };
 
