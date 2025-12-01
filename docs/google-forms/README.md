@@ -4,7 +4,7 @@ Welcome! This directory contains everything you need to integrate Google Forms a
 
 ## 📚 Documentation Overview
 
-### 1. [Quick Start Guide](./GOOGLE_FORMS_QUICK_START.md) ⭐ **START HERE**
+### 1. [Quick Start Guide](../GOOGLE_FORMS_QUICK_START.md) ⭐ **START HERE**
 **Time:** 30-40 minutes | **Difficulty:** Easy
 
 Complete step-by-step walkthrough to get Google Forms working with your admission form.
@@ -20,7 +20,23 @@ Complete step-by-step walkthrough to get Google Forms working with your admissio
 
 ---
 
-### 2. [Traffic Limits & Reliability](./GOOGLE_FORMS_TRAFFIC_LIMITS.md) 📊
+### 2. [Email Automation Guide](../GOOGLE_FORMS_EMAIL_AUTOMATION.md) 📧 **OPTIONAL**
+**Time:** 15-20 minutes | **Difficulty:** Easy
+
+Set up automatic confirmation emails for students using Resend API and Apps Script triggers.
+
+**What you'll learn:**
+- Creating Resend account
+- Setting up Apps Script triggers (THE IMPORTANT PART)
+- Sending beautiful confirmation emails
+- Notifying team of new submissions
+- Testing and troubleshooting
+
+**Perfect for:** Professional email confirmations, automatic workflows
+
+---
+
+### 3. [Traffic Limits & Reliability](../GOOGLE_FORMS_TRAFFIC_LIMITS.md) 📊
 **Time:** 15 minutes read | **Difficulty:** Informational
 
 Deep dive into Google Forms quotas, throttling, and reliability.
@@ -36,7 +52,7 @@ Deep dive into Google Forms quotas, throttling, and reliability.
 
 ---
 
-### 3. [Complete Setup Guide](./GOOGLE_FORMS_SETUP.md) 🔧
+### 4. [Complete Setup Guide](../GOOGLE_FORMS_SETUP.md) 🔧
 **Time:** 1 hour | **Difficulty:** Moderate
 
 Comprehensive guide with all configuration options and advanced features.

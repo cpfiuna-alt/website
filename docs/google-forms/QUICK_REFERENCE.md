@@ -107,6 +107,25 @@ showMappingSuggestions()     // Show field details
 - **Create Form:** https://forms.google.com
 - **Workspace Pricing:** https://workspace.google.com/pricing
 - **Apps Script:** https://script.google.com
+- **Resend (Email Automation):** https://resend.com/signup
+
+---
+
+## Optional: Email Automation
+
+Want to send automatic confirmation emails? See: [GOOGLE_FORMS_EMAIL_AUTOMATION.md](../GOOGLE_FORMS_EMAIL_AUTOMATION.md)
+
+**Quick setup:**
+```
+1. Get Resend API key (free)
+2. Paste scripts/admission-form-resend.js into Apps Script
+3. Set up trigger:
+   - Clock icon ⏰ → Add Trigger
+   - Function: onFormSubmit
+   - Event source: From spreadsheet
+   - Event type: On form submit
+4. Test and enjoy automatic emails!
+```
 
 ---
 

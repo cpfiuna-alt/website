@@ -4,9 +4,35 @@ description: "Cómo contribuir al desarrollo del bot de Discord CPF"
 chapter: "Desarrollo"
 section: "Guía de Contribución"
 order: 1
+status: "active"
 ---
 
-# Contribuir al Discord Bot
+**Contribuir al proyecto**
+
+Gracias por querer colaborar. A continuación hay pautas para contribuir de forma ordenada:
+
+- Fork y Branching:
+  - Hacé un fork del repositorio y trabajá en una branch con nombre descriptivo (`feature/<descripcion>`, `fix/<descripcion>`).
+
+- Estilo de código:
+  - Código en JavaScript moderno (Node.js). Preferir `const`/`let`, evitar variables globales.
+  - Usar mensajes de commit claros y en inglés o español (ej: `feat: agregar comando /rol`).
+
+- Pull Requests:
+  - Abrir PR contra la rama `main` del repositorio original.
+  - Describir el objetivo, qué archivos cambian y cómo probar.
+
+- Manejo de secretos:
+  - No subir tokens, `.env` ni claves al repositorio. Los secretos se deben inyectar en la VM o en secrets del CI.
+
+- Tests y verificación manual:
+  - Probar localmente con `npm run dev` y, si aplica, registrar comandos en un servidor de pruebas con `DISCORD_GUILD_ID`.
+
+Contacto
+- Para temas operativos (despliegue, credenciales de la VM), contactá a los administradores del Club de Programación FIUNA.
+
+ 
+ # Contribuir al Discord Bot
 
 ## Cómo Contribuir
 
@@ -19,7 +45,6 @@ order: 1
 - Node.js 18.x o superior
 - npm 8.x o superior
 - Git
-- MongoDB (local o conexión remota)
 - Cuenta de Discord Developer
 
 ### Configuración Inicial
@@ -29,385 +54,66 @@ order: 1
    # Hacer fork en GitHub, luego clonar tu fork
    git clone https://github.com/tu-usuario/discord-bot.git
    cd discord-bot
-   ```
-
-2. **Instalar dependencias**
-   ```bash
-   npm install
-   ```
-
-3. **Configurar variables de entorno**
-   ```bash
-   cp .env.example .env
-   # Editar .env con tus valores de desarrollo
-   ```
-
-4. **Configurar bot de desarrollo**
-   - Crear nueva aplicación en [Discord Developer Portal](https://discord.com/developers/applications)
-   - Crear bot y copiar token
-   - Invitar bot a servidor de pruebas con permisos necesarios
-
-5. **Inicializar base de datos**
-   ```bash
-   npm run db:setup
-   npm run db:seed  # Datos de prueba
-   ```
-
-6. **Ejecutar en modo desarrollo**
-   ```bash
-   npm run dev
-   ```
-
-## Estructura del Proyecto
-
-```
-discord-bot/
-├── src/
-│   ├── commands/           # Comandos del bot
-│   │   ├── general/       # Comandos generales
-│   │   ├── moderation/    # Comandos de moderación
-│   │   ├── events/        # Comandos de eventos
-│   │   └── utils/         # Comandos de utilidades
-│   ├── events/            # Event handlers
-│   ├── models/            # Modelos de base de datos
-│   ├── services/          # Servicios y lógica de negocio
-│   ├── utils/             # Utilidades y helpers
-│   └── config/            # Configuración
-├── tests/                 # Tests unitarios y de integración
-├── docs/                  # Documentación adicional
-└── scripts/               # Scripts de utilidad
-```
-
-## Convenciones de Código
-
-### Estilo de Código
-
-Usamos ESLint y Prettier para mantener consistencia:
-
-```bash
-# Verificar estilo
-npm run lint
-
-# Corregir automáticamente
-npm run lint:fix
-
-# Formatear código
-npm run format
-```
-
-### Naming Conventions
-
-- **Archivos**: kebab-case (`user-service.js`)
-- **Clases**: PascalCase (`UserService`)
-- **Funciones y variables**: camelCase (`getUserData`)
-- **Constantes**: UPPER_SNAKE_CASE (`MAX_RETRIES`)
-- **Comandos**: kebab-case (`user-info`)
-
-### Comentarios y Documentación
-
-```javascript
-/**
- * Obtiene información de un usuario
- * @param {string} userId - ID del usuario de Discord
- * @param {boolean} includeStats - Si incluir estadísticas
- * @returns {Promise<Object>} Información del usuario
- */
-async function getUserInfo(userId, includeStats = false) {
-  // Implementación
-}
-```
-
-## Desarrollo de Nuevas Funcionalidades
-
-### Crear un Nuevo Comando
-
-1. **Crear archivo del comando**
-   ```javascript
-   // src/commands/general/ejemplo.js
-   const { SlashCommandBuilder } = require('discord.js');
-
-   module.exports = {
-     data: new SlashCommandBuilder()
-       .setName('ejemplo')
-       .setDescription('Comando de ejemplo')
-       .addStringOption(option =>
-         option.setName('texto')
-           .setDescription('Texto de ejemplo')
-           .setRequired(true)
-       ),
-     
-     async execute(interaction) {
-       const texto = interaction.options.getString('texto');
-       await interaction.reply(`¡Hola! Tu texto: ${texto}`);
-     },
-     
-     // Opcional: permisos requeridos
-     permissions: ['SendMessages'],
-     
-     // Opcional: cooldown en segundos
-     cooldown: 5
-   };
-   ```
-
-2. **Registrar el comando**
-   Los comandos se registran automáticamente al cargar desde el directorio `commands/`.
-
-3. **Añadir tests**
-   ```javascript
-   // tests/commands/ejemplo.test.js
-   const { expect } = require('chai');
-   const ejemploCommand = require('../../src/commands/general/ejemplo');
-
-   describe('Comando Ejemplo', () => {
-     it('debe responder correctamente', async () => {
-       // Test implementation
-     });
-   });
-   ```
-
-### Crear un Event Handler
-
-```javascript
-// src/events/nuevo-evento.js
-module.exports = {
-  name: 'messageCreate',
-  once: false, // true si es un evento que se ejecuta una sola vez
-  
-  async execute(message) {
-    // Lógica del evento
-    if (message.author.bot) return;
-    
-    // Procesar mensaje
-  }
-};
-```
-
-### Trabajar con la Base de Datos
-
-#### Crear un Nuevo Modelo
-
-```javascript
-// src/models/Ejemplo.js
-const mongoose = require('mongoose');
-
-const ejemploSchema = new mongoose.Schema({
-  discordId: {
-    type: String,
-    required: true,
-    unique: true
-  },
-  datos: {
-    type: Object,
-    default: {}
-  },
-  fechaCreacion: {
-    type: Date,
-    default: Date.now
-  }
-});
-
-module.exports = mongoose.model('Ejemplo', ejemploSchema);
-```
-
-#### Usar el Modelo
-
-```javascript
-const Ejemplo = require('../models/Ejemplo');
-
-// Crear
-const nuevoEjemplo = new Ejemplo({
-  discordId: '123456789',
-  datos: { nombre: 'Test' }
-});
-await nuevoEjemplo.save();
-
-// Buscar
-const ejemplo = await Ejemplo.findOne({ discordId: '123456789' });
-
-// Actualizar
-await Ejemplo.updateOne(
-  { discordId: '123456789' },
-  { $set: { datos: { nombre: 'Actualizado' } } }
-);
-```
-
-## Testing
-
-### Ejecutar Tests
-
-```bash
-# Todos los tests
-npm test
-
-# Tests específicos
-npm test -- --grep "Comando Ejemplo"
-
-# Tests con coverage
-npm run test:coverage
-
-# Tests en modo watch
-npm run test:watch
-```
-
-### Escribir Tests
-
-#### Test de Comando
-
-```javascript
-const { expect } = require('chai');
-const sinon = require('sinon');
-const command = require('../../src/commands/general/ping');
-
-describe('Comando Ping', () => {
-  let interaction;
-
-  beforeEach(() => {
-    interaction = {
-      reply: sinon.stub(),
-      options: {
-        getString: sinon.stub(),
-        getUser: sinon.stub()
-      }
-    };
-  });
-
-  it('debe responder con pong', async () => {
-    await command.execute(interaction);
-    
-    expect(interaction.reply.calledOnce).to.be.true;
-    expect(interaction.reply.firstCall.args[0]).to.include('Pong!');
-  });
-});
-```
-
-#### Test de Servicio
-
-```javascript
-const { expect } = require('chai');
-const UserService = require('../../src/services/user-service');
-
-describe('UserService', () => {
-  describe('getUserLevel', () => {
-    it('debe calcular el nivel correctamente', () => {
-      const level = UserService.getUserLevel(1000);
-      expect(level).to.equal(5);
-    });
-  });
-});
-```
-
-## Proceso de Contribución
-
-### 1. Preparación
-
-- Asegúrate de que tu fork esté actualizado
-- Crea una rama para tu feature/fix
-- Escribe tests para tu código
-
-```bash
-# Actualizar fork
-git checkout main
-git pull upstream main
-git push origin main
-
-# Crear rama
-git checkout -b feature/nueva-funcionalidad
-```
-
-### 2. Desarrollo
-
-- Sigue las convenciones de código
-- Escribe commits descriptivos
-- Mantén los cambios enfocados
-
-```bash
-# Commits claros y descriptivos
-git commit -m "feat: añadir comando de información de usuario
-
-- Implementa comando /user-info
-- Incluye estadísticas de actividad
-- Añade tests unitarios"
-```
-
-### 3. Testing
-
-```bash
-# Ejecutar todos los tests
-npm test
-
-# Verificar linting
-npm run lint
-
-# Verificar funcionamiento con bot real
-npm run dev
-```
-
-### 4. Pull Request
-
-1. **Push a tu fork**
-   ```bash
-   git push origin feature/nueva-funcionalidad
-   ```
-
-2. **Crear Pull Request en GitHub**
-   - Título descriptivo
-   - Descripción detallada de los cambios
-   - Mencionar issues relacionados
-   - Incluir screenshots si es relevante
-
-3. **Template de PR**
-   ```markdown
-   ## Descripción
-   Breve descripción de los cambios realizados.
-
-   ## Tipo de cambio
-   - [ ] Bug fix
-   - [ ] Nueva funcionalidad
-   - [ ] Breaking change
-   - [ ] Documentación
-
-   ## Checklist
-   - [ ] Los tests pasan
-   - [ ] El código sigue las convenciones de estilo
-   - [ ] Se añadieron tests para las nuevas funcionalidades
-   - [ ] Se actualizó la documentación si es necesario
-
-   ## Testing
-   Describe cómo testear los cambios.
-
-   ## Screenshots
-   Si aplica, añadir screenshots.
-   ```
-
-## Tipos de Contribuciones
-
-### 🐛 Bug Fixes
-
-- Reportar bugs usando GitHub Issues
-- Incluir steps to reproduce
-- Proporcionar información del entorno
-- Crear tests que reproduzcan el bug
-
-### ✨ Nuevas Features
-
-- Discutir la feature en GitHub Issues primero
-- Seguir el proceso de desarrollo
-- Documentar la nueva funcionalidad
-- Añadir tests comprehensivos
-
-### 📚 Documentación
-
-- Mejorar README y documentación
-- Añadir ejemplos de uso
-- Corregir typos y errores
-- Traducir documentación
-
-### 🎨 Mejoras de UI/UX
-
-- Mejorar embeds y mensajes
-- Optimizar flujos de usuario
-- Añadir reacciones y interacciones
-- Mejorar accesibilidad
+  # Cómo contribuir
+
+  ¡Gracias por querer colaborar! Este documento describe el workflow recomendado para contribuir al bot.
+
+  ## Reglas rápidas
+  - Mantener código limpio: `const/let`, evitar mutaciones globales.
+  - Escribir commits descriptivos (ej: `feat: agregar comando /rol`).
+  - No subir secretos, tampoco archivos `.env`.
+
+  ## Flujo de trabajo recomendado
+  1. Fork del repo y crear una rama descriptiva:
+
+  ```bash
+  git clone https://github.com/<tu-usuario>/discord-bot.git
+  git checkout -b feature/mi-cambio
+  ```
+
+  2. Instalar dependencias y configurar entorno local:
+
+  ```bash
+  npm ci
+  cp .env.example .env # editar valores locales
+  npm run dev
+  ```
+
+  3. Desarrollar: crear un nuevo comando en `src/commands` o un event handler en `src/events`.
+
+  4. Registrar comandos localmente (con `DISCORD_GUILD_ID`):
+
+  ```bash
+  npm run deploy
+  ```
+
+  5. Añadir tests (si aplica) y verificar:
+
+  ```bash
+  npm test
+  npm run lint
+  ```
+
+  6. Hacer PR hacia `main` con una descripción clara de los cambios y cómo probarlos.
+
+  ## Contribución de código
+  - Los comandos deben exportar `data` (SlashCommandBuilder) y `execute(interaction)`.
+  - Mantener tests y documentar comportamientos nuevos.
+  - Aceptamos PRs que cumplan con el estilo del repositorio y tengan pruebas cuando el cambio lo justifique.
+
+  ## Operaciones / Deployment (para administradores)
+  - Actualizar dependencias y aplicar cambio en la VM:
+
+  ```bash
+  cd /opt/cpf-bot
+  git pull origin main
+  npm ci --production
+  npm run deploy # si se actualizaron comandos
+  pm2 restart cpf-bot
+  ```
+
+  ---
+  Para dudas de administración (credenciales, VM) contactá al equipo responsable.
 
 ## Guidelines
 
@@ -469,7 +175,7 @@ Al reportar bugs, incluir:
 
 - [Discord Developer Portal](https://discord.com/developers/applications)
 - [Bot Testing Server](https://discord.gg/cpf-dev) (solicitar acceso)
-- [MongoDB Compass](https://www.mongodb.com/products/compass) para BD
+- (Opcional) [MongoDB Compass](https://www.mongodb.com/products/compass) para BD local
 
 ### Community
 

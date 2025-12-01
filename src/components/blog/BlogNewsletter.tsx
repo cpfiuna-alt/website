@@ -45,7 +45,7 @@ const BlogNewsletter = () => {
     try {
       // Replace this URL with your Google Apps Script URL for newsletter
       const response = await fetch(
-        "https://script.google.com/macros/s/AKfycbyVYpcvpmzRPqqa2knaAuzGBpD7Hpceg0RwoNiZ6YWuGOdOhPkwEgo25Rhvhuh9gjEU/exec",
+        "https://script.google.com/macros/s/AKfycbysXb-vQdBKtjGZ5V7uCElA-uHbXr9GepI1vyMCs9kBWMFukph2Oj4mbBy3qz6mg8bv/exec",
         {
           method: "POST",
           mode: "no-cors",

@@ -17,35 +17,19 @@ export interface ProjectConfig {
 
 export const projectsConfig: ProjectConfig[] = [
   /*{
-    id: 'cpf-website',
-    name: 'CPF Website',
-    description: 'Sitio web oficial del Club de Programación FIUNA. Plataforma moderna para mostrar proyectos, eventos y recursos educativos.',
-    icon: 'Globe',
-    status: 'active',
-    category: 'web',
-    tags: ['React', 'TypeScript', 'Vite', 'Tailwind CSS'],
-    repository: 'https://github.com/cpf-fiuna/website',
-    demo: 'https://cpf-fiuna.org',
-    version: '2.0.0',
-    lastUpdate: '2025-06-04',
-    maintainers: ['David Giménez', 'Daniel Villalba'],
-    featured: true,
-    order: 1
-  },
-  {
-    id: 'discord-bot',
-    name: 'CPF Discord Bot',
+    id: 'discord-bot-cpf',
+    name: 'Bot de Discord del </cpf>',
     description: 'Bot inteligente para el servidor de Discord del club. Gestiona eventos, modula conversaciones y proporciona utilidades para la comunidad.',
     icon: 'Bot',
     status: 'active',
     category: 'bot',
     tags: ['Discord.js', 'Node.js', 'TypeScript', 'MongoDB'],
-    repository: 'https://github.com/cpf-fiuna/discord-bot',
-    version: '1.5.2',
+    repository: 'https://github.com/cpfiuna/discord-bot',
+    version: '0.5.0',
     lastUpdate: '2025-05-28',
     maintainers: ['Iván Jara', 'Oscar Alderete'],
     featured: true,
-    order: 2
+    order: 1
   },
   {
     id: 'competitive-programming',

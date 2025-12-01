@@ -70,11 +70,11 @@ const ContactForm = () => {
     // Add debugging
     console.log("Form submission started");
     console.log("Form data:", formData);
-    console.log("Google Apps Script URL:", "https://script.google.com/macros/s/AKfycbynlr3Xpmri02vBuBc31ERUMaUub9otj4K648nxXD5jGq6GE8F5LK0ixv9l35EohkXA/exec");
+    console.log("Google Apps Script URL:", "https://script.google.com/macros/s/AKfycbxj2mCN3qWTr_Z9oiHHwv_mLNO9U5hc5kOwy7wcCBamvKsz1hFq-24CRHhL8boNzfRJ/exec");
 
     try {
       const response = await fetch(
-        "https://script.google.com/macros/s/AKfycbw3j5FMVQnOqfwu-wn2w24qf6mM73SRZfbfraDycz__YKS5lfjCR21S7UCQ2LoO1s4X/exec",
+        "https://script.google.com/macros/s/AKfycbxj2mCN3qWTr_Z9oiHHwv_mLNO9U5hc5kOwy7wcCBamvKsz1hFq-24CRHhL8boNzfRJ/exec",
         {
           method: "POST",
           mode: "no-cors",

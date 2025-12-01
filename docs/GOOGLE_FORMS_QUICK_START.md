@@ -155,6 +155,35 @@ Once testing is successful:
    - In Google Forms: Settings → Responses → Enable email notifications
    - You'll receive an email each time someone submits
 
+## 📧 Optional: Automated Email Confirmations
+
+Want to automatically send beautiful confirmation emails to students?
+
+**See:** [GOOGLE_FORMS_EMAIL_AUTOMATION.md](./GOOGLE_FORMS_EMAIL_AUTOMATION.md)
+
+This optional setup lets you:
+- ✅ Send automatic confirmation emails to students
+- ✅ Notify your team instantly about new submissions
+- ✅ Use professional email templates with your branding
+- ✅ Track email delivery and opens
+
+**Requirements:**
+- Free Resend account (100 emails/day)
+- 15 minutes to set up Apps Script trigger
+- Basic understanding of Google Apps Script
+
+**Quick Overview:**
+1. Get Resend API key
+2. Copy `scripts/admission-form-resend.js` to Apps Script
+3. **Set up trigger** (the important part):
+   - Apps Script → Clock icon ⏰ → Add Trigger
+   - Function: `onFormSubmit`
+   - Event source: From spreadsheet
+   - Event type: On form submit
+4. Test and go live
+
+**Full guide:** [GOOGLE_FORMS_EMAIL_AUTOMATION.md](./GOOGLE_FORMS_EMAIL_AUTOMATION.md)
+
 ## 📊 Monitoring Your Form
 
 ### Daily Monitoring

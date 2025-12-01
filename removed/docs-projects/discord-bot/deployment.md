@@ -4,398 +4,128 @@ description: "Despliegue del bot de Discord CPF en diferentes entornos"
 chapter: "Despliegue"
 section: "Guía de Despliegue"
 order: 1
+status: "active"
 ---
 
-# Deployment del Discord Bot
+## Despliegue en VM de Azure (Guía práctica)
 
-## Preparación para Deployment
+### Supuestos
+- La VM es Linux (Ubuntu 22.04+ recomendado). Adaptá los pasos a tu distribución si es necesario.
+- La VM ya tiene una cuenta con acceso SSH, git y permisos para instalar paquetes.
+- Usamos `pm2` para mantener el proceso en ejecución y habilitar arranque automático.
 
-### Requisitos del Sistema
+### 1) Conexión a la VM
+```powershell
+ssh usuario@IP_VM
+```
 
-**Servidor mínimo recomendado:**
-- CPU: 1 vCore
-- RAM: 512MB
-- Almacenamiento: 5GB SSD
-- OS: Ubuntu 20.04 LTS o superior
-
-**Para producción:**
-- CPU: 2 vCores
-- RAM: 2GB
-- Almacenamiento: 20GB SSD
-- OS: Ubuntu 22.04 LTS
-
-### Dependencias del Sistema
-
+### 2) Preparar la VM (Node.js 18+ y utilidades)
 ```bash
-# Actualizar el sistema
-sudo apt update && sudo apt upgrade -y
-
-# Instalar Node.js 18.x
+sudo apt update; sudo apt upgrade -y
 curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
-sudo apt-get install -y nodejs
-
-# Instalar PM2 para gestión de procesos
-sudo npm install -g pm2
-
-# Instalar Git
-sudo apt-get install -y git
-
-# Instalar MongoDB (opcional, si usas base de datos local)
-sudo apt-get install -y mongodb
+sudo apt install -y nodejs git build-essential
+node -v; npm -v
 ```
 
-## Configuración del Entorno
-
-### Variables de Entorno
-
-Crear archivo `.env` en el directorio raíz:
-
-```env
-# Bot Configuration
-DISCORD_TOKEN=your_discord_bot_token
-DISCORD_CLIENT_ID=your_bot_client_id
-DISCORD_GUILD_ID=your_server_id
-
-# Database
-MONGODB_URI=mongodb://localhost:27017/cpf-discord-bot
-# o para MongoDB Atlas:
-# MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/cpf-discord-bot
-
-# Application
-NODE_ENV=production
-LOG_LEVEL=info
-PORT=3000
-
-# External APIs
-GITHUB_TOKEN=your_github_token
-WEATHER_API_KEY=your_weather_api_key
-
-# Security
-JWT_SECRET=your_jwt_secret_key
-ENCRYPTION_KEY=your_32_character_encryption_key
-
-# Rate Limiting
-RATE_LIMIT_WINDOW=60000
-RATE_LIMIT_MAX=100
-
-# Monitoring
-SENTRY_DSN=your_sentry_dsn
-```
-
-### Configuración de Seguridad
-
+### 3) Clonar el repo y configurar directorio de la app
 ```bash
-# Crear usuario para el bot
-sudo useradd -m -s /bin/bash cpfbot
-sudo usermod -aG sudo cpfbot
-
-# Configurar firewall
-sudo ufw allow 22/tcp   # SSH
-sudo ufw allow 80/tcp   # HTTP
-sudo ufw allow 443/tcp  # HTTPS
-sudo ufw enable
-
-# Configurar fail2ban para proteger SSH
-sudo apt-get install -y fail2ban
-sudo systemctl enable fail2ban
-sudo systemctl start fail2ban
-```
-
-## Deployment con Docker
-
-### Dockerfile
-
-```dockerfile
-FROM node:18-alpine
-
-# Crear directorio de la aplicación
-WORKDIR /usr/src/app
-
-# Copiar archivos de dependencias
-COPY package*.json ./
-
-# Instalar dependencias de producción
-RUN npm ci --only=production && npm cache clean --force
-
-# Copiar código fuente
-COPY . .
-
-# Crear usuario no-root
-RUN addgroup -g 1001 -S nodejs
-RUN adduser -S nodejs -u 1001
-
-# Cambiar permisos
-RUN chown -R nodejs:nodejs /usr/src/app
-USER nodejs
-
-# Exponer puerto
-EXPOSE 3000
-
-# Definir health check
-HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
-  CMD node healthcheck.js
-
-# Comando de inicio
-CMD ["node", "index.js"]
-```
-
-### Docker Compose
-
-```yaml
-version: '3.8'
-
-services:
-  cpf-discord-bot:
-    build: .
-    container_name: cpf-discord-bot
-    restart: unless-stopped
-    environment:
-      - NODE_ENV=production
-    env_file:
-      - .env
-    volumes:
-      - ./logs:/usr/src/app/logs
-    networks:
-      - cpf-network
-    depends_on:
-      - mongodb
-    healthcheck:
-      test: ["CMD", "node", "healthcheck.js"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-
-  mongodb:
-    image: mongo:6.0
-    container_name: cpf-mongodb
-    restart: unless-stopped
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: admin
-      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD}
-      MONGO_INITDB_DATABASE: cpf-discord-bot
-    volumes:
-      - mongodb_data:/data/db
-      - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
-    networks:
-      - cpf-network
-    ports:
-      - "27017:27017"
-
-  nginx:
-    image: nginx:alpine
-    container_name: cpf-nginx
-    restart: unless-stopped
-    ports:
-      - "80:80"
-      - "443:443"
-    volumes:
-      - ./nginx.conf:/etc/nginx/nginx.conf:ro
-      - ./ssl:/etc/nginx/ssl:ro
-    networks:
-      - cpf-network
-    depends_on:
-      - cpf-discord-bot
-
-volumes:
-  mongodb_data:
-
-networks:
-  cpf-network:
-    driver: bridge
-```
-
-### Comandos de Deployment
-
-```bash
-# Construir y ejecutar
-docker-compose up -d
-
-# Ver logs
-docker-compose logs -f cpf-discord-bot
-
-# Actualizar aplicación
-docker-compose pull
-docker-compose up -d --force-recreate
-
-# Backup de base de datos
-docker exec cpf-mongodb mongodump --out /backup
-```
-
-## Deployment Tradicional
-
-### Clonación y Configuración
-
-```bash
-# Cambiar al usuario del bot
-sudo su - cpfbot
-
-# Clonar repositorio
-git clone https://github.com/cpf-fiuna/discord-bot.git
-cd discord-bot
-
-# Instalar dependencias
+cd /opt
+sudo mkdir cpf-bot && sudo chown $(whoami) cpf-bot
+cd cpf-bot
+git clone <REPO_URL> .
 npm ci --production
-
-# Configurar variables de entorno
-cp .env.example .env
-nano .env  # Editar con los valores correctos
-
-# Verificar configuración
-npm run validate-config
 ```
 
-### Configuración de PM2
+### 4) Configurar variables de entorno
+Crear el archivo `.env` con al menos:
+```text
+DISCORD_TOKEN=your_bot_token
+DISCORD_CLIENT_ID=your_client_id
+# Opcional para progresar rapido en desarrollo
+DISCORD_GUILD_ID=your_dev_guild_id
+LOG_CHANNEL_ID=optional_channel_id
+GREETING_CHANNEL_ID=optional_greeting_channel
+BOT_PRESENCE="En línea — usa /"
+```
 
-Crear archivo `ecosystem.config.js`:
+Consejo de seguridad: usar Azure KeyVault o algún mecanismo de secretos para producción en lugar de dejar `.env` en disco plano.
 
+### 5) Registrar comandos slash (opcional/mantenimiento)
+Para registrar los comandos en un servidor de prueba o actualizar su esquema, ejecutá en la VM:
+```bash
+npm run deploy
+```
+
+> Nota: Si no proveés `DISCORD_GUILD_ID`, los comandos se registrarán de forma global y puede tardar hasta 1 hora en reflejarse.
+
+### 6) Instalar y usar `pm2` para gestión del proceso
+```bash
+sudo npm install -g pm2
+# Iniciar con npm (usa script `start` del package.json)
+pm2 start --name cpf-bot --interpreter node -- node ./src/index.js
+pm2 save
+pm2 startup systemd -u $(whoami) --hp $(eval echo ~$USER)
+# Ejecutar el comando que pm2 muestra (usar sudo si lo requiere)
+```
+
+Ejemplo de `ecosystem.config.js` (opcional):
 ```javascript
 module.exports = {
   apps: [{
-    name: 'cpf-discord-bot',
-    script: './index.js',
+    name: 'cpf-bot',
+    script: './src/index.js',
     instances: 1,
     exec_mode: 'fork',
-    env: {
-      NODE_ENV: 'production',
-      PORT: 3000
-    },
-    env_production: {
-      NODE_ENV: 'production'
-    },
-    log_file: './logs/combined.log',
-    out_file: './logs/out.log',
-    error_file: './logs/error.log',
-    time: true,
-    max_memory_restart: '500M',
-    restart_delay: 4000,
-    max_restarts: 10,
-    min_uptime: '10s',
+    env: { NODE_ENV: 'production' },
     watch: false,
-    ignore_watch: [
-      'node_modules',
-      'logs',
-      '.git'
-    ]
+    max_memory_restart: '500M'
   }]
 };
-```
 
-### Iniciar con PM2
-
+Si usás el `ecosystem.config.js` del repo, iniciá con:
 ```bash
-# Iniciar aplicación
 pm2 start ecosystem.config.js --env production
-
-# Guardar configuración de PM2
-pm2 save
-
-# Configurar PM2 para arrancar al boot
-pm2 startup
-# Ejecutar el comando que muestra PM2
-
-# Ver estado
-pm2 status
-
-# Ver logs
-pm2 logs cpf-discord-bot
-
-# Reiniciar aplicación
-pm2 restart cpf-discord-bot
+```
 ```
 
-## Configuración de Nginx
+Comandos útiles de `pm2`:
+- `pm2 status` — Ver estado
+- `pm2 logs cpf-bot` — Ver logs en vivo
+- `pm2 restart cpf-bot` — Reiniciar
+- `pm2 stop cpf-bot` — Detener
+- `pm2 delete cpf-bot` — Eliminar el proceso
 
-### Nginx Configuration
-
-```nginx
-events {
-    worker_connections 1024;
-}
-
-http {
-    upstream cpf_bot {
-        server localhost:3000;
-    }
-
-    # Rate limiting
-    limit_req_zone $binary_remote_addr zone=api:10m rate=10r/s;
-
-    server {
-        listen 80;
-        server_name bot.cpf-fiuna.org;
-        
-        # Redirect HTTP to HTTPS
-        return 301 https://$server_name$request_uri;
-    }
-
-    server {
-        listen 443 ssl http2;
-        server_name bot.cpf-fiuna.org;
-
-        # SSL Configuration
-        ssl_certificate /etc/nginx/ssl/cert.pem;
-        ssl_certificate_key /etc/nginx/ssl/key.pem;
-        ssl_protocols TLSv1.2 TLSv1.3;
-        ssl_ciphers HIGH:!aNULL:!MD5;
-        ssl_prefer_server_ciphers on;
-
-        # Security headers
-        add_header X-Frame-Options DENY;
-        add_header X-Content-Type-Options nosniff;
-        add_header X-XSS-Protection "1; mode=block";
-        add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
-
-        # API endpoints
-        location /api/ {
-            limit_req zone=api burst=20 nodelay;
-            proxy_pass http://cpf_bot;
-            proxy_set_header Host $host;
-            proxy_set_header X-Real-IP $remote_addr;
-            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-            proxy_set_header X-Forwarded-Proto $scheme;
-        }
-
-        # Webhooks
-        location /webhooks/ {
-            proxy_pass http://cpf_bot;
-            proxy_set_header Host $host;
-            proxy_set_header X-Real-IP $remote_addr;
-            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-            proxy_set_header X-Forwarded-Proto $scheme;
-        }
-
-        # Health check
-        location /health {
-            proxy_pass http://cpf_bot;
-            access_log off;
-        }
-
-        # Static files (si tienes dashboard web)
-        location / {
-            root /var/www/cpf-bot-dashboard;
-            try_files $uri $uri/ /index.html;
-        }
-    }
-}
-```
-
-## SSL/TLS Configuration
-
-### Certificado con Let's Encrypt
+### 7) Actualizar la aplicación en la VM (01) — procedimiento seguro
+1. Hacer `git pull` y verificar cambios en main.
+2. Instalar dependencias o reconstruir `npm ci`.
+3. Registrar comandos si se modificaron (/registrar). (opcional)
+4. Reiniciar con pm2.
 
 ```bash
-# Instalar Certbot
-sudo apt-get install -y certbot python3-certbot-nginx
-
-# Obtener certificado
-sudo certbot --nginx -d bot.cpf-fiuna.org
-
-# Verificar renovación automática
-sudo certbot renew --dry-run
-
-# Configurar cron para renovación automática
-echo "0 12 * * * /usr/bin/certbot renew --quiet" | sudo crontab -
+cd /opt/cpf-bot
+git pull --ff-only origin main
+npm ci --production
+npm run deploy # solo si se actualizaron comandos
+pm2 restart cpf-bot
 ```
+
+#### Uso rápido desde `scripts/deploy.sh`
+Si el repositorio contiene `scripts/deploy.sh`, podés usarlo (adaptar permisos) para realizar el proceso de actualización y reinicio:
+```bash
+chmod +x scripts/deploy.sh
+REGISTER_COMMANDS=1 ./scripts/deploy.sh main
+```
+
+### 8) Strategias de rollback/prevención
+- Mantener tags/versions en el repo y el flujo de CI: `git tag -a vX.Y.Z -m "release vX.Y.Z"`.
+- Antes de reiniciar, verificar logs (`pm2 logs cpf-bot --lines 200`) y los cambios.
+- Para rollback rápido, `git checkout <old-commit-or-tag> && npm ci --production && pm2 restart cpf-bot`.
+
+### 9) Troubleshooting rápido
+- Si `pm2` no inicia: ver `pm2 logs cpf-bot` y `journalctl -u pm2-<user>` o `systemctl status pm2-$(whoami)` si instalaste startup.
+- Si el bot no responde: comprobar `DISCORD_TOKEN`, verificar que el bot está invitado al servidor con permisos correctos.
+- Si `npm run deploy` falla: verificar `DISCORD_CLIENT_ID` y permiso de aplicación en portal de Discord.
+
 
 ## Monitoreo y Logging
 
@@ -493,9 +223,9 @@ process.on('uncaughtException', (error) => {
 });
 ```
 
-## Backup y Recuperación
+### Backup y Recuperación (opcional)
 
-### Script de Backup Automático
+Si usás una base de datos (por ejemplo MongoDB), considerá backups regulares. El siguiente script es un ejemplo que hace backup de archivos y (opcionalmente) de una base de datos MongoDB.
 
 ```bash
 #!/bin/bash
@@ -503,13 +233,9 @@ process.on('uncaughtException', (error) => {
 
 DATE=$(date +%Y%m%d_%H%M%S)
 BACKUP_DIR="/home/cpfbot/backups"
-DB_NAME="cpf-discord-bot"
 
 # Crear directorio de backup
 mkdir -p $BACKUP_DIR
-
-# Backup de la base de datos
-mongodump --db $DB_NAME --out $BACKUP_DIR/db_$DATE
 
 # Backup de archivos de configuración
 tar -czf $BACKUP_DIR/config_$DATE.tar.gz .env ecosystem.config.js
@@ -517,21 +243,18 @@ tar -czf $BACKUP_DIR/config_$DATE.tar.gz .env ecosystem.config.js
 # Backup de logs
 tar -czf $BACKUP_DIR/logs_$DATE.tar.gz logs/
 
+# (Opcional) Backup de la base de datos si usás MongoDB
+if command -v mongodump >/dev/null 2>&1; then
+  # Ajustá DB_NAME y MONGODB_URI si aplica
+  DB_NAME="cpf-discord-bot"
+  mongodump --db "$DB_NAME" --out "$BACKUP_DIR/db_$DATE" || true
+fi
+
 # Eliminar backups antiguos (más de 7 días)
 find $BACKUP_DIR -name "*.tar.gz" -mtime +7 -delete
 find $BACKUP_DIR -name "db_*" -mtime +7 -exec rm -rf {} \;
 
 echo "Backup completado: $DATE"
-```
-
-### Configurar Cron para Backups
-
-```bash
-# Editar crontab
-crontab -e
-
-# Añadir línea para backup diario a las 2 AM
-0 2 * * * /home/cpfbot/backup.sh >> /home/cpfbot/backup.log 2>&1
 ```
 
 ## Actualizaciones
@@ -598,16 +321,16 @@ npm install -g clinic
 clinic doctor -- node index.js
 ```
 
-#### Base de datos no conecta
-```bash
-# Verificar estado de MongoDB
+#### Base de datos no conecta (si usas una base de datos)
+```
+# Verificar estado de MongoDB (si aplica)
 sudo systemctl status mongodb
 
-# Verificar conexión
-mongo $MONGODB_URI --eval "db.runCommand('ping')"
+# Verificar conexión (ajustar según el cliente y DB usada)
+mongo $MONGODB_URI --eval "db.runCommand('ping')" || true
 
 # Ver logs de MongoDB
-sudo tail -f /var/log/mongodb/mongod.log
+sudo tail -f /var/log/mongodb/mongod.log || true
 ```
 
 ### Comandos de Debugging
