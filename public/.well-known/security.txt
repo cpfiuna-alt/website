@@ -1,0 +1,11 @@
+# Security Policy for Club de Programación FIUNA
+
+Contact: mailto:clubdeprogramacion@ing.una.py
+Preferred-Languages: es, en
+Canonical: https://cpfiuna.io/.well-known/security.txt
+Expires: 2026-12-07T00:00:00.000Z
+
+# If you discover a security vulnerability, please report it responsibly.
+# We appreciate your efforts to improve our security.
+
+# Thank you for helping keep Club de Programación FIUNA and our users safe!
