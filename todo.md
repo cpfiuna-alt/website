@@ -1,6 +1,0 @@
-- Rewrite the whole Reglamento page to have the adapted reglamento rather than the generated one.
-- Connect our admissions form with Google Forms to have it send the data to a Google Sheets.
-- Re add the redirect functionality to the novedades cards.
-- Various styling and congruency changes throughout the site.
-- Make sure the email sends with the new Discord invite link.
-- 
