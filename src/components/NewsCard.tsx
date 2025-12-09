@@ -91,6 +91,10 @@ const NewsCard: React.FC<NewsCardProps> = ({
           src={getImage()}
           alt={title}
           className="w-full h-full object-cover object-center rounded-t-xl"
+          loading="lazy"
+          decoding="async"
+          width={800}
+          height={384}
           onError={(e) => {
             const target = e.currentTarget as HTMLImageElement;
             // Fallback to category image on error

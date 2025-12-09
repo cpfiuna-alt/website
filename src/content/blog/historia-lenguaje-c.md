@@ -6,7 +6,7 @@ date: "07-12-2025"
 author: "David Giménez"
 readTime: "12 min"
 tags: ["Historia", "C", "Sistemas", "Programación"]
-image: "https://maharatech.gov.eg/pluginfile.php/655033/course/overviewfiles/C%20Programming%20%20From%20Basics%20to%20%20Mastery.jpg"
+image: "https://assets.cpfiuna.io/website/public/images/blog/historia-de-c/la-historia-de-c.jpg"
 slug: "historia-lenguaje-c"
 references:
     - "Kenneth Thompson & Dennis Ritchie Develop UNIX, Making Open Systems Possible, fecha de acceso: diciembre 7, 2025, https://www.historyofinformation.com/detail.php?id=872"

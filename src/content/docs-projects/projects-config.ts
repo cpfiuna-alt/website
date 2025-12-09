@@ -22,9 +22,9 @@ import fm from 'front-matter';
 // Consumers should `await` these helpers (or use Suspense / effects in React).
 
 export async function loadProjectsConfig(): Promise<ProjectConfig[]> {
-  // `as: 'raw'` gives us the file contents as a string. The glob returns
-  // an object where each value is an async resolver function.
-  const modules = import.meta.glob('./*/index.md', { as: 'raw' });
+  // `query: '?raw', import: 'default'` gives us the file contents as a string.
+  // The glob returns an object where each value is an async resolver function.
+  const modules = import.meta.glob('./*/index.md', { query: '?raw', import: 'default' });
 
   const entries = Object.entries(modules) as [string, () => Promise<string>][];
 

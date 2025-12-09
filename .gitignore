@@ -25,10 +25,3 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
-
-# Open Graph images are hosted in R2; keep local copies out of the repo
-/public/og-image.png
-/public/og-image@2x.png
-/public/og-twitter.png
-/public/og-twitter@2x.png
-/public/og*.png

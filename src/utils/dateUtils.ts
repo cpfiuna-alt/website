@@ -1,5 +1,5 @@
 
-import { format } from 'date-fns';
+import { format, parse, isValid } from 'date-fns';
 import { es } from 'date-fns/locale';
 
 /**
@@ -25,6 +25,31 @@ export const formatDateEs = (date: Date | number | string, formatString: string)
     console.error('Error formatting date:', error);
     return 'Fecha desconocida';
   }
+};
+
+/**
+ * Parse a date string in a few common formats and return a Date or null.
+ * Tries native Date constructor first, then common formats like dd-MM-yyyy and yyyy-MM-dd.
+ */
+export const parseDateString = (dateStr?: string | null): Date | null => {
+  if (!dateStr) return null;
+
+  // Try native parsing first
+  const native = new Date(dateStr);
+  if (!isNaN(native.getTime())) return native;
+
+  // Try common explicit formats
+  const formats = ['dd-MM-yyyy', 'yyyy-MM-dd', 'MM-dd-yyyy'];
+  for (const fmt of formats) {
+    try {
+      const parsed = parse(dateStr, fmt, new Date());
+      if (isValid(parsed)) return parsed;
+    } catch (e) {
+      // continue
+    }
+  }
+
+  return null;
 };
 
 /**
