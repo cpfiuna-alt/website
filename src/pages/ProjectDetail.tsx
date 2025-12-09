@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import Layout from "@/components/layout/Layout";
 import { ProjectFrontMatter, GitHubStats } from "@/utils/markdownUtils";
+import { formatDate } from "@/utils/markdown/formatters";
 import NotFound from "./NotFound";
 import { ChevronLeft, Github, ExternalLink, Calendar, Users } from "lucide-react";
 import ProjectGithubStats from "@/components/projects/ProjectGithubStats";
@@ -17,22 +18,13 @@ const ProjectDetail = () => {
   const { allProjects, loading } = useProjects();
   const [project, setProject] = useState<(ProjectFrontMatter & { content: string }) | null>(null);
   const [relatedProjects, setRelatedProjects] = useState<ProjectFrontMatter[]>([]);
-
   useEffect(() => {
     if (!loading && slug) {
-      console.log(`Looking for project with slug: ${slug}`);
-      console.log(`Total projects available: ${allProjects.length}`);
-      
-      if (allProjects.length > 0) {
-        console.log(`First project slug: ${allProjects[0].slug}`);
-      }
-      
       const foundProject = allProjects.find(
         (p) => p.slug === slug
       ) as (ProjectFrontMatter & { content: string }) | undefined;
       
       if (foundProject) {
-        console.log(`Found project: ${foundProject.title}`);
         setProject(foundProject);
         
         // Find related projects with similar tags or category
@@ -41,28 +33,18 @@ const ProjectDetail = () => {
             p.slug !== slug && 
             (p.category === foundProject.category || 
               (foundProject.tags && p.tags && 
-                p.tags.some(tag => foundProject.tags?.includes(tag))))
-          )
+                p.tags.some(tag => foundProject.tags?.includes(tag)))))
           .slice(0, 3);
         
         setRelatedProjects(related);
-      } else {
-        console.warn(`Project with slug '${slug}' not found`);
       }
     }
   }, [slug, allProjects, loading]);
-
-  // Helper function for formatting dates
+  // Helper function for formatting dates using centralized parser/formatter
   const formatDateIfAvailable = (dateString?: string) => {
     if (!dateString) return "No disponible";
-    
     try {
-      const date = new Date(dateString);
-      return date.toLocaleDateString('es-ES', {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric'
-      });
+      return formatDate(dateString);
     } catch (e) {
       return dateString;
     }
@@ -70,22 +52,16 @@ const ProjectDetail = () => {
   
   // Function to get status badge variant based on status
   const getStatusBadgeVariant = (status?: string) => {
-    if (!status) return "bg-[#F59E0BE6] text-white"; // amber-500 with E6 alpha
-    
-    switch (status.toLowerCase()) {
-      case "completado":
-      case "completed":
-        return "bg-[#10B981E6] text-white"; // green-500 with E6 alpha
-      case "abandonado":
-      case "planned":
-        return "bg-[#9CA3AFE6] text-white"; // gray-400 with E6 alpha
-      case "en desarrollo":
-      case "in-progress":
-      default:
-        return "bg-[#F59E0BE6] text-white"; // amber-500 with E6 alpha
-    }
-  };
+    if (!status) return "bg-[#F59E0BE6] text-white"; // default: amber
+    const s = status.toLowerCase();
 
+    // Map common Spanish and English variants to consistent colors
+    if (s.includes('complet')) return "bg-[#3C83F6E6] text-white"; // blue (completed)
+    if (s.includes('aband') || s.includes('archiv')) return "bg-[#9CA3AFE6] text-white"; // gray
+    if (s.includes('activo')) return "bg-[#10B981E6] text-white"; // green (active)
+    // default: any kind of development/in-progress state
+    return "bg-[#F59E0BE6] text-white"; // amber
+  };
   if (loading) {
     return (
       <Layout>
@@ -122,6 +98,8 @@ const ProjectDetail = () => {
     issues: 0, 
     contributors: 0 
   };
+  // Prefer explicit github link fields if available
+  const repoUrl = project.githubLink || project.github || "#";
 
   return (
     <Layout>
@@ -141,27 +119,14 @@ const ProjectDetail = () => {
           <ProjectDetailGallery project={project} />
           
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-10 mt-10">
-            <div className="lg:col-span-2 order-2 lg:order-1">
-              <ProjectDetailContent project={project} />
-            </div>
+            <div className="lg:col-span-2">
+                <ProjectDetailContent project={project} />
+              </div>
             
-            <div className="lg:col-span-1 order-1 lg:order-2">
-              <ProjectDetailSidebar project={project} relatedProjects={relatedProjects} />
+              <div className="lg:col-span-1">
+                <ProjectDetailSidebar project={project} relatedProjects={relatedProjects} />
               
               <div className="mt-8">
-                {/*<div className="flex justify-between mb-4">
-                  <h3 className="text-lg font-semibold">Estadísticas</h3>
-                  <span className="text-muted-foreground text-sm">
-                    <Calendar className="h-4 w-4 inline mr-1" />
-                    {project.lastUpdated || "Sin fecha"}
-                  </span>
-                </div>
-                
-                <ProjectGithubStats 
-                  repoUrl={project.githubLink || "#"} 
-                  stats={githubStats} 
-                />*/}
-                
                 <div className="flex gap-4 mt-8">
                   <a
                     href={project.githubLink || "#"}
@@ -172,22 +137,66 @@ const ProjectDetail = () => {
                     <Github className="h-4 w-4 mr-2" />
                     Código
                   </a>
-                  {project.demoLink && (
-                    <a
-                      href={project.demoLink}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex-1 inline-flex items-center justify-center px-4 py-2 rounded-full bg-primary text-primary-foreground hover:bg-primary/80 transition-colors"
-                    >
-                      <ExternalLink className="h-4 w-4 mr-2" />
-                      Ver demo
-                    </a>
-                  )}
+
+                  {(() => {
+                    // New rule: base behavior on demoLink only.
+                    // If demoLink is empty => show a gray disabled button (non-clickable).
+                    // If demoLink exists => show active button with label determined by demoButtonType.
+                    const buttonType = project.demoButtonType as "demo" | "project" | undefined;
+                    const demoLink = project.demoLink || "";
+
+                    const labelAvailable = buttonType === "project" ? "Ver proyecto" : "Ver demo";
+                    const labelMissing = buttonType === "project" ? "Proyecto no disponible" : "No disponible";
+
+                    if (!demoLink) {
+                      return (
+                        <button
+                          key="demo-disabled-gray"
+                          disabled
+                          aria-disabled
+                          className="flex-1 inline-flex items-center justify-center px-4 py-2 rounded-full bg-gray-200 text-gray-700 cursor-not-allowed border border-gray-200"
+                        >
+                          {labelMissing}
+                        </button>
+                      );
+                    }
+
+                    return (
+                      <a
+                        key="demo-active"
+                        href={demoLink}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex-1 inline-flex items-center justify-center px-4 py-2 rounded-full bg-primary text-primary-foreground hover:bg-primary/80 transition-colors"
+                      >
+                        {labelAvailable}
+                      </a>
+                    );
+                  })()}
                 </div>
               </div>
             </div>
           </div>
+
+        {/* Collaboration CTA — same style as EventRegistrationCTA */}
+        <div className="mt-16 p-8 bg-primary/10 rounded-2xl text-center">
+          <h2 className="text-2xl md:text-3xl font-bold mb-4">
+            ¿Querés colaborar con este proyecto?
+          </h2>
+          <p className="text-lg text-muted-foreground mb-6 max-w-2xl mx-auto">
+            El repositorio es público, no necesitás ser experto para colaborar, siempre estamos abiertos a contribuciones y sugerencias.
+          </p>
+          <a
+            href={repoUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center px-8 py-4 rounded-full bg-primary text-primary-foreground hover:bg-primary/80 transition-colors text-lg font-medium"
+          >
+            <Github className="mr-2 h-5 w-5" />
+            Contribuir en GitHub
+          </a>
         </div>
+      </div>
     </Layout>
   );
 };

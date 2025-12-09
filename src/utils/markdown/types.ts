@@ -5,6 +5,13 @@ export interface BlogFrontMatter {
   description: string;
   date: string;
   author: string;
+  /** Optional single reference URL for this post (visible in the blog post page) */
+  referenceLink?: string;
+  /** Optional list of references. Each entry should be an object with `text` and `url`.
+   * Parsers will also accept an array of strings where each string contains the
+   * display text and URL separated by a comma. The UI normalizes both formats.
+   */
+  references?: Array<{ text: string; url: string }>;
   tags?: string[];
   image?: string;
   readTime?: string;
@@ -56,6 +63,17 @@ export interface ProjectFrontMatter {
   tags?: string[];
   github?: string;
   demo?: string;
+  /**
+   * Control label/behavior for the secondary action button in project pages.
+   * - 'demo' (default): label will be "Ver demo"
+   * - 'project': label will be "Ver proyecto"
+   */
+  demoButtonType?: "demo" | "project" | null;
+  /**
+   * If true and there's no URL for the demo/project, the button will be hidden.
+   * Otherwise a disabled button with a "no disponible" label will be shown.
+   */
+  hideDemoIfMissing?: boolean;
   featured: boolean;
   slug: string;
   status?: string;
@@ -86,10 +104,19 @@ export interface CourseFrontMatter {
   instructorBio?: string;
   duration: string;
   level: string;
+  /**
+   * Generic price label (fallback). Prefer using `priceMember` and `priceNonMember`
+   * for explicit member/non-member pricing.
+   */
   price?: string;
+  /** Price shown to members, e.g. "Gratuito (miembros)" or "Gratis" */
+  priceMember?: string;
+  /** Price shown to non-members, e.g. "30.000 Gs. (no miembros)" */
+  priceNonMember?: string;
   tags?: string[];
   syllabus?: string[];
   youtubeUrl?: string;
+  registrationLink?: string;
   slug: string;
   date?: string;
 }

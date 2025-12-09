@@ -16,18 +16,14 @@ export function useProjects() {
         
         // If no project files were found, set empty array and return
         if (!projectFiles || Object.keys(projectFiles).length === 0) {
-          console.log("No project files found - this is normal if no projects are published yet");
           setAllProjects([]);
           return;
         }
-        
-        console.log("Loading projects from", Object.keys(projectFiles).length, "files");
         
         const parsedProjects = await Promise.all(
           Object.entries(projectFiles).map(async ([path, content]) => {
             // Extract slug from path (filename without extension)
             const slug = path.split('/').pop()?.replace('.md', '') || '';
-            console.log("Processing project:", slug);
             
             try {
               // Parse the markdown content
@@ -64,7 +60,10 @@ export function useProjects() {
                 demoLink: frontMatter.demoLink || frontMatter.demoUrl || "",
                 githubStats: frontMatter.githubStats || { stars: 0, forks: 0, issues: 0, contributors: 0 },
                 github: frontMatter.github || frontMatter.githubLink,
-                demo: frontMatter.demo || frontMatter.demoLink,
+                	demo: frontMatter.demo || frontMatter.demoLink,
+                	// New frontmatter options for demo button behavior
+                	demoButtonType: frontMatter.demoButtonType,
+                	hideDemoIfMissing: !!frontMatter.hideDemoIfMissing,
                 gallery: frontMatter.gallery || [] // Add gallery field
               };
               
@@ -90,8 +89,6 @@ export function useProjects() {
           })
         );
         
-        console.log("Projects loaded:", parsedProjects.length);
-        
         // Sort projects by featured status and then by id
         parsedProjects.sort((a, b) => {
           // First sort by featured status (featured first)
@@ -108,6 +105,100 @@ export function useProjects() {
         });
         
         setAllProjects(parsedProjects);
+        // Attempt to fetch GitHub stats for projects that expose a GitHub link.
+        // We do this after parsing so that frontmatter parsing errors don't block stats fetch.
+        const token = (import.meta.env && (import.meta.env.VITE_GITHUB_TOKEN as string)) || '';
+
+        async function fetchStatsForProject(p: ProjectFrontMatter & { content: string }) {
+          const url = p.githubLink || p.github || '';
+          if (!url || !url.includes('github.com')) return p;
+
+          const match = url.match(/github\.com\/(?<owner>[^/]+)\/(?<repo>[^/]+)(?:\.git|\/|$)/i);
+          if (!match || !(match.groups && match.groups.owner && match.groups.repo)) return p;
+
+          const owner = match.groups.owner;
+          const repo = match.groups.repo.replace(/\.git$/i, '');
+
+          // Check localStorage cache to avoid hitting GitHub API too often.
+          // Cache key: githubStats:<owner>/<repo>
+          try {
+            const cacheKey = `githubStats:${owner}/${repo}`;
+            const cachedRaw = typeof localStorage !== 'undefined' ? localStorage.getItem(cacheKey) : null;
+            if (cachedRaw) {
+              const cached = JSON.parse(cachedRaw) as { stats: GitHubStats; fetchedAt: number };
+              const age = Date.now() - (cached.fetchedAt || 0);
+              const twelveHours = 12 * 60 * 60 * 1000;
+              if (cached && cached.stats && age < twelveHours) {
+                p.githubStats = cached.stats;
+                return p;
+              }
+            }
+          } catch (err) {
+            // If localStorage access fails, continue to fetch fresh data.
+            console.warn('LocalStorage unavailable for GitHub stats cache', err);
+          }
+
+          try {
+            const headers: Record<string, string> = {
+              'Accept': 'application/vnd.github+json'
+            };
+            if (token) headers['Authorization'] = `token ${token}`;
+
+            // Repo info (stars, forks, issues)
+            const repoRes = await fetch(`https://api.github.com/repos/${owner}/${repo}`, { headers });
+            if (!repoRes.ok) throw new Error(`GitHub repo fetch failed: ${repoRes.status}`);
+            const repoJson = await repoRes.json();
+
+            // Contributors: try to get contributors count from contributors endpoint (may be paginated)
+            // We'll request per_page=1 and inspect the Link header for the last page if present.
+            const contribRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/contributors?per_page=1&anon=true`, { headers });
+            let contributors = 0;
+            if (contribRes.ok) {
+              const link = contribRes.headers.get('Link');
+              if (link) {
+                // Find last page number in Link header
+                const m = link.match(/&page=(\d+)>; rel="last"/);
+                if (m && m[1]) contributors = Number(m[1]);
+                else {
+                  // Fallback: count items in this page
+                  const arr = await contribRes.json();
+                  contributors = Array.isArray(arr) ? arr.length : 0;
+                }
+              } else {
+                const arr = await contribRes.json();
+                contributors = Array.isArray(arr) ? arr.length : 0;
+              }
+            }
+
+            p.githubStats = {
+              stars: Number(repoJson.stargazers_count || 0),
+              forks: Number(repoJson.forks_count || 0),
+              issues: Number(repoJson.open_issues_count || 0),
+              contributors: contributors || 0
+            } as GitHubStats;
+            // Save into localStorage cache with timestamp (best-effort)
+            try {
+              const cacheKey = `githubStats:${owner}/${repo}`;
+              if (typeof localStorage !== 'undefined') {
+                const payload = JSON.stringify({ stats: p.githubStats, fetchedAt: Date.now() });
+                localStorage.setItem(cacheKey, payload);
+              }
+            } catch (err) {
+              // ignore localStorage errors
+            }
+          } catch (err) {
+            // Do not fail the whole load if GitHub API fails; leave defaults in place
+            console.warn('Failed to fetch GitHub stats for', p.slug, err);
+            p.githubStats = p.githubStats || { stars: 0, forks: 0, issues: 0, contributors: 0 };
+          }
+
+          return p;
+        }
+
+        // Fetch stats in parallel but keep reasonable concurrency (simple Promise.all here)
+        const projectsWithStats = await Promise.all(parsedProjects.map((p) => fetchStatsForProject(p)));
+
+        setAllProjects(projectsWithStats);
       } catch (error) {
         console.error("Error loading projects:", error);
         setAllProjects([]);

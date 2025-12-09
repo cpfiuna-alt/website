@@ -15,98 +15,72 @@ export interface ProjectConfig {
   order?: number;
 }
 
-export const projectsConfig: ProjectConfig[] = [
-  /*{
-    id: 'discord-bot-cpf',
-    name: 'Bot de Discord del </cpf>',
-    description: 'Bot inteligente para el servidor de Discord del club. Gestiona eventos, modula conversaciones y proporciona utilidades para la comunidad.',
-    icon: 'Bot',
-    status: 'active',
-    category: 'bot',
-    tags: ['Discord.js', 'Node.js', 'TypeScript', 'MongoDB'],
-    repository: 'https://github.com/cpfiuna/discord-bot',
-    version: '0.5.0',
-    lastUpdate: '2025-05-28',
-    maintainers: ['Iván Jara', 'Oscar Alderete'],
-    featured: true,
-    order: 1
-  },
-  {
-    id: 'competitive-programming',
-    name: 'Competitive Programming Platform',
-    description: 'Plataforma educativa para aprender programación competitiva. Incluye problemas, tutoriales y sistema de evaluación automática.',
-    icon: 'Trophy',
-    status: 'beta',
-    category: 'education',
-    tags: ['React', 'Python', 'Docker', 'PostgreSQL'],
-    repository: 'https://github.com/cpf-fiuna/competitive-programming',
-    demo: 'https://cp.cpf-fiuna.org',
-    version: '0.8.0',
-    lastUpdate: '2025-05-15',
-    maintainers: ['David Giménez', 'Iván Jara'],
-    featured: true,
-    order: 3
-  },
-  {
-    id: 'hidroponia-iot',
-    name: 'Sistema Hidroponía IoT',
-    description: 'Sistema IoT para monitoreo y control automático de cultivos hidropónicos. Incluye sensores, actuadores y dashboard en tiempo real.',
-    icon: 'Leaf',
-    status: 'active',
-    category: 'iot',
-    tags: ['Arduino', 'React', 'MQTT', 'InfluxDB'],
-    repository: 'https://github.com/cpf-fiuna/hidroponia-iot',
-    demo: 'https://hidroponia.cpf-fiuna.org',
-    version: '1.2.0',
-    lastUpdate: '2025-05-22',
-    maintainers: ['Iván Jara', 'Oscar Alderete'],
-    featured: true,
-    order: 4
-  },
-  {
-    id: 'fiuna-chatbot',
-    name: 'FIUNA AI Chatbot',
-    description: 'Chatbot inteligente con IA para responder preguntas sobre la FIUNA. Utiliza procesamiento de lenguaje natural para asistir a estudiantes.',
-    icon: 'MessageSquare',
-    status: 'planning',
-    category: 'ai',
-    tags: ['Python', 'OpenAI', 'FastAPI', 'Langchain'],
-    repository: 'https://github.com/cpf-fiuna/fiuna-chatbot',
-    version: '0.3.0',
-    lastUpdate: '2025-04-20',
-    maintainers: ['Oscar Alderete'],
-    featured: false,
-    order: 5
-  },
-  {
-    id: 'biblioteca-digital',
-    name: 'Biblioteca Digital',
-    description: 'Sistema de gestión de recursos digitales para la facultad. Permite catalogar, buscar y acceder a libros, papers y material académico.',
-    icon: 'Library',
-    status: 'planning',
-    category: 'infrastructure',
-    tags: ['Next.js', 'Prisma', 'PostgreSQL', 'Elasticsearch'],
-    repository: 'https://github.com/cpf-fiuna/biblioteca-digital',
-    version: '0.2.0',
-    lastUpdate: '2025-03-10',
-    maintainers: ['Daniel Villalba'],
-    featured: false,
-    order: 6
-  }*/
-];
+import fm from 'front-matter';
 
-export function getProjectById(id: string): ProjectConfig | undefined {
-  return projectsConfig.find(project => project.id === id);
+// Dynamically load project folders by reading their `index.md` frontmatter.
+// This uses Vite's `import.meta.glob` and returns a Promise-based API.
+// Consumers should `await` these helpers (or use Suspense / effects in React).
+
+export async function loadProjectsConfig(): Promise<ProjectConfig[]> {
+  // `as: 'raw'` gives us the file contents as a string. The glob returns
+  // an object where each value is an async resolver function.
+  const modules = import.meta.glob('./*/index.md', { as: 'raw' });
+
+  const entries = Object.entries(modules) as [string, () => Promise<string>][];
+
+  const projects = await Promise.all(
+    entries.map(async ([path, resolver]) => {
+      const raw = await resolver();
+      const parsed = fm(raw || '');
+      // `front-matter` exposes attributes on `parsed.attributes`
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const data = (parsed && (parsed.attributes as any)) || {};
+
+      // path is like './discord-bot-cpf/index.md'
+      const parts = path.split('/');
+      const id = parts.length >= 2 ? parts[1] : path;
+
+      const cfg: ProjectConfig = {
+        id,
+        name: (data && (data.title || data.name)) || id,
+        description: (data && data.description) || '',
+        icon: (data && data.icon) || 'FileText',
+        status: (data && data.status) || 'active',
+        category: (data && data.category) || 'web',
+        tags: (data && data.tags) || [],
+        repository: (data && data.repository) || undefined,
+        demo: (data && data.demo) || undefined,
+        version: (data && data.version) || undefined,
+        lastUpdate: (data && data.lastUpdate) || (data && data.updated) || new Date().toISOString(),
+        maintainers: (data && data.maintainers) || [],
+        featured: !!(data && data.featured),
+        order: (data && typeof data.order === 'number' ? data.order : 999),
+      };
+
+      return cfg;
+    })
+  );
+
+  projects.sort((a, b) => (a.order ?? 999) - (b.order ?? 999));
+  return projects;
 }
 
-export function getFeaturedProjects(): ProjectConfig[] {
-  return projectsConfig.filter(project => project.featured);
+export async function getProjectById(id: string): Promise<ProjectConfig | undefined> {
+  const projects = await loadProjectsConfig();
+  return projects.find((p) => p.id === id);
 }
 
-export function getProjectsByCategory(category: string): ProjectConfig[] {
-  return projectsConfig.filter(project => project.category === category);
+export async function getFeaturedProjects(): Promise<ProjectConfig[]> {
+  const projects = await loadProjectsConfig();
+  return projects.filter((p) => p.featured);
 }
 
-export function getProjectsByStatus(status: string): ProjectConfig[] {
-  return projectsConfig.filter(project => project.status === status);
+export async function getProjectsByCategory(category: string): Promise<ProjectConfig[]> {
+  const projects = await loadProjectsConfig();
+  return projects.filter((p) => p.category === category);
+}
+
+export async function getProjectsByStatus(status: string): Promise<ProjectConfig[]> {
+  const projects = await loadProjectsConfig();
+  return projects.filter((p) => p.status === status);
 }

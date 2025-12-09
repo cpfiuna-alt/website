@@ -1,5 +1,4 @@
 
-import React from "react";
 import { Award, Code, Users, Calendar, Star, Briefcase } from "lucide-react";
 import AnimatedCounter from "../home/AnimatedCounter";
 import { ABOUT_STATS } from "@/data/stats";
@@ -7,18 +6,18 @@ import { ABOUT_STATS } from "@/data/stats";
 const Stats = () => {
   const statsWithIcons = ABOUT_STATS.map((stat, index) => {
     const iconMap = [
-      <Code className="h-6 w-6" />,
-      <Users className="h-6 w-6" />,
-      <Calendar className="h-6 w-6" />,
-      <Award className="h-6 w-6" />,
-      <Star className="h-6 w-6" />,
-      <Briefcase className="h-6 w-6" />,
+      <Code className="h-10 w-10 text-primary" />,
+      <Users className="h-10 w-10 text-primary" />,
+      <Calendar className="h-10 w-10 text-primary" />,
+      <Award className="h-10 w-10 text-primary" />,
+      <Star className="h-10 w-10 text-primary" />,
+      <Briefcase className="h-10 w-10 text-primary" />,
     ];
     
     return {
       value: stat.value,
       label: stat.label,
-      icon: iconMap[index] || <Code className="h-6 w-6" />,
+      icon: iconMap[index] || <Code className="h-10 w-10 text-primary" />,
     };
   });
 
@@ -29,7 +28,7 @@ const Stats = () => {
       
       <div className="container mx-auto max-w-6xl">
         <h2 className="text-3xl font-bold mb-12 text-center">
-          <span className="gradient-text">CPF</span> en números
+          <span className="gradient-text">&lt;/cpf&gt;</span> en números
         </h2>
         
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">

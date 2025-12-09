@@ -31,13 +31,6 @@ export function useLatestContent(limit: number = 4) {
         const projects = await getAllProjects();
         const courses = await getAllCourses();
 
-        console.log("Fetched content counts:", {
-          blogPosts: blogPosts.length,
-          events: events.length,
-          projects: projects.length,
-          courses: courses.length
-        });
-
         // Transform to a unified format
         const allContent: LatestContentItem[] = [
           // Transform blog posts
@@ -87,15 +80,6 @@ export function useLatestContent(limit: number = 4) {
             slug: course.slug
           }))
         ];
-
-        console.log("Transformed content count:", allContent.length);
-        
-        if (allContent.length === 0) {
-          console.warn("No content found in any source");
-        } else {
-          // Log first few items for debugging
-          console.log("Sample content items:", allContent.slice(0, 2));
-        }
 
         // Sort by date (newest first)
         allContent.sort((a, b) => {

@@ -9,13 +9,6 @@ import { Link } from "react-router-dom";
 const NotFound = () => {
   const location = useLocation();
 
-  useEffect(() => {
-    console.error(
-      "404 Error: User attempted to access non-existent route:",
-      location.pathname
-    );
-  }, [location.pathname]);
-
   return (
     <Layout>
       <div className="min-h-[calc(100vh-20rem)] flex flex-col items-center justify-center py-20 px-4">

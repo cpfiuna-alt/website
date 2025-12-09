@@ -1,20 +1,19 @@
 
 import React from "react";
 import { Github, User } from "lucide-react";
-import { featureFlags } from "@/config/site";
 
 const ProjectsCallToAction = () => {
-  // Use admission form if enabled, otherwise fall back to contact
-  const joinClubLink = featureFlags.admissionForm.enabled ? "/admision" : "/contacto";
-  const joinClubText = featureFlags.admissionForm.enabled ? "Unite al club" : "Contáctanos";
+  // Always use contact page for this CTA
+  const joinClubLink = "/contacto";
+  const joinClubText = "Contactanos";
 
   return (
     <section className="py-20 px-6 bg-muted/50 dark:bg-black/60 text-center">
       <div className="container mx-auto">
         <div className="max-w-3xl mx-auto text-center">
-          <h2 className="text-3xl font-bold mb-6">¿Tienes una idea de proyecto?</h2>
+          <h2 className="text-3xl font-bold mb-6">¿Tenés una idea de proyecto?</h2>
           <p className="text-lg mb-8 text-muted-foreground">
-            ¿Quieres contribuir a alguno de nuestros proyectos o proponer uno nuevo?
+            ¿Querés contribuir a alguno de nuestros proyectos o proponer uno nuevo?
             ¡Nos encantaría colaborar contigo!
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-4">
@@ -31,7 +30,6 @@ const ProjectsCallToAction = () => {
               href={joinClubLink}
               className="inline-flex items-center justify-center px-6 py-3 rounded-full border border-primary bg-transparent text-primary font-medium transition-all hover:scale-105 hover:bg-primary/10 hover:shadow-neon-blue"
             >
-              <User className="mr-2 h-5 w-5" />
               {joinClubText}
             </a>
           </div>

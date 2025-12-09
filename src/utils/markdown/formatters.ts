@@ -12,11 +12,33 @@ export function parseDateString(dateString: string): { startDate: Date; endDate?
       return new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
     }
     
-    // If it's a DD-MM-YYYY format, parse it manually
-    const ddmmyyyyMatch = dateStr.match(/^(\d{2})-(\d{2})-(\d{4})$/);
+    // If it's a DD-MM-YYYY or MM-DD-YYYY format (with - or /), parse it manually
+    const ddmmyyyyMatch = dateStr.match(/^(\d{1,2})[-\/](\d{1,2})[-\/](\d{4})$/);
     if (ddmmyyyyMatch) {
-      const [, day, month, year] = ddmmyyyyMatch;
-      return new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
+      const [, part1, part2, year] = ddmmyyyyMatch;
+      const a = parseInt(part1, 10);
+      const b = parseInt(part2, 10);
+
+      // Disambiguate between DD-MM-YYYY and MM-DD-YYYY
+      // If the first part is > 12 it's definitely the day (DD-MM-YYYY)
+      // If the second part is > 12 it's definitely the day (MM-DD-YYYY)
+      // Otherwise default to DD-MM-YYYY for consistency with existing content
+      let day: number;
+      let month: number;
+
+      if (a > 12 && b <= 12) {
+        day = a;
+        month = b;
+      } else if (b > 12 && a <= 12) {
+        day = b;
+        month = a;
+      } else {
+        // Ambiguous case (both <=12) — assume DD-MM-YYYY to match existing format
+        day = a;
+        month = b;
+      }
+
+      return new Date(parseInt(year, 10), month - 1, day);
     }
     
     // For other formats, use regular Date constructor
@@ -48,8 +70,9 @@ export function parseDateString(dateString: string): { startDate: Date; endDate?
 }
 
 // Function to format date in human-readable format (handles both single dates and ranges)
-export function formatDate(dateString: string): string {
+export function formatDate(dateString?: string): string {
   try {
+    if (!dateString) return "No disponible";
     const { startDate, endDate, isRange } = parseDateString(dateString);
     
     const formatOptions: Intl.DateTimeFormatOptions = {

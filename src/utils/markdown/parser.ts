@@ -116,47 +116,44 @@ export function parseMarkdown(content: string) {
         } else if (!isNaN(Number(value)) && value !== '') {
           frontMatter[key] = Number(value);
         } else if (value.startsWith('[') && value.endsWith(']')) {
-          // Parse arrays
-          try {
-            // Process the array string: remove brackets, split by commas
-            const arrayStr = value.slice(1, -1).trim();
-            
-            // If the array is empty, set as empty array
-            if (!arrayStr) {
-              frontMatter[key] = [];
-            } else {
-              // First try to parse as JSON if it looks like JSON format
-              if (value.includes('{')) {
-                // Fix: convert single quotes to double quotes for JSON compatibility
-                const jsonStr = value.replace(/'/g, '"')
-                  .replace(/(['"])?([a-zA-Z0-9_]+)(['"])?:/g, '"$2":');
-                
-                try {
-                  frontMatter[key] = JSON.parse(jsonStr);
-                } catch (e) {
-                  console.warn(`Could not parse JSON array for key ${key}, falling back to simple parsing`, e);
-                  // Fallback to simple array parsing with quote removal
-                  frontMatter[key] = arrayStr
-                    .split(',')
-                    .map(item => item.trim().replace(/^["'](.*)["']$/, '$1'))
-                    .filter(Boolean);
-                }
-              } else {
-                // Simple array parsing with quote removal
-                frontMatter[key] = arrayStr
-                  .split(',')
-                  .map(item => item.trim().replace(/^["'](.*)["']$/, '$1'))
-                  .filter(Boolean);
+          // Parse inline arrays. Prefer JSON.parse for valid JSON arrays,
+          // but fall back to a robust splitter that respects quoted items
+          // (so commas inside quoted strings don't split the item).
+          const arrayStr = value.slice(1, -1).trim();
+          if (!arrayStr) {
+            frontMatter[key] = [];
+          } else {
+            let parsedArray: any[] | null = null;
+            try {
+              parsedArray = JSON.parse(value);
+            } catch (e) {
+              // Try a relaxed JSON conversion replacing single quotes with double
+              // then attempt parse; if it still fails, we'll fallback below.
+              try {
+                const relaxed = value.replace(/'/g, '"');
+                parsedArray = JSON.parse(relaxed);
+              } catch (e2) {
+                parsedArray = null;
               }
             }
-          } catch (e) {
-            console.error('Error parsing array:', e);
-            // Fallback to basic string array
-            frontMatter[key] = value
-              .slice(1, -1)
-              .split(',')
-              .map(item => item.trim().replace(/^["'](.*)["']$/, '$1'))
-              .filter(Boolean);
+
+            if (Array.isArray(parsedArray)) {
+              frontMatter[key] = parsedArray;
+            } else {
+              // Fallback: split by commas but respect quoted strings
+              const items: string[] = [];
+              const itemRegex = /("(?:[^"\\]|\\.)*"|'(?:[^'\\]|\\.)*'|[^,]+)/g;
+              let m: RegExpExecArray | null;
+              while ((m = itemRegex.exec(arrayStr)) !== null) {
+                let token = m[0].trim();
+                // Remove surrounding quotes if present
+                if ((token.startsWith('"') && token.endsWith('"')) || (token.startsWith("'") && token.endsWith("'"))) {
+                  token = token.slice(1, -1);
+                }
+                items.push(token);
+              }
+              frontMatter[key] = items.filter(Boolean);
+            }
           }
         } else if (value.startsWith('"') && value.endsWith('"')) {
           // Remove quotes from quoted strings

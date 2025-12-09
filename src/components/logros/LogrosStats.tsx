@@ -1,6 +1,6 @@
 
 import React from "react";
-import { Users, Trophy, Briefcase, GraduationCap } from "lucide-react";
+import { Users, Trophy, Briefcase, GraduationCap, Calendar } from "lucide-react";
 import { Container } from "@/components/ui/container";
 import AnimatedCounter from "@/components/home/AnimatedCounter";
 import { LOGROS_STATS } from "@/data/stats";
@@ -12,6 +12,7 @@ const LogrosStats = () => {
       <Trophy className="h-10 w-10 text-primary" />,
       <Briefcase className="h-10 w-10 text-primary" />,
       <GraduationCap className="h-10 w-10 text-primary" />,
+      <Calendar className="h-10 w-10 text-primary" />,
     ];
     
     return {
@@ -25,19 +26,20 @@ const LogrosStats = () => {
   return (
     <section className="py-16">
       <Container>
-        <h2 className="text-3xl font-bold text-center mb-12">Nuestros números</h2>
+        <h2 className="text-3xl font-bold mb-12 text-center">
+          <span className="gradient-text">&lt;/cpf&gt;</span> en números
+        </h2>
         
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
           {statsWithIcons.map((stat, index) => (
-            <div key={index} className="glass-card-static p-6 flex flex-col items-center text-center">
-              <div className="flex justify-center mb-4">
-                {stat.icon}
-              </div>
-              <div className="text-3xl font-bold mb-2 flex items-center justify-center">
-                {stat.value}<span>{stat.suffix}</span>
-              </div>
-              <p className="text-muted-foreground">{stat.label}</p>
-            </div>
+            <AnimatedCounter
+              key={stat.label}
+              end={stat.value}
+              label={stat.label}
+              icon={stat.icon}
+              duration={1800 + index * 200}
+              suffix={stat.suffix}
+            />
           ))}
         </div>
       </Container>

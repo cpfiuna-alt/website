@@ -17,7 +17,6 @@ const CoursesSection = () => {
       try {
         setLoading(true);
         const coursesData = await getAllCourses();
-        console.log("Fetched courses:", coursesData);
         setCourses(coursesData.map(course => course.frontMatter));
         setError(null);
       } catch (error) {

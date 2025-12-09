@@ -40,7 +40,6 @@ export function useBlogPosts() {
         
         // If no blog files were found, set empty arrays and return
         if (!blogFiles || Object.keys(blogFiles).length === 0) {
-          console.log("No blog files found - this is normal if no blog posts are published yet");
           setBlogPosts([]);
           setAllTags([]);
           return;
@@ -94,6 +93,39 @@ export function useBlogPosts() {
               }
               
               // Ensure frontMatter has all required fields
+              // Normalize references: support array of strings ("text, url") or
+              // array of objects ({ text, url }). Result will be an array of
+              // { text, url } objects or undefined.
+              let normalizedReferences: Array<{ text: string; url: string }> | undefined;
+              if (Array.isArray(frontMatter.references)) {
+                normalizedReferences = (frontMatter.references as any[]).map(item => {
+                  if (!item) return null;
+                  if (typeof item === 'string') {
+                    const str = item.trim();
+                    // Try to extract an URL anywhere in the string (prefer last occurrence)
+                    const urlMatch = str.match(/https?:\/\/[^\s)"']+/g);
+                    let url = '';
+                    if (urlMatch && urlMatch.length > 0) {
+                      url = urlMatch[urlMatch.length - 1];
+                    }
+
+                    // Remove the url from the text and any trailing separators
+                    let text = url ? str.replace(url, '').trim() : str;
+                    // Trim trailing commas or hyphens
+                    text = text.replace(/[\-,;:\s]+$/g, '').trim();
+
+                    return { text, url };
+                  }
+                  if (typeof item === 'object') {
+                    return {
+                      text: String((item as any).text || (item as any).title || ''),
+                      url: String((item as any).url || (item as any).link || '')
+                    };
+                  }
+                  return null;
+                }).filter(Boolean) as Array<{ text: string; url: string }>;
+              }
+
               const blogPost: BlogFrontMatter = {
                 id: frontMatter.id || slug,
                 title: frontMatter.title || "Untitled Post", 
@@ -104,6 +136,8 @@ export function useBlogPosts() {
                 readTime: frontMatter.readTime || "5 min",
                 tags: cleanedTags || [],
                 image: image,
+                referenceLink: frontMatter.referenceLink || undefined,
+                references: normalizedReferences,
                 slug
               };
               

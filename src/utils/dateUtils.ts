@@ -12,14 +12,12 @@ export const formatDateEs = (date: Date | number | string, formatString: string)
   try {
     // Handle case where date is already a Date object but invalid
     if (date instanceof Date && isNaN(date.getTime())) {
-      console.warn('Invalid Date object provided to formatDateEs:', date);
       return 'Fecha desconocida';
     }
     
     const dateObj = new Date(date);
     // Check if the date is valid
     if (isNaN(dateObj.getTime())) {
-      console.warn('Invalid date value provided to formatDateEs:', date);
       return 'Fecha desconocida';
     }
     return format(dateObj, formatString, { locale: es });

@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { useToast } from "@/components/ui/use-toast";
+import { sanitizeFormData, containsSpamPatterns, validateLength } from "@/utils/sanitize";
+import { checkRateLimit, recordAttempt, resetRateLimit, rateLimitConfigs } from "@/utils/rateLimit";
 
 const ContactForm = () => {
   const { toast } = useToast();
@@ -23,6 +25,17 @@ const ContactForm = () => {
       toast({
         title: "Error",
         description: "Por favor ingresa tu nombre",
+        variant: "destructive",
+      });
+      return false;
+    }
+  
+    // Validate name length
+    const nameValidation = validateLength(formData.name, 2, 100);
+    if (!nameValidation.valid) {
+      toast({
+        title: "Error",
+        description: nameValidation.message,
         variant: "destructive",
       });
       return false;
@@ -54,6 +67,27 @@ const ContactForm = () => {
       });
       return false;
     }
+    
+    // Validate message length
+    const messageValidation = validateLength(formData.message, 10, 2000);
+    if (!messageValidation.valid) {
+      toast({
+        title: "Error",
+        description: messageValidation.message,
+        variant: "destructive",
+      });
+      return false;
+    }
+    
+    // Check for spam patterns
+    if (containsSpamPatterns(formData.message)) {
+      toast({
+        title: "Error",
+        description: "Tu mensaje contiene contenido no permitido. Por favor revísalo.",
+        variant: "destructive",
+      });
+      return false;
+    }
   
     return true;
   };
@@ -62,17 +96,30 @@ const ContactForm = () => {
     e.preventDefault();
     setIsSubmitting(true);
 
+    // Check rate limit
+    const rateCheck = checkRateLimit('contact_form', rateLimitConfigs.contactForm);
+    if (!rateCheck.allowed) {
+      toast({
+        title: "Límite excedido",
+        description: rateCheck.message,
+        variant: "destructive",
+      });
+      setIsSubmitting(false);
+      return;
+    }
+
     if (!validateForm()) {
       setIsSubmitting(false);
       return;
     }
 
-    // Add debugging
-    console.log("Form submission started");
-    console.log("Form data:", formData);
-    console.log("Google Apps Script URL:", "https://script.google.com/macros/s/AKfycbxj2mCN3qWTr_Z9oiHHwv_mLNO9U5hc5kOwy7wcCBamvKsz1hFq-24CRHhL8boNzfRJ/exec");
+    // Record attempt before submission
+    recordAttempt('contact_form');
 
     try {
+      // Sanitize form data before sending
+      const sanitizedData = sanitizeFormData(formData);
+
       const response = await fetch(
         "https://script.google.com/macros/s/AKfycbxj2mCN3qWTr_Z9oiHHwv_mLNO9U5hc5kOwy7wcCBamvKsz1hFq-24CRHhL8boNzfRJ/exec",
         {
@@ -81,12 +128,9 @@ const ContactForm = () => {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(formData),
+          body: JSON.stringify(sanitizedData),
         }
       );
-
-      console.log("Fetch completed (no-cors mode - can't read response)");
-      console.log("Check your Google Sheets to verify if data was received");
 
       // Since we can't read the response in no-cors mode, we assume success
       toast({
@@ -94,6 +138,9 @@ const ContactForm = () => {
         description: "Hemos recibido tu mensaje. Te responderemos a la brevedad.",
         variant: "default",
       });
+
+      // Reset rate limit on successful submission
+      resetRateLimit('contact_form');
 
       setFormData({
         name: "",

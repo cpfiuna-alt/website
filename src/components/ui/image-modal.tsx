@@ -22,12 +22,36 @@ export const ImageModal: React.FC<ImageModalProps> = ({
   allImages,
   onNavigate,
 }) => {
-  // Prevent body scroll when modal is open
+  // Prevent body scroll when modal is open (non-jumpy approach)
   useEffect(() => {
+    if (typeof window === 'undefined') return;
+
+    const preventDefault = (e: Event) => {
+      e.preventDefault();
+    };
+
+    const preventKeyScroll = (e: KeyboardEvent) => {
+      const keys = ['ArrowUp', 'ArrowDown', 'PageUp', 'PageDown', 'Home', 'End', ' '];
+      if (keys.includes(e.key)) {
+        e.preventDefault();
+      }
+    };
+
     if (isOpen) {
+      // Basic overflow hidden to cover most cases
       document.body.style.overflow = 'hidden';
+      document.documentElement.style.overflow = 'hidden';
+      // Prevent touch scrolling and wheel events via listeners (use non-passive)
+      document.addEventListener('wheel', preventDefault, { passive: false });
+      document.addEventListener('touchmove', preventDefault, { passive: false });
+      window.addEventListener('keydown', preventKeyScroll as any, { passive: false });
+
       return () => {
-        document.body.style.overflow = 'unset';
+        document.body.style.overflow = '';
+        document.documentElement.style.overflow = '';
+        document.removeEventListener('wheel', preventDefault);
+        document.removeEventListener('touchmove', preventDefault);
+        window.removeEventListener('keydown', preventKeyScroll as any);
       };
     }
   }, [isOpen]);
@@ -54,12 +78,12 @@ export const ImageModal: React.FC<ImageModalProps> = ({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm overflow-auto"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm overflow-hidden"
       onClick={handleBackdropClick}
       onKeyDown={handleKeyDown}
       tabIndex={-1}
     >
-      <div className="relative max-w-[95vw] max-h-[95vh] p-4 my-8">
+      <div className="relative max-w-[95vw] max-h-[95vh] p-4 overflow-hidden">
         {/* Close button */}
         <button
           onClick={onClose}
@@ -98,12 +122,12 @@ export const ImageModal: React.FC<ImageModalProps> = ({
           </div>
         )}
 
-        {/* Main image container - scrollable */}
-        <div className="relative bg-black/20 rounded-lg overflow-auto max-h-[90vh]">
+        {/* Main image container - constrain image to viewport so it always fits */}
+        <div className="relative bg-black/20 rounded-lg overflow-hidden">
           <img
             src={imageSrc}
             alt={imageAlt}
-            className="max-w-full h-auto object-contain rounded-lg shadow-2xl block mx-auto"
+            className="max-w-[95vw] max-h-[85vh] w-auto h-auto object-contain rounded-lg shadow-2xl block mx-auto"
             onError={(e) => {
               e.currentTarget.src = "/placeholder.svg";
             }}

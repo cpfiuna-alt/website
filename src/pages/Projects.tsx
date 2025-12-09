@@ -12,12 +12,11 @@ const categories: ProjectCategory[] = [
   { value: "all", label: "Todos" },
   { value: "web", label: "Web" },
   { value: "mobile", label: "Móvil" },
-  { value: "data", label: "Datos" },
-  { value: "ml", label: "Machine Learning" },
+  { value: "automation", label: "Automatización" },
   { value: "tools", label: "Herramientas" },
-  { value: "game", label: "Juegos" },
-  { value: "3d", label: "3D" },
-  { value: "space", label: "Espacio" },
+  { value: "data", label: "Datos & IA" },
+  { value: "infrastructure", label: "Infraestructura" },
+  { value: "education", label: "Educación" },
 ];
 
 const Projects = () => {

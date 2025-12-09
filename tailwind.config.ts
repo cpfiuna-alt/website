@@ -8,7 +8,8 @@ export default {
     "./pages/**/*.{ts,tsx}",
     "./components/**/*.{ts,tsx}",
     "./app/**/*.{ts,tsx}",
-    "./src/**/*.{ts,tsx}",
+    // include markdown files so Tailwind can detect classes inside .md/.mdx content
+    "./src/**/*.{ts,tsx,md,mdx}",
   ],
   prefix: "",
   theme: {

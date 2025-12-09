@@ -53,6 +53,7 @@ const FilterSection: React.FC<FilterSectionProps> = ({
               <p className="text-sm mb-2 text-[#94a3b8]">Buscar:</p>
               <Input 
                 type="text" 
+                name="filterSectionSearch"
                 placeholder="Buscar..." 
                 value={searchQuery}
                 onChange={(e) => onSearchChange(e.target.value)}

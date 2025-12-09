@@ -200,7 +200,7 @@ const RoadmapsSection: React.FC = () => {
             }`}
             onClick={() => handleRoadmapSelect(roadmap.id)}
           >
-            <div className="p-5 flex-1 flex flex-col">
+            <div className="p-5 flex-1 flex flex-col justify-start">
               <div className="rounded-full bg-primary/10 p-3 w-12 h-12 flex items-center justify-center mb-4 mx-auto">
                 {roadmap.icon}
               </div>

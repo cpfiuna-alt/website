@@ -104,12 +104,3 @@ export const setupBackendAPI = () => {
   */
 };
 
-// Debugging current Google Apps Script
-export const debugGoogleAppsScript = () => {
-  console.log('Debug steps for Google Apps Script:');
-  console.log('1. Check if the script URL is correct and accessible');
-  console.log('2. Verify the script is deployed as a web app');
-  console.log('3. Check execution permissions (Anyone, even anonymous)');
-  console.log('4. Test the script directly in Google Apps Script editor');
-  console.log('5. Check browser network tab for CORS errors');
-};

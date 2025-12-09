@@ -1,6 +1,8 @@
 
 import React, { useState } from 'react';
 import { useToast } from "@/components/ui/use-toast";
+import { sanitizeEmail, validateLength } from "@/utils/sanitize";
+import { checkRateLimit, recordAttempt, resetRateLimit } from "@/utils/rateLimit";
 
 const BlogNewsletter = () => {
   const { toast } = useToast();
@@ -12,6 +14,15 @@ const BlogNewsletter = () => {
       toast({
         title: "Error",
         description: "Por favor ingresa tu correo electrónico",
+        variant: "destructive",
+      });
+      return false;
+    }
+
+    if (!validateLength(email, 5, 254)) {
+      toast({
+        title: "Error",
+        description: "El correo electrónico debe tener entre 5 y 254 caracteres",
         variant: "destructive",
       });
       return false;
@@ -33,16 +44,30 @@ const BlogNewsletter = () => {
     e.preventDefault();
     setIsSubmitting(true);
 
+    // Check rate limit
+    const rateLimitCheck = checkRateLimit('newsletter');
+    if (!rateLimitCheck.allowed) {
+      toast({
+        title: 'Demasiados intentos',
+        description: rateLimitCheck.message,
+        variant: 'destructive',
+      });
+      setIsSubmitting(false);
+      return;
+    }
+
     if (!validateEmail()) {
       setIsSubmitting(false);
       return;
     }
 
-    // Add debugging
-    console.log("Newsletter subscription started");
-    console.log("Email:", email);
+    // Record rate limit attempt
+    recordAttempt('newsletter');
 
     try {
+      // Sanitize email
+      const sanitizedEmail = sanitizeEmail(email);
+
       // Replace this URL with your Google Apps Script URL for newsletter
       const response = await fetch(
         "https://script.google.com/macros/s/AKfycbysXb-vQdBKtjGZ5V7uCElA-uHbXr9GepI1vyMCs9kBWMFukph2Oj4mbBy3qz6mg8bv/exec",
@@ -53,15 +78,12 @@ const BlogNewsletter = () => {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({ 
-            email: email,
+            email: sanitizedEmail,
             timestamp: new Date().toISOString(),
             source: "website_newsletter"
           }),
         }
       );
-
-      console.log("Newsletter subscription completed (no-cors mode - can't read response)");
-      console.log("Check your Google Sheets to verify if email was received");
 
       // Since we can't read the response in no-cors mode, we assume success
       toast({
@@ -71,6 +93,9 @@ const BlogNewsletter = () => {
       });
 
       setEmail("");
+
+      // Reset rate limit on successful submission
+      resetRateLimit('newsletter');
     } catch (error) {
       console.error("Newsletter subscription error:", error);
       toast({

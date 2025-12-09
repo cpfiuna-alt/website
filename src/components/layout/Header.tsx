@@ -82,7 +82,7 @@ const Header = () => {
         {/* Right Actions - Improved for better spacing */}
         <div className="flex items-center z-10">
           <NavLink 
-            to="/documentacion"
+            to="/docs"
             className={({ isActive }) =>
               `relative px-3 py-2 rounded-md text-sm font-medium mr-2 transition-all duration-300 hidden sm:flex items-center
               ${
@@ -153,7 +153,7 @@ const Header = () => {
                 ))}
                 <li>
                   <NavLink
-                    to="/documentacion"
+                    to="/docs"
                     className={({ isActive }) =>
                       `text-2xl font-medium transition-colors flex items-center justify-center ${
                         isActive

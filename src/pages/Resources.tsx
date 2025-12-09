@@ -10,7 +10,6 @@ import CoursesSection from "@/components/resources/CoursesSection";
 import ResourceUploadModal from "@/components/resources/ResourceUploadModal";
 
 const Resources = () => {
-  const [selectedRoadmap, setSelectedRoadmap] = useState<string | null>(null);
   const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
 
   const handleOpenUploadModal = () => {
@@ -24,19 +23,19 @@ const Resources = () => {
   const handleUploadSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     // Handle the form submission here
-    console.log("Upload form submitted");
     setIsUploadModalOpen(false);
   };
 
+  // Roadmaps are currently external links; no in-app selection handler
+
   const resourceTypes = ["Curso", "Tutorial", "Documentación", "Video", "Ejercicios"];
+
+  // Interactive roadmaps are disabled for now; cards link to external roadmap.sh
 
   return (
     <Layout>
       <ResourcesHero />
-      <LearningRoadmaps 
-        selectedRoadmap={selectedRoadmap} 
-        setSelectedRoadmap={setSelectedRoadmap} 
-      />
+      <LearningRoadmaps />
       <CoursesSection />
       <ClubResources />
       <ExternalResources />

@@ -108,7 +108,7 @@ const Transparency = () => {
                       <div>
                         <h4 className="text-sm font-medium">Eventos</h4>
                         <p className="text-xs text-muted-foreground">
-                          {report.events} eventos organizados
+                          {report.events} eventos
                         </p>
                       </div>
                     </div>
@@ -118,7 +118,7 @@ const Transparency = () => {
                       <div>
                         <h4 className="text-sm font-medium">Proyectos</h4>
                         <p className="text-xs text-muted-foreground">
-                          {report.projects} proyectos completados
+                          {report.projects} proyectos
                         </p>
                       </div>
                     </div>
@@ -135,7 +135,9 @@ const Transparency = () => {
                   </div>
                   
                   <a 
-                    href={`/reports/annual-report-${report.year}.pdf`}
+                    href={`/documentos/reportes/cpf-informe-anual-${report.year}.pdf`}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="flex items-center justify-center gap-2 px-4 py-2 rounded-full bg-muted/30 hover:bg-muted/50 text-sm transition-colors hover:shadow-neon-blue"
                   >
                     <Download className="h-4 w-4" />
@@ -160,8 +162,7 @@ const Transparency = () => {
           <div className="mb-16">
             <h2 className="text-3xl font-bold mb-4 text-center">Gestión de Recursos</h2>
             <p className="text-muted-foreground max-w-2xl mx-auto text-center mb-10">
-              Detalle sobre la administración de los recursos económicos del club, 
-              incluyendo fuentes de financiamiento y distribución de gastos.
+              Detalle sobre la administración de los recursos económicos del club para el año {currentFinancialData ? currentFinancialData.year : new Date().getFullYear()} hasta la fecha, incluyendo fuentes de financiamiento y distribución de gastos.
             </p>
             
             <div className="glass-card-static p-8">
@@ -174,7 +175,7 @@ const Transparency = () => {
                   
                   <div className="mt-8 text-center">
                     <Button variant="outline" className="rounded-full hover:shadow-neon-blue transition-all">
-                      <a href={`/reports/financial-report-${currentFinancialData.year}.pdf`} className="flex items-center gap-2">
+                      <a href="https://docs.google.com/spreadsheets/d/e/2PACX-1vTua7e_idVLyjmvLsYDC7LVuN02HcwZR8ZSrX-96bbVkfWVp7egjNgBaWMdVGJiQW-jXM2DG3wqonyh/pubhtml" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2">
                         <FileText className="h-4 w-4" />
                         <span>Informe financiero detallado</span>
                       </a>
@@ -196,7 +197,7 @@ const Transparency = () => {
           
           {/* Projects and Impact section */}
           <div className="glass-card-static p-8 mb-16">
-            <h3 className="text-2xl font-semibold mb-6 text-center">Proyectos e Impacto</h3>
+            <h3 className="text-2xl font-semibold mb-6 text-center">Proyectos</h3>
             
             {currentProjects && currentProjects.projects.length > 0 ? (
               <>
@@ -207,13 +208,7 @@ const Transparency = () => {
                       <p className="text-sm text-muted-foreground mb-3">
                         {project.description}
                       </p>
-                      <div className="flex flex-wrap gap-4 text-xs">
-                        {project.metrics.map((metric, metricIndex) => (
-                          <span key={metricIndex} className="px-2 py-1 bg-primary/10 text-primary rounded-full">
-                            {metric.label}
-                          </span>
-                        ))}
-                      </div>
+                      {/* Presentación mínima: solo título y descripción (métricas removidas) */}
                     </div>
                   ))}
                 </div>

@@ -2,13 +2,29 @@
 import React from 'react';
 import ReactMarkdown from 'react-markdown';
 import rehypeRaw from 'rehype-raw';
+import remarkGfm from 'remark-gfm';
 import { Link } from 'react-router-dom';
 import { Copy, CheckCheck } from 'lucide-react';
+import { TocHeading, generateSlug, extractHeadings } from './markdownUtils';
 
 interface MarkdownContentProps {
   content: string;
   className?: string;
 }
+
+// NOTE: utility helpers (generateSlug / extractHeadings / TocHeading) were moved
+// to `markdownUtils.ts` to avoid exporting non-component values from this file
+// which breaks React Fast Refresh (eslint rule `react-refresh/only-export-components`).
+// However, to be resilient against any upstream slugging issues, provide a
+// local slug generator and ensure headings always receive a stable `id`.
+const localSlugify = (s: string) =>
+  String(s)
+    .toLowerCase()
+    .trim()
+    .normalize('NFD')
+    .replace(/\p{Diacritic}/gu, '')
+    .replace(/[^\w\s-]/g, '')
+    .replace(/\s+/g, '-');
 
 const MarkdownContent: React.FC<MarkdownContentProps> = ({ content, className = "" }) => {
   const [copiedCode, setCopiedCode] = React.useState<string | null>(null);
@@ -23,6 +39,7 @@ const MarkdownContent: React.FC<MarkdownContentProps> = ({ content, className = 
     <div className={`prose prose-lg dark:prose-invert max-w-none ${className}`}>
       <ReactMarkdown 
         rehypePlugins={[rehypeRaw]}
+        remarkPlugins={[remarkGfm]}
         components={{
           a: ({ node, ...props }) => {
             const href = props.href || '';
@@ -41,10 +58,30 @@ const MarkdownContent: React.FC<MarkdownContentProps> = ({ content, className = 
               />
             );
           },
-          h1: ({ node, ...props }) => <h1 {...props} className="text-3xl md:text-4xl font-bold mt-8 mb-4" />,
-          h2: ({ node, ...props }) => <h2 {...props} className="text-2xl md:text-3xl font-bold mt-8 mb-4" />,
-          h3: ({ node, ...props }) => <h3 {...props} className="text-xl md:text-2xl font-bold mt-6 mb-3" />,
-          h4: ({ node, ...props }) => <h4 {...props} className="text-lg md:text-xl font-semibold mt-6 mb-3" />,
+          h1: ({ node, children, ...props }) => {
+            const text = String(children);
+            const idFromProps = (props as any).id;
+            const id = idFromProps && String(idFromProps).trim() !== '' ? String(idFromProps) : localSlugify(text || 'heading');
+            return <h1 {...props} id={id} className="text-3xl md:text-4xl font-bold mt-8 mb-4 scroll-mt-20">{children}</h1>;
+          },
+          h2: ({ node, children, ...props }) => {
+            const text = String(children);
+            const idFromProps = (props as any).id;
+            const id = idFromProps && String(idFromProps).trim() !== '' ? String(idFromProps) : localSlugify(text || 'heading');
+            return <h2 {...props} id={id} className="text-2xl md:text-3xl font-bold mt-8 mb-4 scroll-mt-20">{children}</h2>;
+          },
+          h3: ({ node, children, ...props }) => {
+            const text = String(children);
+            const idFromProps = (props as any).id;
+            const id = idFromProps && String(idFromProps).trim() !== '' ? String(idFromProps) : localSlugify(text || 'heading');
+            return <h3 {...props} id={id} className="text-xl md:text-2xl font-bold mt-6 mb-3 scroll-mt-20">{children}</h3>;
+          },
+          h4: ({ node, children, ...props }) => {
+            const text = String(children);
+            const idFromProps = (props as any).id;
+            const id = idFromProps && String(idFromProps).trim() !== '' ? String(idFromProps) : localSlugify(text || 'heading');
+            return <h4 {...props} id={id} className="text-lg md:text-xl font-semibold mt-6 mb-3 scroll-mt-20">{children}</h4>;
+          },
           p: ({ node, ...props }) => <p {...props} className="my-4" />,
           ul: ({ node, ...props }) => <ul {...props} className="list-disc pl-6 my-4" />,
           ol: ({ node, ...props }) => <ol {...props} className="list-decimal pl-6 my-4" />,
@@ -55,15 +92,36 @@ const MarkdownContent: React.FC<MarkdownContentProps> = ({ content, className = 
               className="border-l-4 border-primary pl-4 italic my-4" 
             />
           ),
+          // Handle the <pre> element to prevent prose plugin's default styling
+          pre: ({ node, children, ...props }) => {
+            // Just pass through - the code component handles the actual rendering
+            return <>{children}</>;
+          },
           code: ({ node, className, children, ...props }) => {
             // Check if we're in a code block or inline code
             const isCodeBlock = className?.includes('language-');
-            const codeContent = String(children).replace(/\n$/, '');
-            
+            let codeContent = String(children).replace(/\n$/, '');
+
+            // For fenced code blocks, normalize for a couple of edge-cases:
+            // - If the author put inline backticks inside the fenced block
+            //   (e.g. the block contains exactly `` `/info` ``), display it
+            //   as '/info' (single-quoted). This matches the requested UX.
+            // - Otherwise, display the block content verbatim (no added quotes).
+            if (isCodeBlock) {
+              // Trim surrounding whitespace to avoid false matches
+              const raw = codeContent.replace(/^\s+|\s+$/g, '');
+              const backtickWrapped = raw.match(/^`([\s\S]*)`$/s);
+              if (backtickWrapped) {
+                codeContent = backtickWrapped[1];
+              } else {
+                codeContent = raw;
+              }
+            }
+
             return isCodeBlock ? (
-              <div className="relative">
+              <div className="relative group not-prose my-6">
                 <button 
-                  className="absolute right-2 top-2 p-1.5 rounded-md text-gray-400 hover:text-gray-100 hover:bg-gray-700 transition-colors"
+                  className="absolute right-2 top-2 z-10 p-1.5 rounded-md opacity-0 group-hover:opacity-100 text-muted-foreground hover:text-foreground hover:bg-accent transition-all"
                   onClick={() => handleCopyCode(codeContent)}
                 >
                   {copiedCode === codeContent ? (
@@ -72,12 +130,12 @@ const MarkdownContent: React.FC<MarkdownContentProps> = ({ content, className = 
                     <Copy className="h-4 w-4" />
                   )}
                 </button>
-                <pre className="bg-muted p-4 rounded-lg overflow-x-auto mb-6">
-                  <code {...props} className={`${className} text-sm block pt-4`}>{children}</code>
+                <pre className="bg-slate-200 dark:bg-muted text-slate-800 dark:text-slate-50 p-4 rounded-lg overflow-x-auto border border-border">
+                  <code {...props} className={`${className || ''} text-sm block text-slate-800 dark:text-slate-50`}>{codeContent}</code>
                 </pre>
               </div>
             ) : (
-              <code {...props} className="bg-muted px-1 py-0.5 rounded text-sm">{children}</code>
+              <code {...props} className="bg-slate-200 dark:bg-slate-800 text-slate-800 dark:text-slate-50 px-1.5 py-0.5 rounded text-sm font-mono">{children}</code>
             );
           },
           img: ({ node, ...props }) => (

@@ -17,7 +17,3 @@ gallery:
 This is test content.`;
 
 const result = parseMarkdown(testContent);
-console.log('Parsed frontMatter:', JSON.stringify(result.frontMatter, null, 2));
-console.log('Gallery field:', result.frontMatter.gallery);
-console.log('Gallery type:', typeof result.frontMatter.gallery);
-console.log('Gallery length:', result.frontMatter.gallery?.length);

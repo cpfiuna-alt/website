@@ -12,7 +12,7 @@ const EventContent = ({ event }: EventContentProps) => {
   return (
     <>
       {/* Event details */}
-      <div className="prose prose-lg dark:prose-invert max-w-none">
+      <div className="max-w-none">
         <MarkdownRenderer content={event.content} />
         
         {/* If no content is available, show a default message */}

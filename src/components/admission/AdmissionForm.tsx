@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { AlertCircle, Check, Send } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
+import { sanitizeFormData, containsSpamPatterns, validateLength } from "@/utils/sanitize";
+import { checkRateLimit, recordAttempt, resetRateLimit, rateLimitConfigs } from "@/utils/rateLimit";
 
 // Google Forms configuration
 const GOOGLE_FORMS_CONFIG = {
@@ -304,7 +306,17 @@ const AdmissionForm = () => {
     };
 
     if (!fd.nombres?.trim()) pushMissing('nombres', 'Nombres');
+    else if (!validateLength(fd.nombres, 2, 100)) {
+      errorsObj['nombres'] = 'Nombres debe tener entre 2 y 100 caracteres.';
+      missing.push({ key: 'nombres', label: 'Nombres' });
+    }
+
     if (!fd.apellidos?.trim()) pushMissing('apellidos', 'Apellidos');
+    else if (!validateLength(fd.apellidos, 2, 100)) {
+      errorsObj['apellidos'] = 'Apellidos debe tener entre 2 y 100 caracteres.';
+      missing.push({ key: 'apellidos', label: 'Apellidos' });
+    }
+
     if (!fd.cedula?.trim()) pushMissing('cedula', 'Número de Cédula');
     if (!fd.email?.trim()) pushMissing('email', 'Correo Electrónico');
     if (!fd.telefono?.trim()) pushMissing('telefono', 'Número de Teléfono');
@@ -334,10 +346,47 @@ const AdmissionForm = () => {
     if (!fd.desafiosInteres || fd.desafiosInteres.length === 0) pushMissing('desafiosInteres', 'Desafíos de interés');
 
     if (!fd.objetivosPlazo?.trim()) pushMissing('objetivosPlazo', 'Objetivos a corto/mediano plazo');
+    else if (!validateLength(fd.objetivosPlazo, 10, 1000)) {
+      errorsObj['objetivosPlazo'] = 'Objetivos debe tener entre 10 y 1000 caracteres.';
+      missing.push({ key: 'objetivosPlazo', label: 'Objetivos a corto/mediano plazo' });
+    } else if (containsSpamPatterns(fd.objetivosPlazo)) {
+      errorsObj['objetivosPlazo'] = 'El mensaje contiene contenido no permitido.';
+      missing.push({ key: 'objetivosPlazo', label: 'Objetivos a corto/mediano plazo' });
+    }
+
     if (!fd.aprendizajePreferido) pushMissing('aprendizajePreferido', 'Estilo de aprendizaje');
+
     if (!fd.contribucionEsperada?.trim()) pushMissing('contribucionEsperada', 'Contribución esperada');
+    else if (!validateLength(fd.contribucionEsperada, 10, 1000)) {
+      errorsObj['contribucionEsperada'] = 'Contribución esperada debe tener entre 10 y 1000 caracteres.';
+      missing.push({ key: 'contribucionEsperada', label: 'Contribución esperada' });
+    } else if (containsSpamPatterns(fd.contribucionEsperada)) {
+      errorsObj['contribucionEsperada'] = 'El mensaje contiene contenido no permitido.';
+      missing.push({ key: 'contribucionEsperada', label: 'Contribución esperada' });
+    }
 
     if (!fd.comoSeEntero) pushMissing('comoSeEntero', 'Cómo te enteraste del club');
+
+    // Check optional text fields for spam
+    if (fd.proyectosPrevios && containsSpamPatterns(fd.proyectosPrevios)) {
+      errorsObj['proyectosPrevios'] = 'El mensaje contiene contenido no permitido.';
+      missing.push({ key: 'proyectosPrevios', label: 'Proyectos previos' });
+    }
+
+    if (fd.liderazgoExperiencia && containsSpamPatterns(fd.liderazgoExperiencia)) {
+      errorsObj['liderazgoExperiencia'] = 'El mensaje contiene contenido no permitido.';
+      missing.push({ key: 'liderazgoExperiencia', label: 'Liderazgo experiencia' });
+    }
+
+    if (fd.comentarios1 && containsSpamPatterns(fd.comentarios1)) {
+      errorsObj['comentarios1'] = 'El mensaje contiene contenido no permitido.';
+      missing.push({ key: 'comentarios1', label: 'Comentarios' });
+    }
+
+    if (fd.comentarios2 && containsSpamPatterns(fd.comentarios2)) {
+      errorsObj['comentarios2'] = 'El mensaje contiene contenido no permitido.';
+      missing.push({ key: 'comentarios2', label: 'Comentarios' });
+    }
 
     setErrors(errorsObj);
     return { valid: missing.length === 0, missing };
@@ -397,9 +446,20 @@ const AdmissionForm = () => {
     e.preventDefault();
     setIsSubmitting(true);
 
+    // Check rate limit
+    const rateLimitCheck = checkRateLimit('admissionForm');
+    if (!rateLimitCheck.allowed) {
+      toast({
+        title: 'Demasiados intentos',
+        description: rateLimitCheck.message,
+        variant: 'destructive',
+      });
+      setIsSubmitting(false);
+      return;
+    }
+
     const result = validateForm();
     if (!result.valid) {
-      console.debug('Validation failed, missing:', result.missing);
       const labels = result.missing.map(m => m.label).slice(0, 6);
       const more = result.missing.length > 6 ? ` y ${result.missing.length - 6} más` : '';
       toast({
@@ -412,10 +472,16 @@ const AdmissionForm = () => {
       return;
     }
 
+    // Record rate limit attempt
+    recordAttempt('admissionForm');
+
     try {
+      // Sanitize form data before submission
+      const sanitizedData = sanitizeFormData(formData as Record<string, unknown>);
+      
       if (GOOGLE_FORMS_CONFIG.enabled) {
-        // Submit to Google Forms
-        await submitToGoogleForms();
+        // Submit to Google Forms with sanitized data
+        await submitToGoogleForms(sanitizedData);
       } else {
         // Simulate form submission for testing
         await new Promise(resolve => setTimeout(resolve, 2000));
@@ -430,6 +496,9 @@ const AdmissionForm = () => {
       setIsSubmitted(true);
       resetForm();
 
+      // Reset rate limit on successful submission
+      resetRateLimit('admissionForm');
+
       // Scroll to top to show success message
       window.scrollTo({ top: 0, behavior: 'smooth' });
     } catch (error) {
@@ -443,7 +512,7 @@ const AdmissionForm = () => {
     }
   };
 
-  const submitToGoogleForms = async () => {
+  const submitToGoogleForms = async (dataToSubmit: Record<string, unknown>) => {
     const formDataToSubmit = new FormData();
 
     // Helper: map internal option values to human-readable labels where needed
@@ -513,7 +582,7 @@ const AdmissionForm = () => {
 
     // Iterate through actual form data fields
     for (const [key, entryId] of Object.entries(fieldToEntryMapping)) {
-      const value = (formData as FormState)[key as keyof FormState];
+      const value = (dataToSubmit as FormState)[key as keyof FormState];
 
       if (Array.isArray(value)) {
         // Checkbox groups: append each selected option as a separate entry param
@@ -527,20 +596,20 @@ const AdmissionForm = () => {
         }
 
         // For checkbox groups with an associated text field (e.g., areasInteresOtra)
-        if ((key as string).endsWith('areasInteres') && formData.areasInteresOtra) {
-          formDataToSubmit.append(`${entryId}.other_option_response`, formData.areasInteresOtra);
+        if ((key as string).endsWith('areasInteres') && (dataToSubmit as FormState).areasInteresOtra) {
+          formDataToSubmit.append(`${entryId}.other_option_response`, (dataToSubmit as FormState).areasInteresOtra);
         }
-        if ((key as string).endsWith('herramientasLenguajes') && formData.herramientasLenguajesOtro) {
-          formDataToSubmit.append(`${entryId}.other_option_response`, formData.herramientasLenguajesOtro);
+        if ((key as string).endsWith('herramientasLenguajes') && (dataToSubmit as FormState).herramientasLenguajesOtro) {
+          formDataToSubmit.append(`${entryId}.other_option_response`, (dataToSubmit as FormState).herramientasLenguajesOtro);
         }
-        if ((key as string).endsWith('actividadesInteres') && formData.actividadesInteresOtra) {
-          formDataToSubmit.append(`${entryId}.other_option_response`, formData.actividadesInteresOtra);
+        if ((key as string).endsWith('actividadesInteres') && (dataToSubmit as FormState).actividadesInteresOtra) {
+          formDataToSubmit.append(`${entryId}.other_option_response`, (dataToSubmit as FormState).actividadesInteresOtra);
         }
-        if ((key as string).endsWith('fortalezasPrincipales') && formData.fortalezasPrincipalesOtra) {
-          formDataToSubmit.append(`${entryId}.other_option_response`, formData.fortalezasPrincipalesOtra);
+        if ((key as string).endsWith('fortalezasPrincipales') && (dataToSubmit as FormState).fortalezasPrincipalesOtra) {
+          formDataToSubmit.append(`${entryId}.other_option_response`, (dataToSubmit as FormState).fortalezasPrincipalesOtra);
         }
-        if ((key as string).endsWith('desafiosInteres') && formData.desafiosInteresOtro) {
-          formDataToSubmit.append(`${entryId}.other_option_response`, formData.desafiosInteresOtro);
+        if ((key as string).endsWith('desafiosInteres') && (dataToSubmit as FormState).desafiosInteresOtro) {
+          formDataToSubmit.append(`${entryId}.other_option_response`, (dataToSubmit as FormState).desafiosInteresOtro);
         }
 
       } else if (value) {
@@ -554,22 +623,14 @@ const AdmissionForm = () => {
     }
 
     // Map comentarios fields separately (they're not in the fieldMapping loop)
-    if (formData.comentarios1) {
+    if ((dataToSubmit as FormState).comentarios1) {
       const eid1 = GOOGLE_FORMS_CONFIG.fieldMapping['comentariosSection1'] as string;
-      formDataToSubmit.append(eid1, formData.comentarios1);
+      formDataToSubmit.append(eid1, (dataToSubmit as FormState).comentarios1);
     }
-    if (formData.comentarios2) {
+    if ((dataToSubmit as FormState).comentarios2) {
       const eid2 = GOOGLE_FORMS_CONFIG.fieldMapping['comentariosSection2'] as string;
-      formDataToSubmit.append(eid2, formData.comentarios2);
+      formDataToSubmit.append(eid2, (dataToSubmit as FormState).comentarios2);
     }
-
-    // Debug: Log what we're sending
-    console.log('=== Form Submission Debug ===');
-    console.log('Submitting to:', GOOGLE_FORMS_CONFIG.actionUrl);
-    for (const pair of formDataToSubmit.entries()) {
-      console.log(pair[0], '=', pair[1]);
-    }
-    console.log('=== End Debug ===');
 
     // Submit to Google Forms
     // We must use no-cors from the browser; this returns an opaque response. For more control,

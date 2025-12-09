@@ -10,7 +10,6 @@ import {
   Leaf,
   ArrowRight,
   Star,
-  GitBranch,
   Calendar,
   Users,
   ExternalLink,
@@ -18,6 +17,7 @@ import {
   Code,
   Zap
 } from 'lucide-react';
+import { FaGithub } from 'react-icons/fa6';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -64,6 +64,48 @@ const getCategoryColor = (category: string) => {
     case 'iot': return 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900 dark:text-emerald-300';
     default: return 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-300';
   }
+};
+
+const getStatusLabel = (status: string) => {
+  switch (status) {
+    case 'active': return 'Activo';
+    case 'beta': return 'Beta';
+    case 'planning': return 'Planificación';
+    case 'archived': return 'Archivado';
+    default: return status.charAt(0).toUpperCase() + status.slice(1);
+  }
+};
+
+const getCategoryLabel = (category: string) => {
+  switch (category) {
+    case 'web': return 'Web';
+    case 'bot': return 'Bot';
+    case 'education': return 'Educación';
+    case 'ai': return 'IA';
+    case 'infrastructure': return 'Infraestructura';
+    case 'iot': return 'IoT';
+    default: return category.charAt(0).toUpperCase() + category.slice(1);
+  }
+};
+
+const formatDate = (dateStr?: string) => {
+  if (!dateStr) return '';
+  // If already in DD-MM-YYYY, return as-is
+  if (/^\d{2}-\d{2}-\d{4}$/.test(dateStr)) return dateStr;
+  // Match YYYY-MM-DD (optionally with time) and flip
+  const isoMatch = dateStr.match(/^(\d{4})-(\d{2})-(\d{2})/);
+  if (isoMatch) {
+    return `${isoMatch[3]}-${isoMatch[2]}-${isoMatch[1]}`;
+  }
+  // Fallback to Date parse
+  const d = new Date(dateStr);
+  if (!isNaN(d.getTime())) {
+    const dd = String(d.getDate()).padStart(2, '0');
+    const mm = String(d.getMonth() + 1).padStart(2, '0');
+    const yyyy = d.getFullYear();
+    return `${dd}-${mm}-${yyyy}`;
+  }
+  return dateStr;
 };
 
 const ProjectsDocsHub: React.FC = () => {
@@ -122,99 +164,49 @@ const ProjectsDocsHub: React.FC = () => {
                 </div>
               </section>
 
-      {/* Search Section */}
+      {/* Stats and Search Section */}
       <div className="container mx-auto px-4 py-8">
         <div className="text-center max-w-4xl mx-auto">
-          {/* Search Bar */}
-          <div className="relative max-w-2xl mx-auto mb-8">
-              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-              <Input
-                type="text"
-                placeholder="Buscar en toda la documentación..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-12 h-14 text-lg border-2 border-border/50 focus:border-primary/50"
-              />
-            </div>
+          {/* Search Bar + Category Filter (inline on md+, stacked on small) */}
+          <div className="relative max-w-3xl mx-auto flex flex-col md:flex-row items-center gap-4">
+              <div className="relative flex-1 w-full">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <Input
+                  type="text"
+                  id="docs-search"
+                  name="docsSearch"
+                  placeholder="Buscar en toda la documentación..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full pl-10 pr-4 py-2 rounded-lg bg-background border border-muted focus:outline-none focus:ring-2 focus:ring-primary"
+                />
+              </div>
 
-            {/* Quick Stats */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-2xl mx-auto">
-              <div className="text-center">
-                <div className="text-3xl font-bold text-primary">{projects.length}</div>
-                <div className="text-sm text-muted-foreground">Proyectos</div>
-              </div>
-              <div className="text-center">
-                <div className="text-3xl font-bold text-primary">
-                  {projects.reduce((sum, p) => sum + p.totalDocs, 0)}
-                </div>
-                <div className="text-sm text-muted-foreground">Documentos</div>
-              </div>
-              <div className="text-center">
-                <div className="text-3xl font-bold text-primary">
-                  {projects.filter(p => p.status === 'active').length}
-                </div>
-                <div className="text-sm text-muted-foreground">Activos</div>
-              </div>
+            {/* Category filter placed to the right of the search on larger screens */}
+            <div className="w-full md:w-64">
+              <select
+                id="project-category-filter"
+                name="categoryFilter"
+                aria-label="Filtrar proyectos por categoría"
+                value={selectedCategory}
+                onChange={(e) => setSelectedCategory(e.target.value)}
+                className="w-full px-4 py-2 rounded-lg bg-background border border-muted focus:outline-none focus:ring-2 focus:ring-primary"
+              >
+                <option value="">Todas las categorías</option>
+                {categories.map(category => (
+                  <option key={category} value={category}>
+                    {getCategoryLabel(category)}
+                  </option>
+                ))}
+              </select>
             </div>
           </div>
         </div>
+      </div>
 
-
-      {/* Filters */}
+      {/* Projects */}
       <div className="container mx-auto px-4 py-8">
-        <div className="flex flex-wrap gap-4 mb-8">
-          <div className="flex-1 min-w-48">
-            <select
-              id="project-category-filter"
-              name="categoryFilter"
-              aria-label="Filtrar proyectos por categoría"
-              value={selectedCategory}
-              onChange={(e) => setSelectedCategory(e.target.value)}
-              className="w-full p-2 border border-border rounded-md bg-background"
-            >
-              <option value="">Todas las categorías</option>
-              {categories.map(category => (
-                <option key={category} value={category}>
-                  {category.charAt(0).toUpperCase() + category.slice(1)}
-                </option>
-              ))}
-            </select>
-          </div>
-          <div className="flex-1 min-w-48">
-            <select
-              id="project-status-filter"
-              name="statusFilter"
-              aria-label="Filtrar proyectos por estado"
-              value={selectedStatus}
-              onChange={(e) => setSelectedStatus(e.target.value)}
-              className="w-full p-2 border border-border rounded-md bg-background"
-            >
-              <option value="">Todos los estados</option>
-              {statuses.map(status => (
-                <option key={status} value={status}>
-                  {status.charAt(0).toUpperCase() + status.slice(1)}
-                </option>
-              ))}
-            </select>
-          </div>
-        </div>
-
-        {/* Featured Projects */}
-        {!searchQuery && !selectedCategory && !selectedStatus && (
-          <section className="mb-16">
-            <div className="flex items-center mb-8">
-              <Star className="h-6 w-6 text-primary mr-3" />
-              <h2 className="text-3xl font-bold">Proyectos Destacados</h2>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {featuredProjects.map(project => (
-                <ProjectCard key={project.id} project={project} featured />
-              ))}
-            </div>
-          </section>
-        )}
-
-        {/* All Projects */}
+        {/* All Projects (Featured first) */}
         <section>
           <div className="flex items-center justify-between mb-8">
             <h2 className="text-3xl font-bold">
@@ -229,19 +221,19 @@ const ProjectsDocsHub: React.FC = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {[1, 2, 3, 4, 5, 6].map(i => (
                 <div key={i} className="animate-pulse">
-                  <Card className="h-80">
-                    <CardHeader>
+                  <div className="glass-card-static h-80">
+                    <div className="p-6">
                       <div className="h-8 w-8 bg-muted rounded-full mb-2"></div>
                       <div className="h-6 bg-muted rounded w-3/4 mb-2"></div>
                       <div className="h-4 bg-muted rounded w-full"></div>
-                    </CardHeader>
-                    <CardContent>
+                    </div>
+                    <div className="p-6 pt-0">
                       <div className="space-y-2">
                         <div className="h-4 bg-muted rounded w-full"></div>
                         <div className="h-4 bg-muted rounded w-5/6"></div>
                       </div>
-                    </CardContent>
-                  </Card>
+                    </div>
+                  </div>
                 </div>
               ))}
             </div>
@@ -255,8 +247,13 @@ const ProjectsDocsHub: React.FC = () => {
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {filteredProjects.map(project => (
-                <ProjectCard key={project.id} project={project} />
+              {/* Show featured projects first, then non-featured */}
+              {[...filteredProjects].sort((a, b) => {
+                if (a.featured && !b.featured) return -1;
+                if (!a.featured && b.featured) return 1;
+                return 0;
+              }).map(project => (
+                <ProjectCard key={project.id} project={project} featured={project.featured} />
               ))}
             </div>
           )}
@@ -273,10 +270,10 @@ interface ProjectCardProps {
 
 const ProjectCard: React.FC<ProjectCardProps> = ({ project, featured = false }) => {
   return (
-    <Card className={`h-full transition-all duration-300  ${
-      featured ? 'ring-2 ring-primary/20' : ''
-    }`}>
-      <CardHeader>
+    // Previously the featured card applied a ring: `featured ? 'ring-2 ring-primary/20' : ''`.
+    // Kept as a comment so it can be re-enabled quickly if needed.
+    <div className="glass-card h-full transition-all duration-300 group hover:shadow-neon-blue">
+      <div className="flex flex-col space-y-1.5 p-6">
         <div className="flex items-start justify-between">
           <div className="flex items-center">
             <div className="bg-primary/10 p-2 rounded-lg mr-3">
@@ -285,7 +282,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, featured = false }) 
             <div>
               <CardTitle className="text-lg">{project.name}</CardTitle>
               {featured && (
-                <Badge variant="secondary" className="mt-1">
+                <Badge variant="secondary" className="mt-1 inline-flex items-center justify-center">
                   <Star className="h-3 w-3 mr-1" />
                   Destacado
                 </Badge>
@@ -293,42 +290,41 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, featured = false }) 
             </div>
           </div>
           <div className="flex flex-col gap-1">
-            <Badge className={getStatusColor(project.status)}>
-              {project.status}
+            <Badge className={`${getStatusColor(project.status)} inline-flex items-center justify-center text-center`}>
+              {getStatusLabel(project.status)}
             </Badge>
-            <Badge variant="outline" className={getCategoryColor(project.category)}>
-              {project.category}
+            <Badge variant="outline" className={`${getCategoryColor(project.category)} inline-flex items-center justify-center text-center`}>
+              {getCategoryLabel(project.category)}
             </Badge>
           </div>
         </div>
-        <CardDescription className="mt-3 line-clamp-3">
+        <p className="text-sm text-muted-foreground mt-3 line-clamp-3">
           {project.description}
-        </CardDescription>
-      </CardHeader>
+        </p>
+      </div>
 
-      <CardContent className="pt-0">
+      <div className="p-6 pt-0">
         <div className="space-y-4">
           {/* Project Stats */}
           <div className="flex items-center justify-between text-sm text-muted-foreground">
             <div className="flex items-center">
-              <BookOpen className="h-4 w-4 mr-1" />
-              {project.totalDocs} docs
+              <Calendar className="h-4 w-4 mr-1" />
+              {formatDate(project.lastUpdate) || 'Sin fecha'}
             </div>
             <div className="flex items-center">
-              <Calendar className="h-4 w-4 mr-1" />
-              {project.lastUpdate}
+              {/* keep space for future actions or small metadata */}
             </div>
           </div>
 
           {/* Tags */}
           <div className="flex flex-wrap gap-1">
             {project.tags.slice(0, 3).map(tag => (
-              <Badge key={tag} variant="secondary" className="text-xs">
+              <Badge key={tag} variant="secondary" className="inline-flex items-center justify-center px-2 py-0.5 text-xs text-center leading-none">
                 {tag}
               </Badge>
             ))}
             {project.tags.length > 3 && (
-              <Badge variant="secondary" className="text-xs">
+              <Badge variant="secondary" className="inline-flex items-center justify-center px-2 py-0.5 text-xs text-center leading-none">
                 +{project.tags.length - 3}
               </Badge>
             )}
@@ -337,29 +333,28 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, featured = false }) 
           {/* Actions */}
           <div className="flex gap-2 pt-2">
             {project.hasDocumentation ? (
-              <Button asChild className="flex-1">
-                <Link to={`/documentacion/projects/${project.id}`}>
-                  <BookOpen className="h-4 w-4 mr-2" />
+                <Button asChild className="flex-1 rounded-full transition-transform duration-200 hover:scale-105">
+                <Link to={`/docs/${project.id}`}>
                   Ver Docs
                 </Link>
               </Button>
             ) : (
-              <Button variant="outline" className="flex-1" disabled>
+              <Button variant="outline" className="flex-1 rounded-full" disabled>
                 <Code className="h-4 w-4 mr-2" />
                 En desarrollo
               </Button>
             )}
             
             {project.repository && (
-              <Button variant="outline" size="icon" asChild>
+              <Button variant="outline" size="icon" className="rounded-full transition-transform duration-200 hover:scale-105" asChild>
                 <a href={project.repository} target="_blank" rel="noopener noreferrer">
-                  <GitBranch className="h-4 w-4" />
+                  <FaGithub className="h-4 w-4" />
                 </a>
               </Button>
             )}
             
             {project.demo && (
-              <Button variant="outline" size="icon" asChild>
+              <Button variant="outline" size="icon" className="rounded-full transition-transform duration-200 hover:scale-105" asChild>
                 <a href={project.demo} target="_blank" rel="noopener noreferrer">
                   <ExternalLink className="h-4 w-4" />
                 </a>
@@ -367,8 +362,8 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, featured = false }) 
             )}
           </div>
         </div>
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   );
 };
 

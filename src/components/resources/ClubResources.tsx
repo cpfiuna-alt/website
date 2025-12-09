@@ -8,13 +8,44 @@ interface ResourceCardProps {
 
 const ResourceCard = ({ resource }: ResourceCardProps) => {
   const downloadInfo = clubResourcesService.getSafeDownloadUrl(resource);
-  
+  // Decide action label and icon based on resource type / URL
+  const getActionMeta = (res: Resource) => {
+    const t = (res.type || '').toString().toLowerCase();
+    const url = (res.downloadUrl || '').toLowerCase();
+
+    // Presentations / Drive folders
+    if (t.includes('drive') || t.includes('present') || t.includes('presentaci') || url.includes('drive.google')) {
+      return { label: 'Ver Presentaciones', icon: ExternalLink, showSize: false };
+    }
+
+    // Video or playlist
+    if (t.includes('video') || url.includes('youtube') || url.includes('vimeo')) {
+      const label = url.includes('playlist') || url.includes('list=') ? 'Ver Playlist' : 'Ver Video';
+      return { label, icon: ExternalLink, showSize: false };
+    }
+
+    // Repositories / code samples
+    if (t.includes('repo') || t.includes('código') || t.includes('codigo') || url.includes('github.com')) {
+      return { label: 'Ver en GitHub', icon: ExternalLink, showSize: false };
+    }
+
+    // Guides, PDFs and other downloadable files
+    if (t.includes('guía') || t.includes('guia') || t.includes('pdf') || t.includes('apunte') || t.includes('documento')) {
+      return { label: 'Descargar', icon: Download, showSize: true };
+    }
+
+    // Fallback default
+    return { label: 'Descargar', icon: Download, showSize: true };
+  };
+
   const handleDownload = () => {
+    const meta = getActionMeta(resource);
     if (downloadInfo.isValid) {
       // Open external URLs in a new tab for security
       if (downloadInfo.isExternal) {
         window.open(downloadInfo.url, '_blank', 'noopener,noreferrer');
       } else {
+        // For downloadable assets, navigate to the file URL
         window.location.href = downloadInfo.url;
       }
     } else {
@@ -23,8 +54,19 @@ const ResourceCard = ({ resource }: ResourceCardProps) => {
     }
   };
 
+  // Show only the year for resource dates (robust to different formats)
+  const displayYear = (() => {
+    if (!resource?.date) return '';
+    const s = String(resource.date);
+    const yearMatch = s.match(/(\d{4})/);
+    if (yearMatch) return yearMatch[1];
+    const d = new Date(s);
+    if (!isNaN(d.getFullYear())) return String(d.getFullYear());
+    return s;
+  })();
+
   return (
-    <div className="glass-card-static p-6">
+    <div className="glass-card-static p-6 flex flex-col h-full">
       <div className="flex items-start justify-between mb-3">
         <div>
           <span className="text-xs px-2 py-1 rounded-full bg-primary/10 text-primary">
@@ -39,7 +81,6 @@ const ResourceCard = ({ resource }: ResourceCardProps) => {
       
       <h3 className="text-lg font-semibold mb-2">{resource.title}</h3>
       <p className="text-sm text-muted-foreground mb-4">{resource.description}</p>
-      
       <div className="flex flex-wrap gap-1 mb-4">
         {resource.tags.map(tag => (
           <span key={tag} className="text-xs px-2 py-0.5 bg-muted/30 rounded-full">
@@ -47,25 +88,32 @@ const ResourceCard = ({ resource }: ResourceCardProps) => {
           </span>
         ))}
       </div>
-      
-      <div className="flex items-center justify-between text-xs text-muted-foreground mb-4">
-        <div>Por: {resource.author}</div>
-        <div>{new Date(resource.date).toLocaleDateString('es-ES')}</div>
+
+      <div className="flex flex-col gap-3 mt-auto">
+        <div className="flex items-center justify-between text-xs text-muted-foreground">
+          <div>Por: {resource.author}</div>
+          <div>{displayYear}</div>
+        </div>
+
+        <button
+          onClick={handleDownload}
+          disabled={!downloadInfo.isValid}
+          className={`flex items-center justify-center w-full px-4 py-2 rounded-full transition-colors ${
+            downloadInfo.isValid
+              ? 'bg-primary/10 hover:bg-primary/20 text-primary cursor-pointer'
+              : 'bg-muted/50 text-muted-foreground cursor-not-allowed'
+          }`}
+        >
+          {
+            (() => {
+              const meta = getActionMeta(resource);
+              return (
+                <span>{meta.label}{meta.showSize && resource.fileSize ? ` (${resource.fileSize})` : ''}</span>
+              );
+            })()
+          }
+        </button>
       </div>
-      
-      <button 
-        onClick={handleDownload}
-        disabled={!downloadInfo.isValid}
-        className={`flex items-center justify-center gap-2 w-full px-4 py-2 rounded-lg transition-colors ${
-          downloadInfo.isValid
-            ? 'bg-primary/10 hover:bg-primary/20 text-primary cursor-pointer'
-            : 'bg-muted/50 text-muted-foreground cursor-not-allowed'
-        }`}
-      >
-        <Download className="h-4 w-4" />
-        <span>Descargar ({resource.fileSize})</span>
-        {downloadInfo.isExternal && <ExternalLink className="h-3 w-3" />}
-      </button>
     </div>
   );
 };

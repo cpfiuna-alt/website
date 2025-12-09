@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import Layout from "@/components/layout/Layout";
 import { Link, useParams, useNavigate } from "react-router-dom";
-import { CalendarIcon, Clock, User, Tag, ChevronLeft, ThumbsUp, Bookmark, Share2 } from "lucide-react";
+import { CalendarIcon, Clock, User, Tag, ChevronLeft, ThumbsUp, Bookmark, Share2, ChevronDown } from "lucide-react";
 import MarkdownRenderer from "@/components/MarkdownRenderer";
 import { getContentBySlug, getAllBlogPosts } from "@/utils/staticSiteGenerator";
 import { BlogFrontMatter } from "@/utils/markdownUtils";
@@ -17,6 +17,7 @@ const BlogPost = () => {
   const [post, setPost] = useState<{frontMatter: BlogFrontMatter, content: string} | null>(null);
   const [relatedPosts, setRelatedPosts] = useState<BlogFrontMatter[]>([]);
   const [loading, setLoading] = useState(true);
+  const [refsOpen, setRefsOpen] = useState(false);
   
   useEffect(() => {
     const fetchBlogPost = async () => {
@@ -110,6 +111,35 @@ const BlogPost = () => {
   }
 
   const { frontMatter, content } = post;
+  // Normalize references: turn raw frontMatter.references into {text,url} and filter empties
+  const normalizedRefs: Array<{ text: string; url: string }> = (() => {
+    const raw = (Array.isArray(frontMatter.references) ? frontMatter.references : []) as unknown[];
+    return raw
+      .map((rawRef: unknown) => {
+        let text = "";
+        let url = "";
+
+        if (typeof rawRef === "string") {
+          const str = rawRef.trim();
+          const urlMatch = str.match(/https?:\/\/[^\s)"']+/g);
+          if (urlMatch && urlMatch.length > 0) url = urlMatch[urlMatch.length - 1].trim();
+          text = url ? str.replace(url, "").trim() : str;
+          text = text.replace(/\s+/g, " ").replace(/[-,;:\s]+$/g, "").trim();
+        } else if (rawRef && typeof rawRef === "object") {
+          const obj = rawRef as Record<string, unknown>;
+          text = String(obj.text || obj.title || "").replace(/\s+/g, " ").trim();
+          url = String(obj.url || obj.link || "").trim();
+        }
+
+        return { text, url };
+      })
+      .filter((r) => (r.text && r.text.length > 0) || (r.url && r.url.length > 0));
+  })();
+  const rawRefsCount = Array.isArray(frontMatter.references) ? frontMatter.references.length : 0;
+  // Debug: if there are raw refs but normalization removed them, log to help diagnose malformed entries
+  if (rawRefsCount > 0 && normalizedRefs.length === 0) {
+    console.warn('BlogPost: references present but no normalized entries produced', frontMatter.references);
+  }
 
   return (
     <Layout>
@@ -214,9 +244,73 @@ const BlogPost = () => {
         {/* Post content */}
         <div className="container mx-auto px-6">
           <div className="max-w-3xl mx-auto">
-            <div className="prose prose-lg dark:prose-invert max-w-none mb-12">
+            <div className="max-w-none mb-12">
               <MarkdownRenderer content={content} />
             </div>
+
+            {/* References (optional) - FAQ-style toggle like ContactFAQ */}
+            {(normalizedRefs.length > 0 || rawRefsCount > 0) ? (
+              <div className="mb-8">
+                <div>
+                  <button
+                    type="button"
+                    aria-expanded={refsOpen}
+                    onClick={() => setRefsOpen(!refsOpen)}
+                    className="flex items-center w-full py-2 text-left font-medium transition-all hover:text-primary"
+                  >
+                    <h3 className="text-lg font-semibold flex items-center gap-2">
+                      Referencias
+                      <ChevronDown className={`h-4 w-4 transition-transform duration-200 ${refsOpen ? 'rotate-180' : ''}`} />
+                    </h3>
+                  </button>
+
+                  {refsOpen && (
+                    <div className="mt-2">
+                      <ol className="list-decimal list-inside text-sm space-y-1">
+                        {normalizedRefs.length > 0 ? (
+                          normalizedRefs.map((r, idx) => (
+                            <li key={`ref-${idx}`} className="text-sm">
+                              {r.text ? (
+                                <span><em>{r.text}</em>{r.url && <span className="mx-2">-</span>}</span>
+                              ) : null}
+                              {r.url ? (
+                                <a href={r.url} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline break-words inline">
+                                  {r.url}
+                                </a>
+                              ) : null}
+                            </li>
+                          ))
+                        ) : (
+                          // Fallback: render raw entries as strings if normalization filtered everything
+                          (Array.isArray(frontMatter.references) ? frontMatter.references : []).map((rawRef: unknown, idx: number) => {
+                            const asStr = typeof rawRef === 'string' ? rawRef.trim() : JSON.stringify(rawRef);
+                            return (
+                              <li key={`rawref-${idx}`} className="text-sm">
+                                <span>{asStr}</span>
+                              </li>
+                            );
+                          })
+                        )}
+                      </ol>
+                    </div>
+                  )}
+                </div>
+              </div>
+            ) : frontMatter.referenceLink ? (
+              <div className="mb-8">
+                <h3 className="text-lg font-semibold mb-2">Referencia</h3>
+                <div className="text-sm">
+                  <a
+                    href={frontMatter.referenceLink}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-primary hover:underline"
+                  >
+                    Ver referencia
+                  </a>
+                </div>
+              </div>
+            ) : null}
             
             {/* Author bio */}
             <div className="glass-card-static p-6 mb-12">

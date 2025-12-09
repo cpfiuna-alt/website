@@ -1,11 +1,12 @@
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="es" class="dark">
   <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>Club de Programación FIUNA</title>
     <meta name="description" content="Por amor al código y la innovación." />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
     <link rel="canonical" href="https://cpfiuna.io/" />
     <meta name="author" content="/cpf" />
     <meta property="og:site_name" content="Club de Programación FIUNA" />
@@ -35,16 +36,48 @@
     <meta name="theme-color" content="#0a0a0a" />
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
     <link rel="apple-touch-icon" href="/favicon.ico" />
+    <link rel="manifest" href="/manifest.json" />
+    <link rel="alternate" type="application/rss+xml" title="Club de Programación FIUNA - Blog" href="/rss.xml" />
     <link rel="preload" href="/cpf-logo.png" as="image" />
     <!-- Basic CSP (adjust on server for production): -->
     <!-- Note: frame-ancestors directive should be set via HTTP headers in production -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.gpteng.co 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' https: data:; connect-src 'self' https://script.google.com https://script.googleusercontent.com https://docs.google.com; frame-src 'self' https://www.google.com; object-src 'none'; base-uri 'self';" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' blob:; worker-src 'self' blob:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' https: data:; connect-src 'self' https://script.google.com https://script.googleusercontent.com https://docs.google.com https://api.github.com https://raw.githubusercontent.com; frame-src 'self' https://www.google.com https://www.youtube-nocookie.com https://www.youtube.com; object-src 'none'; base-uri 'self';" />
     <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin" />
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "Club de Programación FIUNA",
+      "alternateName": ["CPF", "</cpf>"],
+      "url": "https://cpfiuna.io",
+      "logo": "https://cpfiuna.io/cpf-logo.png",
+      "description": "Comunidad de estudiantes apasionados por el código en la Facultad de Ingeniería de la Universidad Nacional de Asunción.",
+      "email": "clubdeprogramacion@ing.una.py",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "San Lorenzo",
+        "addressCountry": "PY"
+      },
+      "sameAs": [
+        "https://github.com/cpfiuna",
+        "https://instagram.com/cpfiuna",
+        "https://twitter.com/cpfiuna",
+        "https://www.linkedin.com/company/cpfiuna",
+        "https://youtube.com/@cpfiuna",
+        "https://discord.gg/UtRpKw2ay4"
+      ],
+      "foundingDate": "2017",
+      "memberOf": {
+        "@type": "EducationalOrganization",
+        "name": "Facultad de Ingeniería - Universidad Nacional de Asunción",
+        "alternateName": "FIUNA",
+        "url": "https://ing.una.py"
+      }
+    }
+    </script>
   </head>
   <body>
     <div id="root"></div>
-    <!-- IMPORTANT: DO NOT REMOVE THIS SCRIPT TAG OR THIS VERY COMMENT! -->
-    <script src="https://cdn.gpteng.co/gptengineer.js" type="module"></script>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

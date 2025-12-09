@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, Link, useNavigate } from 'react-router-dom';
+import { useParams, Link, useNavigate, useLocation } from 'react-router-dom';
 import {
   ArrowLeft,
   BookOpen,
@@ -17,7 +17,8 @@ import {
   Trophy,
   MessageSquare,
   Library,
-  Leaf
+  Leaf,
+  List
 } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -28,6 +29,11 @@ import { getProjectDocs, getProjectDoc } from '@/utils/projectDocsLoader';
 import { getProjectById, ProjectConfig } from '@/content/docs-projects/projects-config';
 import { ProjectDocStructure, ProjectDoc } from '@/types/projectDocs';
 import MarkdownContent from '@/components/markdown/MarkdownContent';
+
+// Local TocHeading type and DOM-based TOC extraction used to ensure
+// IDs on rendered headings match the TOC links (avoids mismatches between
+// parser-based headings and the rendered DOM).
+type TocHeading = { id: string; text: string; level: number };
 
 const getProjectIcon = (iconName: string) => {
   const icons = { Globe, Bot, Trophy, MessageSquare, Library, Leaf };
@@ -54,6 +60,15 @@ const ProjectDocumentationPage: React.FC = () => {
       try {
         const structure = await getProjectDocs(projectId);
         setDocStructure(structure);
+
+        // Load project metadata (from dynamic loader)
+        try {
+          const proj = await getProjectById(projectId);
+          setProject(proj || null);
+        } catch (err) {
+          console.warn('Could not load project metadata for', projectId, err);
+          setProject(null);
+        }
 
         // Determine which document to show
         let docToShow: ProjectDoc | null = null;
@@ -82,8 +97,91 @@ const ProjectDocumentationPage: React.FC = () => {
 
     fetchDocumentation();
   }, [projectId, chapterId, sectionId]);
+  // Table of contents is generated from the rendered DOM to ensure
+  // IDs match what MarkdownContent actually emits. This avoids
+  // mismatches between a parser-based TOC and rendered headings.
+  const [tocHeadings, setTocHeadings] = useState<TocHeading[]>([]);
 
-  const project = projectId ? getProjectById(projectId) : null;
+  const [project, setProject] = useState<ProjectConfig | null>(null);
+
+  const slugify = (s: string) =>
+    String(s)
+      .toLowerCase()
+      .trim()
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/[^\n+\w\s-]/g, '')
+      .replace(/\s+/g, '-');
+
+  useEffect(() => {
+    if (!currentDoc) {
+      setTocHeadings([]);
+      return;
+    }
+
+    // Allow the MarkdownContent to render into the DOM, then collect headings
+    const t = setTimeout(() => {
+      const container = document.getElementById('project-doc-content');
+      if (!container) return;
+      const elements = container.querySelectorAll('h2,h3,h4');
+      const headings: TocHeading[] = Array.from(elements).map((el) => {
+        const text = (el.textContent || '').trim();
+        let id = (el as HTMLElement).id;
+
+        if (!id) {
+          // generate slug and assign it to the element so links can find it
+          const base = slugify(text || 'heading');
+          let unique = base;
+          let i = 1;
+          while (document.getElementById(unique)) {
+            unique = `${base}-${i++}`;
+          }
+          id = unique;
+          (el as HTMLElement).id = id;
+          // Debug log for troubleshooting missing ids
+          // id assigned for TOC
+        } else {
+          // eslint-disable-next-line no-console
+          // found existing heading id
+        }
+
+        return { id, text, level: Number(el.tagName.replace('H', '')) };
+      });
+      setTocHeadings(headings);
+    }, 40);
+
+    return () => clearTimeout(t);
+  }, [currentDoc]);
+
+  // Ensure we scroll when the URL hash changes (covers clicks, manual hash edits,
+  // and replaceState calls). This runs independently of the TOC click handler
+  // and retries a few times if the element isn't present immediately.
+  const location = useLocation();
+  useEffect(() => {
+    const hash = location.hash;
+    if (!hash) return;
+    const id = hash.replace('#', '');
+
+    const attemptScroll = () => {
+      const el = document.getElementById(id);
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'nearest' });
+        return true;
+      }
+      return false;
+    };
+
+    if (!attemptScroll()) {
+      let tries = 0;
+      const retry = () => {
+        if (attemptScroll() || tries >= 6) return;
+        tries += 1;
+        window.setTimeout(retry, 100);
+      };
+      window.setTimeout(retry, 0);
+    }
+  }, [location.hash, currentDoc]);
+
+  
 
   if (loading) {
     return <LoadingSkeleton />;
@@ -98,7 +196,7 @@ const ProjectDocumentationPage: React.FC = () => {
             El proyecto solicitado no existe o no tiene documentación disponible.
           </p>
           <Button asChild>
-            <Link to="/documentacion">
+            <Link to="/docs">
               <ArrowLeft className="h-4 w-4 mr-2" />
               Volver al hub
             </Link>
@@ -111,7 +209,7 @@ const ProjectDocumentationPage: React.FC = () => {
   return (
     <div className="min-h-screen bg-background">
       <div className="container mx-auto px-4 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-[300px_1fr] gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-[300px_1fr] xl:grid-cols-[300px_1fr_220px] gap-8">
           {/* Sidebar */}
           <aside className="space-y-6">            <ProjectSidebar
               project={project}
@@ -136,12 +234,18 @@ const ProjectDocumentationPage: React.FC = () => {
               </div>
             )}
           </main>
+
+          {/* Table of Contents - Right Sidebar */}
+          {tocHeadings.length > 0 && (
+            <aside className="hidden xl:block">
+              <TableOfContents headings={tocHeadings} />
+            </aside>
+          )}
         </div>
       </div>
     </div>
   );
 };
-
 interface ProjectSidebarProps {
   project: ProjectConfig;
   docStructure: ProjectDocStructure;
@@ -178,23 +282,32 @@ const ProjectSidebar: React.FC<ProjectSidebarProps> = ({
 
   return (
     <div className="space-y-6">
+      {/* Back to Hub - Above project info */}
+      <Link 
+        to="/docs" 
+        className="inline-flex items-center text-muted-foreground hover:text-primary transition-colors"
+      >
+        <ArrowLeft className="h-4 w-4 mr-1" />
+        Volver al Hub
+      </Link>
+
       {/* Project Header */}
-      <Card>
-        <CardHeader className="pb-4">
+      <div className="rounded-lg border bg-card text-card-foreground shadow-sm border-border">
+        <div className="flex flex-col space-y-1.5 p-6 pb-4">
           <div className="flex items-center space-x-3">
             <div className="bg-primary/10 p-2 rounded-lg">
               {getProjectIcon(project.icon)}
             </div>
             <div>
-              <CardTitle className="text-lg">{project.name}</CardTitle>
-              <CardDescription className="text-sm">
+              <h3 className="text-lg font-semibold leading-none tracking-tight">{project.name}</h3>
+              <p className="text-sm text-muted-foreground">
                 v{project.version} • {project.status}
-              </CardDescription>
+              </p>
             </div>
           </div>
-        </CardHeader>
-        <CardContent className="pt-0">
-          <div className="flex gap-2 mb-4">
+        </div>
+        <div className="p-6 pt-0 space-y-4">
+          <div className="flex gap-2">
             {project.repository && (
               <Button variant="outline" size="sm" asChild>
                 <a href={project.repository} target="_blank" rel="noopener noreferrer">
@@ -212,33 +325,49 @@ const ProjectSidebar: React.FC<ProjectSidebarProps> = ({
               </Button>
             )}
           </div>
-          <div className="text-xs text-muted-foreground">
-            {docStructure.totalDocs} documentos • {docStructure.chapters.length} capítulos
-          </div>
-        </CardContent>
-      </Card>
+          
+          {/* Maintainers */}
+          {project.maintainers && project.maintainers.length > 0 && (
+            <div className="flex items-start gap-2 text-xs text-muted-foreground">
+              <Users className="h-3.5 w-3.5 mt-0.5 flex-shrink-0" />
+              <span>{project.maintainers.join(', ')}</span>
+            </div>
+          )}
+          
+          {/* Last Update */}
+          {project.lastUpdate && (
+            <div className="flex items-center gap-2 text-xs text-muted-foreground">
+              <Calendar className="h-3.5 w-3.5 flex-shrink-0" />
+              <span>Actualizado: {new Date(project.lastUpdate).toLocaleDateString('es-PY', { day: '2-digit', month: '2-digit', year: 'numeric' })}</span>
+            </div>
+          )}
+        </div>
+      </div>
 
       {/* Navigation */}
-      <Card>
-        <CardHeader className="pb-4">
-          <CardTitle className="text-base">Navegación</CardTitle>
+      <div className="rounded-lg border bg-card text-card-foreground shadow-sm border-border">
+        <div className="flex flex-col space-y-1.5 p-6 pb-4">
+          <h3 className="text-base font-semibold leading-none tracking-tight">Navegación</h3>
           {/* Search */}
           <div className="relative">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input
               type="text"
+              id={`docs-sidebar-search-${project.id}`}
+              name="docsSidebarSearch"
               placeholder="Buscar en docs..."
               value={searchQuery}
               onChange={(e) => onSearchChange(e.target.value)}
               className="pl-9 h-9"
             />
           </div>
-        </CardHeader>
-        <CardContent className="pt-0">
+        </div>
+        <div className="p-6 pt-0">
           <ScrollArea className="h-[calc(100vh-400px)]">
             <div className="space-y-1">
-              {/* Overview */}              <Link
-                to={`/documentacion/projects/${project.id}`}
+              {/* Overview */}
+              <Link
+                to={`/docs/${project.id}`}
                 className={`flex items-center px-3 py-2 text-sm rounded-md transition-colors ${
                   currentPath === 'overview' ? 'bg-primary/10 text-primary' : 'hover:bg-muted'
                 }`}
@@ -246,7 +375,6 @@ const ProjectSidebar: React.FC<ProjectSidebarProps> = ({
                 <BookOpen className="h-4 w-4 mr-2" />
                 Descripción General
               </Link>
-
               {/* Chapters */}
               {docStructure.chapters.map(chapter => (
                 <div key={chapter.id} className="space-y-1">
@@ -267,7 +395,7 @@ const ProjectSidebar: React.FC<ProjectSidebarProps> = ({
                       {chapter.sections.map(section => (
                         <Link
                           key={section.id}
-                          to={`/documentacion/projects/${project.id}/${chapter.id}/${section.slug}`}                          className={`flex items-center px-3 py-2 text-sm rounded-md transition-colors ${
+                          to={`/docs/${project.id}/${chapter.id}/${section.slug}`}                          className={`flex items-center px-3 py-2 text-sm rounded-md transition-colors ${
                             currentPath === section.slug ? 'bg-primary/10 text-primary' : 'hover:bg-muted'
                           }`}
                         >
@@ -281,16 +409,8 @@ const ProjectSidebar: React.FC<ProjectSidebarProps> = ({
               ))}
             </div>
           </ScrollArea>
-        </CardContent>
-      </Card>
-
-      {/* Back to Hub */}
-      <Button variant="outline" asChild className="w-full">
-        <Link to="/documentacion">
-          <ArrowLeft className="h-4 w-4 mr-2" />
-          Volver al Hub
-        </Link>
-      </Button>
+        </div>
+      </div>
     </div>
   );
 };
@@ -303,51 +423,104 @@ interface DocumentContentProps {
 const DocumentContent: React.FC<DocumentContentProps> = ({ doc, project }) => {
   return (
     <div className="space-y-6">
-      {/* Document Header */}
-      <div className="border-b pb-6">
-        <h1 className="text-3xl font-bold mb-2">{doc.frontMatter.title}</h1>
-        {doc.frontMatter.description && (
-          <p className="text-lg text-muted-foreground mb-4">
-            {doc.frontMatter.description}
-          </p>
-        )}
-          {/* Metadata */}
-        <div className="flex flex-wrap gap-4 text-sm text-muted-foreground">
-          {doc.frontMatter.lastUpdate && (
-            <div className="flex items-center">
-              <Calendar className="h-4 w-4 mr-1" />
-              Actualizado: {doc.frontMatter.lastUpdate}
-            </div>
-          )}
-          {doc.frontMatter.maintainers && doc.frontMatter.maintainers.length > 0 && (
-            <div className="flex items-center">
-              <Users className="h-4 w-4 mr-1" />
-              {doc.frontMatter.maintainers.join(', ')}
-            </div>
-          )}
-          {doc.frontMatter.version && (
-            <div className="flex items-center">
-              <Tag className="h-4 w-4 mr-1" />
-              v{doc.frontMatter.version}
-            </div>
-          )}
-        </div>
-
-        {/* Tags */}
-        {doc.frontMatter.tags && doc.frontMatter.tags.length > 0 && (
-          <div className="flex flex-wrap gap-2 mt-4">
-            {doc.frontMatter.tags.map(tag => (
-              <Badge key={tag} variant="secondary">
-                {tag}
-              </Badge>
-            ))}
-          </div>
-        )}
-      </div>
-
       {/* Document Content */}
-      <div className="prose prose-lg dark:prose-invert max-w-none">
+      <div id="project-doc-content">
         <MarkdownContent content={doc.content} />
+      </div>
+    </div>
+  );
+};
+
+interface TableOfContentsProps {
+  headings: TocHeading[];
+}
+
+const TableOfContents: React.FC<TableOfContentsProps> = ({ headings }) => {
+  const [activeId, setActiveId] = useState<string>('');
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setActiveId(entry.target.id);
+          }
+        });
+      },
+      { rootMargin: '-80px 0px -80% 0px' }
+    );
+
+    headings.forEach((heading) => {
+      const element = document.getElementById(heading.id);
+      if (element) observer.observe(element);
+    });
+
+    return () => observer.disconnect();
+  }, [headings]);
+
+  return (
+    <div className="rounded-lg border bg-card text-card-foreground shadow-sm border-border sticky top-20">
+      <div className="flex flex-col space-y-1.5 p-6 pb-3">
+        <div className="flex items-center gap-2 text-sm font-medium">
+          <List className="h-4 w-4" />
+          En esta pagina
+        </div>
+      </div>
+      <div className="p-6 pt-0">
+        <ScrollArea className="max-h-[calc(100vh-200px)]">
+          <nav className="space-y-1">
+            {headings.map((heading) => (
+              <a
+                key={heading.id}
+                href={`#${heading.id}`}
+                className={`block text-sm py-1 transition-colors hover:text-foreground ${
+                  heading.level === 2 ? 'pl-0' : heading.level === 3 ? 'pl-3' : 'pl-6'
+                } ${
+                  activeId === heading.id
+                    ? 'text-primary font-medium'
+                    : 'text-muted-foreground'
+                }`}
+                onClick={(e) => {
+                  e.preventDefault();
+
+                  // Update the hash so the URL reflects the target (no native jump)
+                  try {
+                    history.replaceState(null, '', `#${heading.id}`);
+                  } catch (err) {
+                    // ignore
+                  }
+
+                  // Attempt a robust scroll using the browser's native behavior.
+                  // The Markdown headings already have `scroll-mt-*` set, so
+                  // `scrollIntoView` will respect the offset for sticky headers.
+                  const attemptScroll = () => {
+                    const el = document.getElementById(heading.id);
+                    if (el) {
+                      el.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'nearest' });
+                      setActiveId(heading.id);
+                      return true;
+                    }
+                    return false;
+                  };
+
+                  if (!attemptScroll()) {
+                    // Retry a few times in case IDs are assigned shortly after click
+                    let tries = 0;
+                    const retry = () => {
+                      if (attemptScroll() || tries >= 5) return;
+                      tries += 1;
+                      window.setTimeout(retry, 100);
+                    };
+                    // Run on next tick to give React a chance to assign IDs
+                    window.setTimeout(retry, 0);
+                  }
+                }}
+              >
+                {heading.text}
+              </a>
+            ))}
+          </nav>
+        </ScrollArea>
       </div>
     </div>
   );

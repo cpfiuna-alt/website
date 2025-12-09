@@ -12,10 +12,10 @@ const Documentation: React.FC = () => {
         {/* Main documentation hub */}
         <Route path="/" element={<ProjectsDocsHub />} />
         
-        {/* Project documentation routes */}
-        <Route path="/projects/:projectId" element={<ProjectDocumentationPage />} />
-        <Route path="/projects/:projectId/:chapterId" element={<ProjectDocumentationPage />} />
-        <Route path="/projects/:projectId/:chapterId/:sectionId" element={<ProjectDocumentationPage />} />
+        {/* Project documentation routes (simplified: /docs/:projectId/...) */}
+        <Route path=":projectId" element={<ProjectDocumentationPage />} />
+        <Route path=":projectId/:chapterId" element={<ProjectDocumentationPage />} />
+        <Route path=":projectId/:chapterId/:sectionId" element={<ProjectDocumentationPage />} />
       </Routes>
     </Layout>
   );

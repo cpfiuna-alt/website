@@ -20,7 +20,7 @@ const ProjectDetailContent: React.FC<ProjectDetailContentProps> = ({ project }) 
   };
 
   return (
-    <div className="prose prose-lg dark:prose-invert max-w-none">
+    <div className="max-w-none">
       {/* Render markdown content using MarkdownContent component */}
       {project.content && (
         <MarkdownContent content={processContent(project.content)} />

@@ -13,9 +13,7 @@ export async function getAllCourses({
   limit?: number
 } = {}): Promise<Array<{ frontMatter: CourseFrontMatter, content: string, slug: string }>> {
   try {
-    console.log("Getting all courses");
     const courses = await getAllContent<CourseFrontMatter>('courses');
-    console.log(`Found ${courses.length} courses`);
     
     // Filter courses based on tag if provided
     let filteredCourses = courses;
@@ -117,9 +115,7 @@ export async function getAllCourses({
 // Get a single course by slug
 export async function getCourseBySlug(slug: string): Promise<{ frontMatter: CourseFrontMatter, content: string, slug: string } | null> {
   try {
-    console.log(`Getting course with slug: ${slug}`);
     const course = await getContentBySlug<CourseFrontMatter>('courses', slug);
-    console.log(`Found course: ${course?.frontMatter?.title || 'Not found'}`);
     return course;
   } catch (error) {
     console.error(`Error getting course with slug ${slug}:`, error);

@@ -1,14 +1,9 @@
-
 # robots.txt for Club de Programación FIUNA
 User-agent: *
 Allow: /
 
 # Sitemap location
 Sitemap: https://cpfiuna.io/sitemap.xml
-
-# Disallow access to administrative areas
-Disallow: /admin/
-Disallow: /wp-admin/
 
 # Crawl-delay directive (optional)
 Crawl-delay: 10

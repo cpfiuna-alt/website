@@ -123,6 +123,19 @@
   --tw-prose-counters: hsl(var(--muted-foreground));
 }
 
+/* Make images in markdown responsive and prevent overflow */
+.markdown-content.prose img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Allow authors to set smaller widths via inline style or tailwind classes (e.g. w-1/2) */
+.markdown-content.prose img[class] {
+  margin-left: auto;
+  margin-right: auto;
+}
+
 /* List items should be blueish/muted color */
 .markdown-content.prose ul li,
 .markdown-content.prose ol li,
@@ -248,4 +261,15 @@
 .prose .markdown-content ol li {
   color: hsl(var(--muted-foreground)) !important;
   margin-left: 1.5rem !important;
+}
+
+/* Remove any backticks/quotes injected by the Tailwind Typography plugin
+   for inline <code> elements. The typography plugin sometimes inserts
+   ::before / ::after content (e.g. backticks) for visual styling; override
+   those here so authors see the exact text they wrote. */
+.markdown-content.prose code::before,
+.markdown-content.prose code::after,
+.prose code::before,
+.prose code::after {
+  content: "" !important;
 }

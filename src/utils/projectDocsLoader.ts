@@ -1,6 +1,6 @@
 import { parseMarkdown } from '@/utils/markdownUtils';
 import { ProjectDoc, ProjectDocFrontMatter, ProjectDocStructure, ProjectChapter } from '@/types/projectDocs';
-import { projectsConfig, getProjectById } from '@/content/docs-projects/projects-config';
+import { getProjectById, loadProjectsConfig } from '@/content/docs-projects/projects-config';
 
 // Search interfaces
 export interface SearchResult {
@@ -62,7 +62,7 @@ async function loadProjectMarkdownFiles(projectId: string): Promise<Array<{ fron
  */
 export async function getProjectDocs(projectId: string): Promise<ProjectDocStructure | null> {
   try {
-    const project = getProjectById(projectId);
+    const project = await getProjectById(projectId);
     if (!project) return null;
 
     // Get all docs for this project
@@ -132,8 +132,9 @@ export async function getProjectDocs(projectId: string): Promise<ProjectDocStruc
  * Get all available projects with their documentation status
  */
 export async function getAllProjectsWithDocs() {
+  const allProjects = await loadProjectsConfig();
   const projectsWithDocs = await Promise.all(
-    projectsConfig.map(async (project) => {
+    allProjects.map(async (project) => {
       const docStructure = await getProjectDocs(project.id);
       return {
         ...project,
@@ -184,16 +185,16 @@ export async function searchProjectDocs(query: string, options: SearchOptions = 
     } = options;
 
     // Determine which projects to search
-    let projectsToSearch = projectsConfig;
-    
+    let projectsToSearch = await loadProjectsConfig();
+
     if (projectId) {
-      projectsToSearch = projectsConfig.filter(p => p.id === projectId);
+      projectsToSearch = projectsToSearch.filter(p => p.id === projectId);
     }
-    
+
     if (category) {
       projectsToSearch = projectsToSearch.filter(p => p.category === category);
     }
-    
+
     if (status) {
       projectsToSearch = projectsToSearch.filter(p => p.status === status);
     }
@@ -218,7 +219,7 @@ export async function searchProjectDocs(query: string, options: SearchOptions = 
             title: doc.frontMatter.title,
             description: doc.frontMatter.description,
             content: includeContent ? doc.content : '',
-            url: `/documentacion/projects/${project.id}/${doc.slug}`,
+            url: `/docs/${project.id}/${doc.slug}`,
             relevanceScore,
             highlights
           });
@@ -303,8 +304,9 @@ function extractHighlights(doc: { frontMatter: ProjectDocFrontMatter; content: s
 /**
  * Get featured projects for documentation hub
  */
-export function getFeaturedProjects() {
-  return projectsConfig
+export async function getFeaturedProjects() {
+  const all = await loadProjectsConfig();
+  return all
     .filter(project => project.featured)
     .sort((a, b) => (a.order || 0) - (b.order || 0));
 }
@@ -312,8 +314,9 @@ export function getFeaturedProjects() {
 /**
  * Get projects by category
  */
-export function getProjectsByCategory(category: string) {
-  return projectsConfig
+export async function getProjectsByCategory(category: string) {
+  const all = await loadProjectsConfig();
+  return all
     .filter(project => project.category === category)
     .sort((a, b) => (a.order || 0) - (b.order || 0));
 }
@@ -321,8 +324,9 @@ export function getProjectsByCategory(category: string) {
 /**
  * Get projects by status
  */
-export function getProjectsByStatus(status: string) {
-  return projectsConfig
+export async function getProjectsByStatus(status: string) {
+  const all = await loadProjectsConfig();
+  return all
     .filter(project => project.status === status)
     .sort((a, b) => (a.order || 0) - (b.order || 0));
 }

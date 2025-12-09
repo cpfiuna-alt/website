@@ -19,13 +19,13 @@ const CourseDetail = () => {
   // Determine YouTube video availability from frontmatter
   const getVideoStatus = () => {
     if (!course?.frontMatter.youtubeUrl) {
-      return { hasVideo: false, url: "", message: "Vídeo por subir" };
+      return { hasVideo: false, url: "", message: "Playlist no disponible" };
     }
     
     const url = course.frontMatter.youtubeUrl;
     
     if (url === "none" || url === "null" || url === "unavailable") {
-      return { hasVideo: false, url: "", message: "Vídeo no disponible" };
+      return { hasVideo: false, url: "", message: "Playlist no disponible" };
     }
     
     if (url.includes("youtube.com") || url.includes("youtu.be")) {
@@ -33,7 +33,7 @@ const CourseDetail = () => {
     }
     
     // Fallback for any other value
-    return { hasVideo: false, url: "", message: "Vídeo por subir" };
+    return { hasVideo: false, url: "", message: "Playlist no disponible" };
   };
   
   const videoStatus = getVideoStatus();
@@ -213,7 +213,7 @@ const CourseDetail = () => {
                         onClick={() => window.open(videoStatus.url, '_blank')}
                       >
                         <Youtube className="mr-2 h-4 w-4" />
-                        Ver en YouTube
+                        Ver playlist del curso
                       </Button>
                     ) : (
                       <Button 
@@ -256,19 +256,56 @@ const CourseDetail = () => {
                         <p className="font-medium">{frontMatter.instructor}</p>
                       </div>
                       <div>
-                        <p className="text-sm text-muted-foreground">Precio</p>
-                        <p className="font-medium">Gratuito (miembros)</p>
-                        <p className="text-xs text-muted-foreground">30.000 Gs. (no miembros)</p>
+                        <p className="text-sm text-muted-foreground">Inversión</p>
+                        {(() => {
+                          // Prefer explicit member/non-member fields, fallback to generic `price` or defaults
+                          const member = frontMatter.priceMember || frontMatter.price || 'Gratuito (miembros)';
+                          const nonMember = frontMatter.priceNonMember || (frontMatter.price ? '' : '30.000 Gs. (no miembros)');
+                          return (
+                            <>
+                              <p className="font-medium">{member}</p>
+                              {nonMember ? <p className="text-xs text-muted-foreground">{nonMember}</p> : null}
+                            </>
+                          );
+                        })()}
                       </div>
                     </div>
-                    
+
                     <div className="pt-4">
-                      <a 
-                        href="#" 
-                        className="w-full inline-flex items-center justify-center px-6 py-3 rounded-full bg-primary text-primary-foreground font-medium transition-all hover:shadow-neon-blue"
-                      >
-                        Inscribite al curso
-                      </a>
+                      {/* CTA: keep label 'Inscribite al curso' — only change behavior/colors based on frontMatter.registrationLink */}
+                      {frontMatter.registrationLink ? (
+                        (() => {
+                          const url = frontMatter.registrationLink as string;
+                          const isExternal = /^https?:\/\//i.test(url);
+                          return isExternal ? (
+                            <a
+                              href={url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="w-full inline-flex items-center justify-center px-6 py-3 rounded-full bg-primary text-primary-foreground font-medium transition-all hover:shadow-neon-blue"
+                            >
+                              Inscribite al curso
+                            </a>
+                          ) : (
+                            <a
+                              href={url}
+                              className="w-full inline-flex items-center justify-center px-6 py-3 rounded-full bg-primary text-primary-foreground font-medium transition-all hover:shadow-neon-blue"
+                            >
+                              Inscribite al curso
+                            </a>
+                          );
+                        })()
+                      ) : (
+                        // Match ProjectDetail disabled demo button style but keep active padding/size
+                        <button
+                          key="inscripcion-disabled"
+                          disabled
+                          aria-disabled="true"
+                          className="w-full inline-flex items-center justify-center px-6 py-3 rounded-full bg-gray-200 text-gray-700 cursor-not-allowed border border-gray-200"
+                        >
+                          Inscripciones no disponibles
+                        </button>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -288,7 +325,7 @@ const CourseDetail = () => {
             </TabsList>
             
             <TabsContent value="overview" className="space-y-8">
-              <div className="prose prose-lg dark:prose-invert max-w-none">
+              <div className="max-w-none">
                 <MarkdownRenderer content={extractDescriptionOnly(content)} />
               </div>
               
@@ -353,84 +390,71 @@ const CourseDetail = () => {
             
             <TabsContent value="resources" className="space-y-8">
               <h2 className="text-2xl font-bold mb-6">Recursos de aprendizaje</h2>
-              
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <a 
-                  href="#"
-                  className="glass-card p-6 hover:shadow-neon-blue transition-all group"
-                >
-                  <div className="flex items-start">
-                    <div className="rounded-full bg-primary/10 p-3 mr-4">
-                      <FileCode className="h-6 w-6 text-primary" />
-                    </div>
-                    <div>
-                      <h3 className="font-medium group-hover:text-primary transition-colors">
-                        Material del curso
-                      </h3>
-                      <p className="text-sm text-muted-foreground mt-1">
-                        Acceso a las presentaciones, ejemplos de código y ejercicios
-                      </p>
-                    </div>
+
+              {/* Read resource links from frontMatter. Support either a `resources` object
+                  or top-level fields for backward compatibility. */}
+              {(() => {
+                const fmRecord = frontMatter as unknown as Record<string, unknown>;
+                const resObj = (fmRecord.resources && typeof fmRecord.resources === 'object') ? fmRecord.resources as Record<string, unknown> : {};
+                const materialLink = typeof resObj.material === 'string' ? resObj.material : (typeof fmRecord.materialLink === 'string' ? fmRecord.materialLink : '');
+                const githubLink = typeof resObj.github === 'string' ? resObj.github : (typeof fmRecord.githubLink === 'string' ? fmRecord.githubLink : '');
+                // Support resources.documentation (preferred), resObj.docs, or legacy frontmatter.
+                // Prefer explicit `setupLink` if available (we're deprecating `documentationLink`).
+                const docsLink = typeof resObj.documentation === 'string'
+                  ? resObj.documentation
+                  : (typeof resObj.docs === 'string'
+                    ? resObj.docs
+                    : (typeof fmRecord.setupLink === 'string'
+                      ? fmRecord.setupLink
+                      : (typeof fmRecord.documentationLink === 'string' ? fmRecord.documentationLink : '')));
+                const readingsLink = typeof resObj.readings === 'string' ? resObj.readings : (typeof fmRecord.readingsLink === 'string' ? fmRecord.readingsLink : '');
+
+                const cards = [
+                  { key: 'material', title: 'Material del curso', desc: 'Acceso a las presentaciones, listas de ejercicios, cheatsheets y más', url: materialLink },
+                  { key: 'github', title: 'Repositorio de GitHub', desc: 'Ejemplos de código y proyectos para practicar', url: githubLink },
+                  { key: 'docs', title: 'Configuración y herramientas', desc: 'Instrucciones y enlaces para preparar el entorno de desarrollo', url: docsLink },
+                  { key: 'readings', title: 'Lecturas recomendadas', desc: 'Libros y artículos para profundizar en los temas', url: readingsLink },
+                ];
+
+                return (
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {cards.map((c) => (
+                      c.url ? (
+                        <a
+                          key={c.key}
+                          href={c.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="glass-card p-6 hover:shadow-neon-blue transition-all group"
+                        >
+                          <div className="flex items-start">
+                            <div className="rounded-full bg-primary/10 p-3 mr-4">
+                              <FileCode className="h-6 w-6 text-primary" />
+                            </div>
+                            <div>
+                              <h3 className="font-medium group-hover:text-primary transition-colors">{c.title}</h3>
+                              <p className="text-sm text-muted-foreground mt-1">{c.desc}</p>
+                            </div>
+                          </div>
+                        </a>
+                      ) : (
+                        <div key={c.key} className="glass-card p-6 opacity-60">
+                          <div className="flex items-start">
+                            <div className="rounded-full bg-primary/10 p-3 mr-4">
+                              <FileCode className="h-6 w-6 text-primary" />
+                            </div>
+                            <div>
+                              <h3 className="font-medium">{c.title}</h3>
+                              <p className="text-sm text-muted-foreground mt-1">{c.desc}</p>
+                              <p className="text-xs text-muted-foreground mt-2">Enlace no disponible</p>
+                            </div>
+                          </div>
+                        </div>
+                      )
+                    ))}
                   </div>
-                </a>
-                
-                <a 
-                  href="#"
-                  className="glass-card p-6 hover:shadow-neon-blue transition-all group"
-                >
-                  <div className="flex items-start">
-                    <div className="rounded-full bg-primary/10 p-3 mr-4">
-                      <FileCode className="h-6 w-6 text-primary" />
-                    </div>
-                    <div>
-                      <h3 className="font-medium group-hover:text-primary transition-colors">
-                        Repositorio de GitHub
-                      </h3>
-                      <p className="text-sm text-muted-foreground mt-1">
-                        Ejemplos de código y proyectos para practicar
-                      </p>
-                    </div>
-                  </div>
-                </a>
-                
-                <a 
-                  href="#"
-                  className="glass-card p-6 hover:shadow-neon-blue transition-all group"
-                >
-                  <div className="flex items-start">
-                    <div className="rounded-full bg-primary/10 p-3 mr-4">
-                      <FileCode className="h-6 w-6 text-primary" />
-                    </div>
-                    <div>
-                      <h3 className="font-medium group-hover:text-primary transition-colors">
-                        Documentación oficial
-                      </h3>
-                      <p className="text-sm text-muted-foreground mt-1">
-                        Enlaces a documentación relevante para el curso
-                      </p>
-                    </div>
-                  </div>
-                </a>
-                
-                <a 
-                  href="#"
-                  className="glass-card p-6 hover:shadow-neon-blue transition-all group"
-                >
-                  <div className="flex items-start">
-                    <div className="rounded-full bg-primary/10 p-3 mr-4">
-                      <FileCode className="h-6 w-6 text-primary" />
-                    </div>
-                    <div>
-                      <h3 className="font-medium group-hover:text-primary transition-colors">
-                        Lecturas recomendadas
-                      </h3>
-                      <p className="text-sm text-muted-foreground mt-1">
-                        Libros y artículos para profundizar en los temas
-                      </p>
-                    </div>
-                  </div>
-                </a>
-              </div>
+                );
+              })()}
             </TabsContent>
             
             <TabsContent value="faq" className="space-y-8">
@@ -466,17 +490,16 @@ const CourseDetail = () => {
                 </div>
               </div>
               
-              <div className="bg-primary/5 dark:bg-primary/10 rounded-xl p-6">
-                <h3 className="text-lg font-medium mb-4">¿Tenés más preguntas?</h3>
-                <p className="mb-4">
+              <div className="mt-16 p-8 bg-primary/10 rounded-2xl text-center w-full">
+                <h2 className="text-2xl md:text-3xl font-bold mb-4">¿Tenés más preguntas?</h2>
+                <p className="text-lg text-muted-foreground mb-6 max-w-2xl mx-auto">
                   Si tenés dudas que no están cubiertas aquí, no dudes en contactarnos.
                 </p>
-                <a 
-                  href="/contacto" 
-                  className="inline-flex items-center text-primary hover:underline"
+                <a
+                  href="/contacto"
+                  className="inline-flex items-center px-8 py-4 rounded-full bg-primary text-primary-foreground hover:bg-primary/80 transition-colors text-lg font-medium"
                 >
                   Contactanos
-                  <ChevronRight className="ml-1 h-4 w-4" />
                 </a>
               </div>
             </TabsContent>

@@ -11,13 +11,13 @@ export interface StatItem {
 // Estadísticas principales del CPF
 export const CPF_STATS = {
   // Números principales
-  MIEMBROS_ACTIVOS: 145,
-  PROYECTOS_REALIZADOS: 30,
-  EVENTOS_ORGANIZADOS: 45,
-  PREMIOS_RECIBIDOS: 25,
-  COMPETENCIAS_PARTICIPADAS: 12,
-  CONTRIBUCIONES_GITHUB: 300,
-  ALIADOS_COLABORADORES: 15,
+  MIEMBROS_ACTIVOS: 18,
+  PROYECTOS_REALIZADOS: 6,
+  EVENTOS_ORGANIZADOS: 8,
+  PREMIOS_RECIBIDOS: 7,
+  COMPETENCIAS_PARTICIPADAS: 14,
+  CONTRIBUCIONES_GITHUB: 0,
+  ALIADOS_COLABORADORES: 0,
   
   // Años de historia
   AÑOS_FUNDACION: 2017,
@@ -63,17 +63,17 @@ export const LOGROS_STATS: StatItem[] = [
   },
   {
     value: CPF_STATS.PREMIOS_RECIBIDOS,
-    label: "Premios recibidos",
-    suffix: "+",
-  },
-  {
-    value: CPF_STATS.PROYECTOS_REALIZADOS,
-    label: "Proyectos realizados",
-    suffix: "+",
+    label: "Premios ganados",
+    suffix: "",
   },
   {
     value: CPF_STATS.COMPETENCIAS_PARTICIPADAS,
     label: "Competencias",
+    suffix: "",
+  },
+  {
+    value: CPF_STATS.EVENTOS_ORGANIZADOS,
+    label: "Eventos atendidos",
     suffix: "",
   },
 ];

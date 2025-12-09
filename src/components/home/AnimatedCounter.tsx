@@ -6,9 +6,10 @@ interface CounterProps {
   duration?: number;
   label: string;
   icon: React.ReactNode;
+  suffix?: string;
 }
 
-const AnimatedCounter = ({ end, duration = 2000, label, icon }: CounterProps) => {
+const AnimatedCounter = ({ end, duration = 2000, label, icon, suffix }: CounterProps) => {
   const [count, setCount] = useState(0);
   const countRef = useRef<HTMLDivElement>(null);
   const hasAnimated = useRef(false);
@@ -55,14 +56,17 @@ const AnimatedCounter = ({ end, duration = 2000, label, icon }: CounterProps) =>
   };
 
   return (
-    <div 
+    <div
       ref={countRef}
       className="glass-card-static p-6 text-center"
     >
       <div className="flex justify-center mb-4">
         {icon}
       </div>
-      <div className="text-3xl font-bold mb-2">{count}</div>
+      <div className="text-3xl font-bold mb-2">
+        {count}
+        {typeof suffix === 'string' && <span className="ml-1">{suffix}</span>}
+      </div>
       <div className="text-muted-foreground">{label}</div>
     </div>
   );

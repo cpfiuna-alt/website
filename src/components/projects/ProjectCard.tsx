@@ -16,16 +16,14 @@ const ProjectCard = ({ project }: ProjectCardProps) => {
   // Get the badge style based on the project status
   const getStatusBadgeStyle = (status?: string) => {
     if (!status) return "bg-[#F59E0BE6] text-white"; // amber-500 with E6 alpha
-    
-    switch (status.toLowerCase()) {
-      case "completado":
-        return "bg-[#10B981E6] text-white"; // green-500 with E6 alpha
-      case "abandonado":
-        return "bg-[#9CA3AFE6] text-white"; // gray-400 with E6 alpha
-      case "en desarrollo":
-      default:
-        return "bg-[#F59E0BE6] text-white"; // amber-500 with E6 alpha
-    }
+    const s = String(status || '').toLowerCase();
+
+    // Completed -> blue, Active -> green, Abandoned/archived -> gray, default -> amber (in development)
+    if (s.includes('complet')) return "bg-[#3C83F6E6] text-white"; // blue
+    if (s.includes('aband') || s.includes('archiv')) return "bg-[#9CA3AFE6] text-white"; // gray
+    if (s.includes('activo')) return "bg-[#10B981E6] text-white"; // green
+    // default to development amber
+    return "bg-[#F59E0BE6] text-white"; // amber
   };
 
   return (
@@ -93,7 +91,6 @@ const ProjectCard = ({ project }: ProjectCardProps) => {
             className="inline-flex items-center justify-center px-4 py-2 rounded-full bg-primary text-primary-foreground text-sm font-medium transition-all hover:scale-105 hover:shadow-neon-blue"
           >
             Ver detalles
-            <ExternalLink className="ml-2 h-3 w-3" />
           </Link>
         </div>
       </div>

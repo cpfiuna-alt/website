@@ -147,6 +147,8 @@ const BlogPage: React.FC = () => {
             <div className="md:col-span-2">
               <Input 
                 type="text" 
+                id="blogpage-search"
+                name="blogSearch"
                 placeholder="Buscar artículos..." 
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}

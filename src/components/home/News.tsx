@@ -91,7 +91,6 @@ const FallbackNewsCard = ({ index }: { index: number }) => {
 
 const News = () => {
   const { latestContent, isLoading } = useLatestContent(4);
-  console.log("Latest content in News component:", latestContent);
 
   // Function to get the correct path for each content item
   const getContentPath = (item: { category: string; slug: string }) => {

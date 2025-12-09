@@ -22,11 +22,13 @@ const ProjectDetailHeader: React.FC<ProjectDetailHeaderProps> = ({
           variant="default" 
           className={`${getStatusBadgeVariant(project.status)} hover:!bg-[var(--badge-bg)] hover:!text-[var(--badge-text)]`}
           style={{
-            '--badge-bg': project.status?.toLowerCase() === 'completado' || project.status?.toLowerCase() === 'completed' 
-              ? '#10B981E6' 
-              : project.status?.toLowerCase() === 'abandonado' || project.status?.toLowerCase() === 'planned'
-              ? '#9CA3AFE6'
-              : '#F59E0BE6',
+            '--badge-bg': ((): string => {
+              const s = (project.status || '').toLowerCase();
+              if (s.includes('complet')) return '#3C83F6E6'; // blue (completed)
+              if (s.includes('aband') || s.includes('archiv')) return '#9CA3AFE6'; // gray
+              if (s.includes('activo')) return '#10B981E6'; // green (active)
+              return '#F59E0BE6'; // amber (in development / default)
+            })(),
             '--badge-text': '#ffffff'
           } as React.CSSProperties}
         >

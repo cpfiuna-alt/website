@@ -5,12 +5,13 @@ import LogrosHero from "@/components/logros/LogrosHero";
 import LogrosGrid from "@/components/logros/LogrosGrid";
 import LogrosStats from "@/components/logros/LogrosStats";
 import LogrosCallToAction from "@/components/logros/LogrosCallToAction";
+import Stats from "@/components/about/Stats";
 
 const Logros = () => {
   return (
     <Layout>
       <LogrosHero />
-      {/*<LogrosStats />*/}
+      <LogrosStats />
       <LogrosGrid />
       <LogrosCallToAction />
     </Layout>

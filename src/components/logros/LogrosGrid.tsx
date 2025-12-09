@@ -3,22 +3,29 @@ import React, { useState } from "react";
 import { Trophy, Medal, Award, Star, GraduationCap, Flag, ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { de } from "date-fns/locale";
-import { describe } from "node:test";
 
 // Sample data for achievements
 const achievements = [
   {
-    id: 0,
+    id: 7,
+    title: "Semifinalistas de la aceleradora Moonshot de Ueno Bank",
+    description: "Un proyecto de un equipo formado por miembros del Club fue seleccionado entre los 100 mejores proyectos para participar en la prestigiosa competencia y aceleradora de startups Moonshot de Ueno Bank.",
+    icon: <Award  className="h-8 w-8 text-primary" />,
+    year: 2025,
+    category: "competition",
+    link: "https://www.spaceappschallenge.org/nasa-space-apps-2024/find-a-team/acentauri/"
+  },
+  {
+    id: 6,
     title: "Finalistas Globales en NASA Space Apps Challenge",
     description: "Miembros del CPF fueron seleccionados entre los 40 finalistas globales de la competencia con el proyecto 'Appsteroids'.",
-    icon: <Trophy className="h-8 w-8 text-primary" />,
+    icon: <Award  className="h-8 w-8 text-primary" />,
     year: 2024,
     category: "competition",
     link: "https://www.spaceappschallenge.org/nasa-space-apps-2024/find-a-team/acentauri/"
   },
   {
-    id: 1,
+    id: 5,
     title: "Primer Lugar Local en NASA Space Apps Challenge",
     description: "Miembros del CPF ganaron el primer lugar en la competencia local con el proyecto 'Appsteroids'.",
     icon: <Trophy className="h-8 w-8 text-primary" />,
@@ -27,7 +34,7 @@ const achievements = [
     link: "https://www.spaceappschallenge.org/nasa-space-apps-2024/find-a-team/acentauri/"
   },
   {
-    id: 6,
+    id: 4,
     title: "Primer lugar en la Hackathon Samsung Tigo Campus Party",
     description: "El equipo del CPF obtuvo el primer lugar en la Hackathon Samsung Tigo Campus Party.",
     icon: <Trophy className="h-8 w-8 text-primary" />,
@@ -36,16 +43,16 @@ const achievements = [
     link: "#"
   },
   {
-    id: 2,
+    id: 3,
     title: "Mención de Honor Local en NASA Space Apps Challenge",
     description: "Miembros del CPF recibieron una mención de honor en la competencia local con el proyecto 'Moonquake Visualizer'.",
-    icon: <Trophy className="h-8 w-8 text-primary" />,
+    icon: <Award  className="h-8 w-8 text-primary" />,
     year: 2022,
     category: "competition",
     link: "#"
   },
   {
-    id: 5,
+    id: 2,
     title: "Primer lugar en la Hackathon Samsung Tigo Campus Party",
     description: "El equipo del CPF obtuvo el primer lugar en la Hackathon Samsung Tigo Campus Party.",
     icon: <Trophy className="h-8 w-8 text-primary" />,
@@ -54,7 +61,7 @@ const achievements = [
     link: "#"
   },
   {
-    id: 3,
+    id: 1,
     title: "Primer lugar local en la Competencia IEEEXtreme 12.0",
     description: "El equipo del CPF obtuvo el primer lugar en la competencia IEEEXtreme a nivel nacional.",
     icon: <Trophy className="h-8 w-8 text-primary" />,
@@ -63,7 +70,7 @@ const achievements = [
     link: "#"
   },
   {
-    id: 4,
+    id: 0,
     title: "Primer lugar en el Intercoding de la Universidad Católica",
     description: "El equipo del CPF obtuvo el primer lugar en la competencia Intercoding UC.",
     icon: <Trophy className="h-8 w-8 text-primary" />,

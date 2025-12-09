@@ -1,209 +1,161 @@
----
-title: "CPF Discord Bot"
-description: "Bot inteligente para el servidor de Discord del club. Gestiona eventos, modula conversaciones y proporciona utilidades para la comunidad."
+﻿---
+title: "Bot de Discord del CPF"
+description: "Bot oficial del servidor de Discord del Club de Programacion FIUNA"
 category: "bot"
 status: "active"
 version: "1.0.0"
-repository: "https://github.com/cpf-fiuna/discord-bot"
+repository: "https://github.com/cpfiuna/discord-bot"
 demo: ""
-maintainers: ["David Giménez", "Iván Jara"]
+maintainers: ["David Gimenez", "Ivan Jara"]
 tags: ["Discord.js", "Node.js", "JavaScript", "Bot"]
-lastUpdate: "2025-11-30"
+lastUpdate: "2025-12-08"
 ---
 
-# CPF Discord Bot
+# Bot de Discord del CPF
 
-Bot oficial del Club de Programación de la Facultad de Ingeniería de la UNA (FIUNA). Sistema modular diseñado para facilitar la gestión y automatización de tareas en el servidor de Discord del club.
+Bot oficial del Club de Programacion de la Facultad de Ingenieria de la UNA (FIUNA). Un sistema modular disenado para facilitar la gestion y automatizacion de tareas en el servidor de Discord del club.
 
-## Visión del Proyecto
+## 1. Caracteristicas Principales
+### 1.1 Comandos Slash
+Sistema completo de slash commands con Discord.js v14. Todos los comandos son registrados automaticamente y funcionan con autocompletado.
 
-Crear un bot de Discord robusto y escalable que permita:
-- Gestión automatizada de comandos slash
-- Sistema modular de eventos para interacciones
-- Manejo de bienvenidas a nuevos miembros
-- Registro de errores y actividad en canal dedicado
-- Fácil despliegue en entornos de producción
+### 1.2 Sistema de Eventos
+Arquitectura modular de eventos que permite manejar interacciones, nuevos miembros y cambios de estado de manera eficiente.
 
-## Características Actuales
+### 1.3 Logging Avanzado
+Sistema de logs con soporte para canales de Discord. Registra errores, uso de comandos e informacion de diagnostico.
 
-### Gestión de Comandos
-- **Comandos Slash**: Sistema completo de slash commands con Discord.js v14
-- **Registro Automático**: Deploy automatizado de comandos locales o globales
-- **Modularidad**: Arquitectura que permite agregar comandos fácilmente
-- **Manejo de Errores**: Sistema robusto de error handling
+### 1.4 Recordatorios
+Sistema de recordatorios personales y globales con soporte para fechas especificas. Limite de 10 recordatorios activos por usuario.
 
-### Sistema de Eventos
-- **Ready Event**: Inicialización del bot con banner personalizado
-- **Guild Member Add**: Bienvenida automática a nuevos miembros
-- **Interaction Create**: Manejo centralizado de todas las interacciones
-- **Presencia Personalizable**: Estado del bot configurable vía variables de entorno
+### 1.5 Salas de Voz Temporales
+Creacion automatica de salas de voz que se eliminan tras 1 minuto de estar vacias.
 
-### Logging y Monitoreo
-- **Canal de Logs**: Registro de eventos importantes en canal configurable
-- **Error Tracking**: Captura de errores no manejados
-- **Instance Identification**: Identificación de instancia (hostname + PID)
-- **Startup Notifications**: Notificación automática de inicio del bot
+### 1.6 Encuestas Interactivas
+Sistema de encuestas con 2-4 opciones usando reacciones para votacion.
 
-### Comandos Disponibles
+### 1.7 Compartir Codigo
+Modal para compartir codigo formateado con soporte para 11 lenguajes de programacion.
 
-#### /ping
-Comando de diagnóstico que responde con un embed informativo mostrando que el bot está activo y funcionando correctamente.
+### 1.8 Bienvenidas Automaticas
+Mensaje de bienvenida personalizable para nuevos miembros con fallback a DM.
 
-**Características:**
-- Respuesta inmediata con embed personalizado
-- Identifica la instancia del bot
-- Manejo robusto de interacciones
+---
 
-## Arquitectura del Sistema
+## 2. Comandos Disponibles
+
+### 2.1 Informacion
+
+| Comando | Descripcion |
+|---------|-------------|
+| `/info` | Informacion del Club de Programacion FIUNA |
+| `/links` | Enlaces y redes sociales del club |
+| `/help` | Ayuda detallada sobre comandos |
+
+### 2.2 Utilidades
+
+| Comando | Descripcion |
+|---------|-------------|
+| `/code` | Comparte codigo formateado (limite 4000 caracteres) |
+| `/encuesta` | Crea encuestas con 2-4 opciones |
+| `/recordar` | Crea recordatorios personales o globales |
+| `/ping` | Verifica que el bot este activo |
+
+### 2.3 Salas de Voz
+
+| Comando | Descripcion |
+|---------|-------------|
+| `/sala crear` | Crea una sala de voz temporal |
+| `/sala listar` | Lista todas las salas disponibles |
+| `/sala unirse` | Informacion sobre una sala especifica |
+
+### 2.4 Administracion
+
+| Comando | Descripcion |
+|---------|-------------|
+| `/setpresence` | Cambia el estado del bot |
+| `/setgreeting` | Configura mensajes de bienvenida |
+| `/setlogchannel` | Configura el canal de logs |
+| `/botstats` | Estadisticas del bot (uptime, RAM, CPU) |
+| `/serverinfo` | Informacion del servidor |
+| `/say` | Envia mensajes formateados |
+| `/shutdown` | Apaga el bot de forma segura |
+
+---
+
+## 3. Stack Tecnologico
+
+| Tecnologia | Version | Uso |
+|------------|---------|-----|
+| Node.js | 18+ LTS | Runtime |
+| Discord.js | 14.14.1 | API de Discord |
+| dotenv | 16.3.1 | Variables de entorno |
+| SQLite3 | 5.1.6 | Base de datos (opcional) |
+| node-cron | 3.0.3 | Tareas programadas |
+| nodemon | 3.0.2 | Desarrollo |
+
+---
+
+## 4. Arquitectura
 
 ```
 discord-bot/
-├── src/
-│   ├── index.js              # Entry point principal
-│   ├── deploy-commands.js    # Script para registrar comandos
-│   ├── commands/             # Comandos slash
-│   │   ├── commands.js       # Comando de ayuda/lista
-│   │   ├── ping.js          # Comando de diagnóstico
-│   │   ├── logtest.js       # Comando de prueba de logs
-│   │   └── testgreeting.js  # Comando de prueba de bienvenida
-│   ├── events/               # Manejadores de eventos
-│   │   ├── ready.js         # Evento de inicialización
-│   │   ├── guildMemberAdd.js # Bienvenida a nuevos miembros
-│   │   └── interactionCreate.js # Manejo de interacciones
-│   └── lib/                  # Utilidades y helpers
-│       └── logger.js         # Sistema de logging
-├── biblioteca-digital/       # Documentación ejemplo
-├── discord-bot-docs/         # Documentación del bot
-├── package.json
-├── .env.example
-└── README.md
+    src/
+        index.js              # Entry point
+        deploy-commands.js    # Registro de comandos
+        commands/             # Comandos slash
+        events/               # Manejadores de eventos
+        lib/                  # Utilidades
+    assets/uploads/           # Archivos subidos
+    package.json
+    .env
 ```
-
-## Stack Tecnológico
-
-### Core
-- **Node.js**: v18+ (LTS)
-- **Discord.js**: v14.14.1 - Librería principal para interactuar con Discord API
-- **dotenv**: v16.3.1 - Gestión de variables de entorno
-
-### Utilidades
-- **sqlite3**: v5.1.6 - Base de datos SQLite para persistencia (opcional)
-- **node-cron**: v3.0.3 - Tareas programadas
-- **axios**: v1.6.2 - Cliente HTTP para APIs externas
-
-### Desarrollo
-- **nodemon**: v3.0.2 - Auto-reload en desarrollo
-
-## Estado Actual del Proyecto
-
-**Estado**: ✅ Activo y en producción  
-**Versión**: 1.0.0  
-**Última actualización**: 30 de noviembre, 2025  
-**Mantenedor**: David Gimenez
-
-## Características en Desarrollo
-
-### Fase Actual (v1.0.0)
-- [x] Sistema base de comandos slash
-- [x] Sistema de eventos modular
-- [x] Comando ping funcional
-- [x] Sistema de logging
-- [x] Deploy automatizado
-- [x] Documentación básica
-
-### Próximas Características (v1.1.0)
-- [ ] Base de datos SQLite integrada
-- [ ] Sistema de permisos por rol
-- [ ] Comandos de moderación
-- [ ] Sistema de puntos/rankings
-- [ ] Comandos de información del club
-
-### Futuro (v2.0.0)
-- [ ] Panel web de administración
-- [ ] Integración con GitHub para notificaciones
-- [ ] Sistema de eventos/calendario
-- [ ] Bot multi-servidor
-- [ ] Analytics y estadísticas
-
-## Desafíos Técnicos
-
-### Escalabilidad
-- Manejo de múltiples servidores simultáneamente
-- Optimización de respuestas para reducir latencia
-- Gestión eficiente de memoria en despliegue con PM2
-
-### Modularidad
-- Sistema de plugins para extensibilidad
-- Configuración por servidor
-- Hot-reload de comandos sin reiniciar
-
-### Confiabilidad
-- Manejo robusto de errores de red
-- Recuperación automática ante desconexiones
-- Sistema de backups automáticos
-
-## Configuración Requerida
-
-Variables de entorno mínimas necesarias:
-
-```env
-# Obligatorias
-DISCORD_TOKEN=your_bot_token_here
-DISCORD_CLIENT_ID=your_application_id
-
-# Recomendadas
-DISCORD_GUILD_ID=your_guild_id_for_dev
-LOG_CHANNEL_ID=channel_id_for_logs
-GREETING_CHANNEL_ID=channel_id_for_welcomes
-BOT_PRESENCE="En línea — usa /"
-```
-
-## Despliegue
-
-### Desarrollo Local
-```bash
-npm install
-npm run deploy  # Registra comandos
-npm run dev     # Inicia con nodemon
-```
-
-### Producción (PM2)
-```bash
-npm ci --production
-npm run deploy
-pm2 start --name cpf-bot npm -- start
-pm2 save
-```
-
-## Oportunidades de Colaboración
-
-### Roles Necesarios
-- **Desarrolladores Node.js**: Implementación de nuevos comandos y features
-- **DevOps**: Optimización de despliegue y monitoreo
-- **Diseñadores**: Diseño de embeds y mensajes visuales
-- **Moderadores**: Testing y feedback de funcionalidades
-
-### Cómo Contribuir
-1. Fork del repositorio
-2. Crear rama de feature (`git checkout -b feature/nuevo-comando`)
-3. Implementar cambios con tests
-4. Crear Pull Request con descripción detallada
-5. Esperar revisión y aprobación
-
-## Enlaces Importantes
-
-- [Repositorio en GitHub](https://github.com/davidgimenezs/discord-bot)
-- [Documentación de Discord.js](https://discord.js.org/)
-- [Guía de Getting Started](./getting-started.md)
-- [Guía de Deployment](./deployment.md)
-- [Guía de Contribución](./contributing.md)
-
-## Contacto y Soporte
-
-- **Discord**: Únete al servidor del CPF FIUNA
-- **GitHub Issues**: Para reportar bugs o sugerir features
-- **Email**: Contacta al mantenedor para consultas directas
 
 ---
 
-> **Nota**: Este proyecto está en constante desarrollo. Las contribuciones son bienvenidas y apreciadas.
+## 5. Instalacion Rapida
+
+```bash
+# Clonar el repositorio
+git clone https://github.com/cpfiuna/discord-bot.git
+cd discord-bot
+
+# Instalar dependencias
+npm install
+
+# Configurar variables de entorno
+cp .env.example .env
+# Editar .env con tus credenciales
+
+# Registrar comandos
+npm run deploy
+
+# Iniciar en desarrollo
+npm run dev
+```
+
+---
+
+## 6. Variables de Entorno
+
+```env
+# Obligatorio
+DISCORD_TOKEN=tu_token_aqui
+DISCORD_CLIENT_ID=tu_client_id
+
+# Desarrollo
+DISCORD_GUILD_ID=tu_guild_id
+
+# Opcional
+LOG_CHANNEL_ID=id_canal_logs
+GREETING_CHANNEL_ID=id_canal_bienvenidas
+BOT_PRESENCE="Usa /help para ver comandos"
+```
+
+---
+
+## 7. Enlaces
+
+- [Repositorio en GitHub](https://github.com/cpfiuna/discord-bot)
+- [Documentacion de Discord.js](https://discord.js.org/)
+- [Portal de Desarrolladores de Discord](https://discord.com/developers/applications)
