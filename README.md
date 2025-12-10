@@ -1,5 +1,5 @@
 # Sitio Web del Club de Programación FIUNA
-:)
+
 <div align="center">
   <img src="https://drive.google.com/uc?export=view&id=1OkDHnnwW2D4ZxtMyyp57greiRR0ZDarF" alt="Logo del Club de Programación FIUNA" width="200" />
   <p><em>Sitio web oficial del Club de Programación de la Facultad de Ingeniería de la Universidad Nacional de Asunción</em></p>
