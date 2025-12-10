@@ -60,25 +60,25 @@ const MarkdownContent: React.FC<MarkdownContentProps> = ({ content, className = 
           },
           h1: ({ node, children, ...props }) => {
             const text = String(children);
-            const idFromProps = (props as any).id;
+            const idFromProps = (props as Record<string, unknown>).id;
             const id = idFromProps && String(idFromProps).trim() !== '' ? String(idFromProps) : localSlugify(text || 'heading');
             return <h1 {...props} id={id} className="text-3xl md:text-4xl font-bold mt-8 mb-4 scroll-mt-20">{children}</h1>;
           },
           h2: ({ node, children, ...props }) => {
             const text = String(children);
-            const idFromProps = (props as any).id;
+            const idFromProps = (props as Record<string, unknown>).id;
             const id = idFromProps && String(idFromProps).trim() !== '' ? String(idFromProps) : localSlugify(text || 'heading');
             return <h2 {...props} id={id} className="text-2xl md:text-3xl font-bold mt-8 mb-4 scroll-mt-20">{children}</h2>;
           },
           h3: ({ node, children, ...props }) => {
             const text = String(children);
-            const idFromProps = (props as any).id;
+            const idFromProps = (props as Record<string, unknown>).id;
             const id = idFromProps && String(idFromProps).trim() !== '' ? String(idFromProps) : localSlugify(text || 'heading');
             return <h3 {...props} id={id} className="text-xl md:text-2xl font-bold mt-6 mb-3 scroll-mt-20">{children}</h3>;
           },
           h4: ({ node, children, ...props }) => {
             const text = String(children);
-            const idFromProps = (props as any).id;
+            const idFromProps = (props as Record<string, unknown>).id;
             const id = idFromProps && String(idFromProps).trim() !== '' ? String(idFromProps) : localSlugify(text || 'heading');
             return <h4 {...props} id={id} className="text-lg md:text-xl font-semibold mt-6 mb-3 scroll-mt-20">{children}</h4>;
           },

@@ -10,22 +10,22 @@ const Press = () => {
       id: 1,
       title: "Entrevista a los Finalistas Globales del NASA Space Apps Challenge",
       media: "Paraguay TV",
-      date: "11 de marzo de 2025",
+      date: "11 de marzo del 2025",
       type: "Televisión",
       image: "https://assets.cpfiuna.io/website/public/images/timeline/cpf-2025.png",
-      link: "https://drive.google.com/file/d/17exUlQ8sSDfiFUB8S9I9lUVhOfxE6jtR/view?usp=sharing",
-    },
-  ];
-  {/*{
-      id: 2,
-      title: "El Club de Programación FIUNA organiza hackathon nacional",
-      media: "Diario ABC",
-      date: "24 de mayo de 2023",
-      type: "Prensa escrita",
-      image: "/placeholder.svg",
-      link: "https://example.com/press1",
+      link: "https://www.youtube.com/watch?v=oZ3HJ-s0Jlc",
     },
     {
+      id: 2,
+      title: "Premiación del NASA Space Apps Challenge en la AEP",
+      media: "Agencia Espacial del Paraguay",
+      date: "4 de febrero del 2025",
+      type: "Redes Sociales",
+      image: "https://assets.cpfiuna.io/website/public/images/prensa/premiacion-aep-1.jpg",
+      link: "https://www.instagram.com/p/DFpksA-xF6w/?img_index=1",
+    },
+    ];
+    /*{
       id: 3,
       title: "FIUNA destaca en competencia internacional de programación",
       media: "La Nación",
@@ -60,7 +60,7 @@ const Press = () => {
       type: "Digital",
       image: "/placeholder.svg",
       link: "https://example.com/press6",
-    },*/}
+    },*/
 
   return (
     <Layout>

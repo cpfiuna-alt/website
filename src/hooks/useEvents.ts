@@ -21,29 +21,32 @@ export function useEvents() {
           const { frontMatter } = parseMarkdown(content as string);
           
           // Calculate isUpcoming based on date comparison
-          const isUpcoming = isUpcomingEventWithFields(frontMatter.date, frontMatter.startDate, frontMatter.endDate);
+          const dateStr = String(frontMatter.date || '');
+          const startDateStr = frontMatter.startDate ? String(frontMatter.startDate) : undefined;
+          const endDateStr = frontMatter.endDate ? String(frontMatter.endDate) : undefined;
+          const isUpcoming = isUpcomingEventWithFields(dateStr, startDateStr, endDateStr);
 
           // Ensure frontMatter has all required fields
           const eventData: EventFrontMatter = {
-            id: frontMatter.id || slug,
-            title: frontMatter.title || "Untitled Event",
-            date: frontMatter.date || new Date().toISOString(),
-            startDate: frontMatter.startDate,
-            endDate: frontMatter.endDate,
-            location: frontMatter.location || "TBD",
-            description: frontMatter.description || "",
-            image: frontMatter.image || "/placeholder.svg",
-            type: frontMatter.type || "meetup",
+            id: String(frontMatter.id || slug),
+            title: String(frontMatter.title || "Untitled Event"),
+            date: dateStr || new Date().toISOString(),
+            startDate: startDateStr,
+            endDate: endDateStr,
+            location: String(frontMatter.location || "TBD"),
+            description: String(frontMatter.description || ""),
+            image: String(frontMatter.image || "/placeholder.svg"),
+            type: String(frontMatter.type || "meetup"),
             isUpcoming: isUpcoming,
             slug,
-            time: frontMatter.time || "TBD",
-            organizer: frontMatter.organizer,
-            registrationLink: frontMatter.registrationLink || frontMatter.registrationUrl,
-            speakers: frontMatter.speakers,
-            topics: frontMatter.topics,
-            prerequisites: frontMatter.prerequisites,
-            resources: frontMatter.resources,
-            sponsors: frontMatter.sponsors
+            time: String(frontMatter.time || "TBD"),
+            organizer: frontMatter.organizer ? String(frontMatter.organizer) : undefined,
+            registrationLink: String(frontMatter.registrationLink || frontMatter.registrationUrl || ''),
+            speakers: Array.isArray(frontMatter.speakers) ? frontMatter.speakers as { name: string; role?: string; bio?: string; image?: string; }[] : undefined,
+            topics: Array.isArray(frontMatter.topics) ? frontMatter.topics as string[] : undefined,
+            prerequisites: Array.isArray(frontMatter.prerequisites) ? frontMatter.prerequisites as string[] : undefined,
+            resources: Array.isArray(frontMatter.resources) ? frontMatter.resources as { title: string; url: string; }[] : undefined,
+            sponsors: Array.isArray(frontMatter.sponsors) ? frontMatter.sponsors as string[] : undefined
           };
           
           return eventData;

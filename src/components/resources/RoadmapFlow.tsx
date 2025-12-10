@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { ExternalLink, ChevronDown, ChevronUp, BookOpen, Video, FileText, Code, Terminal, Award, Lightbulb, Users, Compass } from 'lucide-react';
-import { Roadmap, RoadmapResource } from './LearningRoadmaps';
+import { Roadmap, RoadmapResource } from '@/data/learningRoadmaps';
 
 interface RoadmapFlowProps {
   roadmap: Roadmap;

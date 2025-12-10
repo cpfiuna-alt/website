@@ -3,7 +3,7 @@
 export type ContentType = 'events' | 'projects' | 'courses' | 'blog' | 'docs';
 
 export interface ContentItem {
-  frontMatter: Record<string, any>;
+  frontMatter: Record<string, unknown>;
   content: string;
   slug: string;
 }

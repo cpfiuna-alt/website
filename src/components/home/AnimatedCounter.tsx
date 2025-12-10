@@ -15,45 +15,47 @@ const AnimatedCounter = ({ end, duration = 2000, label, icon, suffix }: CounterP
   const hasAnimated = useRef(false);
 
   useEffect(() => {
+    const currentRef = countRef.current;
+    
+    const animateCountFn = () => {
+      const start = 0;
+      const steps = 60;
+      const stepTime = duration / steps;
+      let current = 0;
+      const increment = Math.floor(end / steps) || 1;
+      
+      const timer = setInterval(() => {
+        current += increment;
+        if (current >= end) {
+          setCount(end);
+          clearInterval(timer);
+        } else {
+          setCount(current);
+        }
+      }, stepTime);
+    };
+    
     const observer = new IntersectionObserver(
       (entries) => {
         const [entry] = entries;
         if (entry.isIntersecting && !hasAnimated.current) {
           hasAnimated.current = true;
-          animateCount();
+          animateCountFn();
         }
       },
       { threshold: 0.1 }
     );
 
-    if (countRef.current) {
-      observer.observe(countRef.current);
+    if (currentRef) {
+      observer.observe(currentRef);
     }
 
     return () => {
-      if (countRef.current) {
-        observer.unobserve(countRef.current);
+      if (currentRef) {
+        observer.unobserve(currentRef);
       }
     };
-  }, [end]);
-
-  const animateCount = () => {
-    const start = 0;
-    const steps = 60;
-    const stepTime = duration / steps;
-    let current = 0;
-    const increment = Math.floor(end / steps) || 1;
-    
-    const timer = setInterval(() => {
-      current += increment;
-      if (current >= end) {
-        setCount(end);
-        clearInterval(timer);
-      } else {
-        setCount(current);
-      }
-    }, stepTime);
-  };
+  }, [end, duration]);
 
   return (
     <div

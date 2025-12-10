@@ -2,9 +2,9 @@ import { useEffect, useState } from "react";
 
 // X/Twitter feed disabled — returning empty feed to avoid external API usage.
 export function useXFeed() {
-  const [posts, setPosts] = useState<any[] | null>([]);
+  const [posts, setPosts] = useState<unknown[] | null>([]);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<any | null>(null);
+  const [error, setError] = useState<Error | null>(null);
 
   // Feature disabled - no API calls made
   return { posts, loading, error };

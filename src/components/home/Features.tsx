@@ -20,7 +20,7 @@ const Features = () => {
       icon: Lightbulb,
       title: "Innovación Constante",
       description:
-        "Mantente al día con las últimas tecnologías y tendencias en el mundo del desarrollo de software.",
+        "Mantenete al día con las últimas tecnologías y tendencias en el mundo del desarrollo de software.",
     },
     {
       icon: GraduationCap,

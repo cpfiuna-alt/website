@@ -66,6 +66,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   // Apply theme to document with optimized smooth transition
   useEffect(() => {
     const root = window.document.documentElement;
+    let cleanupTimeout: ReturnType<typeof setTimeout> | null = null;
     
     // Use requestAnimationFrame for smoother performance
     requestAnimationFrame(() => {
@@ -93,14 +94,18 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
       
       // Clean up transition and will-change after animation is complete
       if (!isInitialMount) {
-        const cleanup = setTimeout(() => {
+        cleanupTimeout = setTimeout(() => {
           root.style.removeProperty('transition');
           root.style.removeProperty('will-change');
         }, 150);
-        
-        return () => clearTimeout(cleanup);
       }
     });
+    
+    return () => {
+      if (cleanupTimeout) {
+        clearTimeout(cleanupTimeout);
+      }
+    };
   }, [theme, systemTheme]);
 
   const toggleTheme = () => {

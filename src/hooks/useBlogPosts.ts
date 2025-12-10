@@ -81,14 +81,14 @@ export function useBlogPosts() {
               }
               
               // If tags exist as strings with quotes, clean them up
-              let cleanedTags = frontMatter.tags;
-              if (Array.isArray(cleanedTags)) {
-                cleanedTags = cleanedTags.map(tag => {
+              let cleanedTags: string[] = [];
+              if (Array.isArray(frontMatter.tags)) {
+                cleanedTags = (frontMatter.tags as unknown[]).map(tag => {
                   // Remove quotation marks if they exist
                   if (typeof tag === 'string') {
                     return tag.replace(/^["'](.*)["']$/, '$1');
                   }
-                  return tag;
+                  return String(tag);
                 });
               }
               
@@ -98,7 +98,7 @@ export function useBlogPosts() {
               // { text, url } objects or undefined.
               let normalizedReferences: Array<{ text: string; url: string }> | undefined;
               if (Array.isArray(frontMatter.references)) {
-                normalizedReferences = (frontMatter.references as any[]).map(item => {
+                normalizedReferences = (frontMatter.references as Array<string | Record<string, unknown>>).map(item => {
                   if (!item) return null;
                   if (typeof item === 'string') {
                     const str = item.trim();
@@ -112,14 +112,15 @@ export function useBlogPosts() {
                     // Remove the url from the text and any trailing separators
                     let text = url ? str.replace(url, '').trim() : str;
                     // Trim trailing commas or hyphens
-                    text = text.replace(/[\-,;:\s]+$/g, '').trim();
+                    text = text.replace(/[-,;:\s]+$/g, '').trim();
 
                     return { text, url };
                   }
-                  if (typeof item === 'object') {
+                  if (typeof item === 'object' && item !== null) {
+                    const obj = item as Record<string, unknown>;
                     return {
-                      text: String((item as any).text || (item as any).title || ''),
-                      url: String((item as any).url || (item as any).link || '')
+                      text: String(obj.text || obj.title || ''),
+                      url: String(obj.url || obj.link || '')
                     };
                   }
                   return null;
@@ -127,16 +128,16 @@ export function useBlogPosts() {
               }
 
               const blogPost: BlogFrontMatter = {
-                id: frontMatter.id || slug,
-                title: frontMatter.title || "Untitled Post", 
-                description: frontMatter.excerpt || frontMatter.description || "No description available",
-                excerpt: frontMatter.excerpt || "No excerpt available", 
-                date: frontMatter.date || new Date().toISOString(),
-                author: frontMatter.author || "Anonymous",
-                readTime: frontMatter.readTime || "5 min",
+                id: String(frontMatter.id || slug),
+                title: String(frontMatter.title || "Untitled Post"), 
+                description: String(frontMatter.excerpt || frontMatter.description || "No description available"),
+                excerpt: String(frontMatter.excerpt || "No excerpt available"), 
+                date: String(frontMatter.date || new Date().toISOString()),
+                author: String(frontMatter.author || "Anonymous"),
+                readTime: String(frontMatter.readTime || "5 min"),
                 tags: cleanedTags || [],
-                image: image,
-                referenceLink: frontMatter.referenceLink || undefined,
+                image: String(image || ""),
+                referenceLink: frontMatter.referenceLink ? String(frontMatter.referenceLink) : undefined,
                 references: normalizedReferences,
                 slug
               };

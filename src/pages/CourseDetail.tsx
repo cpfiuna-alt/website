@@ -582,10 +582,6 @@ function extractDescriptionOnly(content: string): string {
   const contenidoSectionRegex = /## Contenido del curso[\s\S]*$/i;
   descriptionContent = descriptionContent.replace(contenidoSectionRegex, '').trim();
   
-  // Remove "## Metodología" section and everything after it if it appears before syllabus
-  const metodologiaSectionRegex = /## Metodología[\s\S]*$/i;
-  descriptionContent = descriptionContent.replace(metodologiaSectionRegex, '').trim();
-  
   // Remove "## Requisitos" section and everything after it if it appears before syllabus
   const requisitosSectionRegex = /## Requisitos[\s\S]*$/i;
   descriptionContent = descriptionContent.replace(requisitosSectionRegex, '').trim();

@@ -119,7 +119,7 @@ const News = () => {
             Últimas <span className="gradient-text">Novedades</span>
           </h2>
           <p className="text-muted-foreground">
-            Mantente al día con los últimos acontecimientos, cursos, eventos y recursos del club.
+            Mantenete al día con los últimos acontecimientos, cursos, eventos y recursos del club.
           </p>
         </div>
 

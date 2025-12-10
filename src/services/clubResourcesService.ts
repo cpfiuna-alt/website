@@ -1,7 +1,7 @@
 import clubResourcesData from '@/data/clubResources.json';
 
 export interface Resource {
-  id: string;
+  id: string | number;
   title: string;
   description: string;
   type: string;

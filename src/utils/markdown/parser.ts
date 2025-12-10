@@ -17,7 +17,7 @@ export function parseMarkdown(content: string) {
     const [, frontMatterStr, markdownContent] = match;
     
     // Parse the front matter
-    const frontMatter: Record<string, any> = {};
+    const frontMatter: Record<string, unknown> = {};
     const lines = frontMatterStr.split('\n');
     
     // Track multiline array/object parsing
@@ -65,12 +65,12 @@ export function parseMarkdown(content: string) {
       if (!isInMultiline && line.includes(':')) {
         const colonIndex = line.indexOf(':');
         const key = line.slice(0, colonIndex).trim();
-        let value = line.slice(colonIndex + 1).trim();
+        const value = line.slice(colonIndex + 1).trim();
         
         // Check if this is the start of a YAML-style array (key: followed by no value)
         if (value === '' || value === null) {
           // Look ahead to see if the next lines are array items
-          let yamlArrayItems = [];
+          const yamlArrayItems = [];
           let nextLineIndex = i + 1;
           
           // Collect YAML array items (lines starting with -)
@@ -123,7 +123,7 @@ export function parseMarkdown(content: string) {
           if (!arrayStr) {
             frontMatter[key] = [];
           } else {
-            let parsedArray: any[] | null = null;
+            let parsedArray: unknown[] | null = null;
             try {
               parsedArray = JSON.parse(value);
             } catch (e) {

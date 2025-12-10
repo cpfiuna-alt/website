@@ -23,16 +23,18 @@ const CookieConsent = () => {
   if (!isVisible) return null;
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-50 p-4 bg-background/80 backdrop-blur-sm border-t border-border">      <div className="container mx-auto max-w-4xl">
-        <div className="flex items-center justify-between gap-4">
-          <div className="text-sm flex items-center">
+    <div className="fixed bottom-0 left-0 right-0 z-50 p-4 bg-background/80 backdrop-blur-sm border-t border-border">
+      <div className="container mx-auto max-w-4xl">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <div className="text-sm text-center sm:text-left">
             <p>
               Este sitio utiliza cookies y tecnologías similares para mejorar su experiencia.
               <br />
               Ver nuestra <Link to="/privacidad" className="text-primary hover:underline">política de privacidad</Link>.
             </p>
           </div>
-          <div className="flex items-center gap-4 shrink-0"><button 
+          <div className="flex items-center justify-center sm:justify-end gap-4 shrink-0">
+            <button 
               onClick={acceptCookies}
               className="px-6 py-3 text-sm bg-primary text-primary-foreground rounded-full font-medium hover:scale-105 hover:shadow-neon-blue transition-all"
             >

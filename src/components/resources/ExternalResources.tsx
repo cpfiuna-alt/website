@@ -1,6 +1,6 @@
 
 import React from "react";
-import { BookOpen, Code, Coffee, Github, Terminal, Video, ExternalLink } from "lucide-react";
+import { BookOpen, Code, Coffee, Github, Terminal, Video, ExternalLink, LucideIcon } from "lucide-react";
 
 interface ResourceItem {
   name: string;
@@ -10,7 +10,7 @@ interface ResourceItem {
 
 interface ResourceCategory {
   title: string;
-  icon: React.ElementType;
+  icon: LucideIcon;
   resources: ResourceItem[];
 }
 
@@ -87,7 +87,10 @@ const ExternalResources = () => {
             >
               <div className="flex items-center gap-3 mb-4">
                 <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center text-primary">
-                  {React.createElement(category.icon, { className: "h-5 w-5" })}
+                  {(() => {
+                    const Icon = category.icon;
+                    return <Icon className="h-5 w-5" />;
+                  })()}
                 </div>
                 <h2 className="text-xl font-semibold">{category.title}</h2>
               </div>

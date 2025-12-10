@@ -39,6 +39,14 @@ Al finalizar este curso, los estudiantes serán capaces de:
 - Leer y escribir archivos
 - Desarrollar programas simples para resolver problemas reales
 
+## Metodología
+
+El curso combina:
+- Clases teórico-prácticas semanales (2 horas, 3 días a la semana)
+- Ejercicios prácticos para realizar en casa
+- Resolución de problemas
+- Proyecto final integrador
+
 ## Contenido del curso
 
 ### Clase 1: Introducción y configuración

@@ -1,8 +1,8 @@
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import Layout from "@/components/layout/Layout";
 import { Link, useParams, useNavigate } from "react-router-dom";
-import { CalendarIcon, Clock, User, Tag, ChevronLeft, ThumbsUp, Bookmark, Share2, ChevronDown } from "lucide-react";
+import { CalendarIcon, Clock, User, Tag, ChevronLeft, ThumbsUp, Bookmark, Share2, ChevronDown, Check } from "lucide-react";
 import MarkdownRenderer from "@/components/MarkdownRenderer";
 import { getContentBySlug, getAllBlogPosts } from "@/utils/staticSiteGenerator";
 import { BlogFrontMatter } from "@/utils/markdownUtils";
@@ -10,14 +10,108 @@ import { formatDate } from "@/utils/markdownUtils";
 import { Container } from "@/components/ui/container";
 import { Avatar } from "@/components/ui/avatar";
 import { getInstructorByName } from "@/data/instructors";
+import { useToast } from "@/hooks/use-toast";
 
 const BlogPost = () => {
   const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
+  const { toast } = useToast();
   const [post, setPost] = useState<{frontMatter: BlogFrontMatter, content: string} | null>(null);
   const [relatedPosts, setRelatedPosts] = useState<BlogFrontMatter[]>([]);
   const [loading, setLoading] = useState(true);
   const [refsOpen, setRefsOpen] = useState(false);
+  const [isLiked, setIsLiked] = useState(false);
+  const [isSaved, setIsSaved] = useState(false);
+  const [showCopied, setShowCopied] = useState(false);
+
+  // Check if this post is liked/saved on mount
+  useEffect(() => {
+    if (slug) {
+      const likedPosts = JSON.parse(localStorage.getItem('likedBlogPosts') || '[]');
+      setIsLiked(likedPosts.includes(slug));
+      const savedPosts = JSON.parse(localStorage.getItem('savedBlogPosts') || '[]');
+      setIsSaved(savedPosts.includes(slug));
+    }
+  }, [slug]);
+
+  // Handle like button
+  const handleLike = useCallback(() => {
+    if (!slug) return;
+    
+    const likedPosts = JSON.parse(localStorage.getItem('likedBlogPosts') || '[]');
+    
+    if (isLiked) {
+      // Remove from liked
+      const updated = likedPosts.filter((s: string) => s !== slug);
+      localStorage.setItem('likedBlogPosts', JSON.stringify(updated));
+      setIsLiked(false);
+      toast({
+        description: "Ya no te gusta este artículo",
+      });
+    } else {
+      // Add to liked
+      likedPosts.push(slug);
+      localStorage.setItem('likedBlogPosts', JSON.stringify(likedPosts));
+      setIsLiked(true);
+      toast({
+        description: "¡Te gusta este artículo!",
+      });
+    }
+  }, [slug, isLiked, toast]);
+
+  // Handle share button - copy link to clipboard
+  const handleShare = useCallback(async () => {
+    // Always use production URL for sharing
+    const path = window.location.pathname;
+    const url = `https://cpfiuna.io${path}`;
+    
+    try {
+      await navigator.clipboard.writeText(url);
+      setShowCopied(true);
+      toast({
+        description: "¡Enlace copiado al portapapeles!",
+      });
+      setTimeout(() => setShowCopied(false), 2000);
+    } catch (err) {
+      // Fallback for older browsers
+      const textArea = document.createElement('textarea');
+      textArea.value = url;
+      document.body.appendChild(textArea);
+      textArea.select();
+      document.execCommand('copy');
+      document.body.removeChild(textArea);
+      setShowCopied(true);
+      toast({
+        description: "¡Enlace copiado al portapapeles!",
+      });
+      setTimeout(() => setShowCopied(false), 2000);
+    }
+  }, [toast]);
+
+  // Handle bookmark button - save to localStorage
+  const handleBookmark = useCallback(() => {
+    if (!slug) return;
+    
+    const savedPosts = JSON.parse(localStorage.getItem('savedBlogPosts') || '[]');
+    
+    if (isSaved) {
+      // Remove from saved
+      const updated = savedPosts.filter((s: string) => s !== slug);
+      localStorage.setItem('savedBlogPosts', JSON.stringify(updated));
+      setIsSaved(false);
+      toast({
+        description: "Publicación eliminada de guardados",
+      });
+    } else {
+      // Add to saved
+      savedPosts.push(slug);
+      localStorage.setItem('savedBlogPosts', JSON.stringify(savedPosts));
+      setIsSaved(true);
+      toast({
+        description: "¡Publicación guardada!",
+      });
+    }
+  }, [slug, isSaved, toast]);
   
   useEffect(() => {
     const fetchBlogPost = async () => {
@@ -225,18 +319,48 @@ const BlogPost = () => {
         <div className="container mx-auto px-6 mb-8">
           <div className="max-w-3xl mx-auto flex justify-between items-center">
             <div className="flex space-x-4">
-              <button className="flex items-center text-sm text-muted-foreground hover:text-primary">
-                <ThumbsUp className="h-4 w-4 mr-2" />
-                Me gusta
+              <button 
+                onClick={handleLike}
+                className={`flex items-center text-sm transition-colors ${
+                  isLiked 
+                    ? 'text-primary font-medium' 
+                    : 'text-muted-foreground hover:text-primary'
+                }`}
+              >
+                <ThumbsUp className={`h-4 w-4 mr-2 ${isLiked ? 'fill-primary' : ''}`} />
+                {isLiked ? '¡Te gusta!' : 'Me gusta'}
               </button>
-              <button className="flex items-center text-sm text-muted-foreground hover:text-primary">
-                <Share2 className="h-4 w-4 mr-2" />
-                Compartir
+              <button 
+                onClick={handleShare}
+                className={`flex items-center text-sm transition-colors ${
+                  showCopied 
+                    ? 'text-green-500 font-medium' 
+                    : 'text-muted-foreground hover:text-primary'
+                }`}
+              >
+                {showCopied ? (
+                  <>
+                    <Check className="h-4 w-4 mr-2" />
+                    ¡Copiado!
+                  </>
+                ) : (
+                  <>
+                    <Share2 className="h-4 w-4 mr-2" />
+                    Compartir
+                  </>
+                )}
               </button>
             </div>
-            <button className="flex items-center text-sm text-muted-foreground hover:text-primary">
-              <Bookmark className="h-4 w-4 mr-2" />
-              Guardar
+            <button 
+              onClick={handleBookmark}
+              className={`flex items-center text-sm transition-colors ${
+                isSaved 
+                  ? 'text-yellow-500 font-medium' 
+                  : 'text-muted-foreground hover:text-primary'
+              }`}
+            >
+              <Bookmark className={`h-4 w-4 mr-2 ${isSaved ? 'fill-yellow-500' : ''}`} />
+              {isSaved ? 'Guardado' : 'Guardar'}
             </button>
           </div>
         </div>

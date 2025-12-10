@@ -7,6 +7,7 @@ declare namespace JSX {
   interface IntrinsicElements {
     // Allow any intrinsic element name with any props as a last-resort fallback.
     // This prevents spurious editor errors while keeping real TypeScript checks.
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     [elemName: string]: any;
   }
 }

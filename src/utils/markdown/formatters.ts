@@ -13,7 +13,7 @@ export function parseDateString(dateString: string): { startDate: Date; endDate?
     }
     
     // If it's a DD-MM-YYYY or MM-DD-YYYY format (with - or /), parse it manually
-    const ddmmyyyyMatch = dateStr.match(/^(\d{1,2})[-\/](\d{1,2})[-\/](\d{4})$/);
+    const ddmmyyyyMatch = dateStr.match(/^(\d{1,2})[-/](\d{1,2})[-/](\d{4})$/);
     if (ddmmyyyyMatch) {
       const [, part1, part2, year] = ddmmyyyyMatch;
       const a = parseInt(part1, 10);

@@ -30,47 +30,51 @@ export function useProjects() {
               const { frontMatter, content: markdownContent } = parseMarkdown(content as string);
               
               // Ensure team is an array
-              let teamData = frontMatter.team || [];
-              if (!Array.isArray(teamData)) {
-                console.warn(`Team data for ${slug} is not an array:`, teamData);
-                teamData = [];
+              let teamData: (string | { name: string; role?: string; })[] = [];
+              if (Array.isArray(frontMatter.team)) {
+                teamData = frontMatter.team as (string | { name: string; role?: string; })[];
+              } else if (frontMatter.team) {
+                console.warn(`Team data for ${slug} is not an array:`, frontMatter.team);
               }
+
+              // Get image with proper typing
+              const imageStr = frontMatter.image ? String(frontMatter.image) : '';
               
               // Convert to ProjectFrontMatter with required fields
               const projectData: ProjectFrontMatter & { content: string } = {
-                id: frontMatter.id || slug,
-                title: frontMatter.title || "Untitled Project",
-                description: frontMatter.description || "",
-                technologies: frontMatter.technologies || [],
-                image: frontMatter.image
+                id: String(frontMatter.id || slug),
+                title: String(frontMatter.title || "Untitled Project"),
+                description: String(frontMatter.description || ""),
+                technologies: Array.isArray(frontMatter.technologies) ? frontMatter.technologies as string[] : [],
+                image: imageStr
                   ? (
                       // If the image is already an absolute URL (http/https) or a root-relative path, keep it as-is.
                       // Otherwise, prefix with a slash to make it a root-relative path for local assets.
-                      frontMatter.image.startsWith('/') || /^https?:\/\//i.test(frontMatter.image)
-                        ? frontMatter.image
-                        : `/${frontMatter.image}`
+                      imageStr.startsWith('/') || /^https?:\/\//i.test(imageStr)
+                        ? imageStr
+                        : `/${imageStr}`
                     )
                   : "/placeholder.svg",
-                category: frontMatter.category || "web",
+                category: String(frontMatter.category || "web"),
                 team: teamData,
                 // Additional properties used by the existing codebase
-                tags: frontMatter.tags || [],
-                featured: frontMatter.featured || false,
+                tags: Array.isArray(frontMatter.tags) ? frontMatter.tags as string[] : [],
+                featured: Boolean(frontMatter.featured),
                 slug: slug,
                 content: markdownContent,
-                status: frontMatter.status,
-                lastUpdated: frontMatter.lastUpdated,
-                startDate: frontMatter.startDate,
-                endDate: frontMatter.endDate,
-                githubLink: frontMatter.githubLink || frontMatter.githubUrl || "#",
-                demoLink: frontMatter.demoLink || frontMatter.demoUrl || "",
-                githubStats: frontMatter.githubStats || { stars: 0, forks: 0, issues: 0, contributors: 0 },
-                github: frontMatter.github || frontMatter.githubLink,
-                	demo: frontMatter.demo || frontMatter.demoLink,
-                	// New frontmatter options for demo button behavior
-                	demoButtonType: frontMatter.demoButtonType,
-                	hideDemoIfMissing: !!frontMatter.hideDemoIfMissing,
-                gallery: frontMatter.gallery || [] // Add gallery field
+                status: frontMatter.status ? String(frontMatter.status) : undefined,
+                lastUpdated: frontMatter.lastUpdated ? String(frontMatter.lastUpdated) : undefined,
+                startDate: frontMatter.startDate ? String(frontMatter.startDate) : undefined,
+                endDate: frontMatter.endDate ? String(frontMatter.endDate) : undefined,
+                githubLink: String(frontMatter.githubLink || frontMatter.githubUrl || "#"),
+                demoLink: String(frontMatter.demoLink || frontMatter.demoUrl || ""),
+                githubStats: (frontMatter.githubStats as GitHubStats) || { stars: 0, forks: 0, issues: 0, contributors: 0 },
+                github: frontMatter.github ? String(frontMatter.github) : (frontMatter.githubLink ? String(frontMatter.githubLink) : undefined),
+                demo: frontMatter.demo ? String(frontMatter.demo) : (frontMatter.demoLink ? String(frontMatter.demoLink) : undefined),
+                // New frontmatter options for demo button behavior
+                demoButtonType: frontMatter.demoButtonType as "demo" | "project" | undefined,
+                hideDemoIfMissing: !!frontMatter.hideDemoIfMissing,
+                gallery: Array.isArray(frontMatter.gallery) ? frontMatter.gallery as string[] : [] // Add gallery field
               };
               
               return projectData;

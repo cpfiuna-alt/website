@@ -6,7 +6,7 @@ export interface MarkdownMeta {
   excerpt?: string;
   slug: string;
   image?: string;
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 // Type definitions for specific content types
@@ -65,7 +65,7 @@ export function useMarkdownContent<T extends MarkdownMeta>(contentType: string):
   useEffect(() => {
     // Here we'd normally fetch the markdown files
     // For now, we'll return mock data based on contentType
-    const mockData: Record<string, any[]> = {
+    const mockData: Record<string, MarkdownMeta[]> = {
       events: getMockEvents(),
       projects: getMockProjects(),
       blog: getMockBlogPosts(),
@@ -88,7 +88,7 @@ export function useMarkdownItem<T extends MarkdownMeta>(
   useEffect(() => {
     // Here we'd normally fetch a specific markdown file by slug
     // For now, we'll return mock data based on contentType and slug
-    const mockData: Record<string, any[]> = {
+    const mockData: Record<string, MarkdownMeta[]> = {
       events: getMockEvents(),
       projects: getMockProjects(),
       blog: getMockBlogPosts(),

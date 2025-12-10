@@ -24,7 +24,6 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { ScrollArea } from '@/components/ui/scroll-area';
 import { getProjectDocs, getProjectDoc } from '@/utils/projectDocsLoader';
 import { getProjectById, ProjectConfig } from '@/content/docs-projects/projects-config';
 import { ProjectDocStructure, ProjectDoc } from '@/types/projectDocs';
@@ -207,21 +206,24 @@ const ProjectDocumentationPage: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="bg-background">
       <div className="container mx-auto px-4 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-[300px_1fr] xl:grid-cols-[300px_1fr_220px] gap-8">
+        <div className="flex flex-col lg:flex-row gap-8">
           {/* Sidebar */}
-          <aside className="space-y-6">            <ProjectSidebar
-              project={project}
-              docStructure={docStructure}
-              searchQuery={searchQuery}
-              onSearchChange={setSearchQuery}
-              currentPath={sectionId || chapterId || 'overview'}
-            />
+          <aside className="w-full lg:w-[300px] lg:flex-shrink-0">
+            <div className="lg:sticky lg:top-24">
+              <ProjectSidebar
+                project={project}
+                docStructure={docStructure}
+                searchQuery={searchQuery}
+                onSearchChange={setSearchQuery}
+                currentPath={sectionId || chapterId || 'overview'}
+              />
+            </div>
           </aside>
 
           {/* Main Content */}
-          <main>
+          <main className="flex-1 min-w-0">
             {currentDoc ? (
               <DocumentContent doc={currentDoc} project={project} />
             ) : (
@@ -237,8 +239,10 @@ const ProjectDocumentationPage: React.FC = () => {
 
           {/* Table of Contents - Right Sidebar */}
           {tocHeadings.length > 0 && (
-            <aside className="hidden xl:block">
-              <TableOfContents headings={tocHeadings} />
+            <aside className="hidden xl:block w-[220px] flex-shrink-0">
+              <div className="sticky top-24">
+                <TableOfContents headings={tocHeadings} />
+              </div>
             </aside>
           )}
         </div>
@@ -363,7 +367,7 @@ const ProjectSidebar: React.FC<ProjectSidebarProps> = ({
           </div>
         </div>
         <div className="p-6 pt-0">
-          <ScrollArea className="h-[calc(100vh-400px)]">
+          <div className="max-h-[400px] overflow-y-auto">
             <div className="space-y-1">
               {/* Overview */}
               <Link
@@ -408,7 +412,7 @@ const ProjectSidebar: React.FC<ProjectSidebarProps> = ({
                 </div>
               ))}
             </div>
-          </ScrollArea>
+          </div>
         </div>
       </div>
     </div>
@@ -459,7 +463,7 @@ const TableOfContents: React.FC<TableOfContentsProps> = ({ headings }) => {
   }, [headings]);
 
   return (
-    <div className="rounded-lg border bg-card text-card-foreground shadow-sm border-border sticky top-20">
+    <div className="rounded-lg border bg-card text-card-foreground shadow-sm border-border">
       <div className="flex flex-col space-y-1.5 p-6 pb-3">
         <div className="flex items-center gap-2 text-sm font-medium">
           <List className="h-4 w-4" />
@@ -467,9 +471,8 @@ const TableOfContents: React.FC<TableOfContentsProps> = ({ headings }) => {
         </div>
       </div>
       <div className="p-6 pt-0">
-        <ScrollArea className="max-h-[calc(100vh-200px)]">
-          <nav className="space-y-1">
-            {headings.map((heading) => (
+        <nav className="space-y-1">
+          {headings.map((heading) => (
               <a
                 key={heading.id}
                 href={`#${heading.id}`}
@@ -520,7 +523,6 @@ const TableOfContents: React.FC<TableOfContentsProps> = ({ headings }) => {
               </a>
             ))}
           </nav>
-        </ScrollArea>
       </div>
     </div>
   );
