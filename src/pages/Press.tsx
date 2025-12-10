@@ -12,7 +12,7 @@ const Press = () => {
       media: "Paraguay TV",
       date: "4 de marzo de 2025",
       type: "Televisión",
-      image: "/images/timeline/cpf-2025.png",
+      image: "https://assets.cpfiuna.io/website/public/images/timeline/cpf-2025.png",
       link: "https://drive.google.com/file/d/17exUlQ8sSDfiFUB8S9I9lUVhOfxE6jtR/view?usp=sharing",
     },
   ];
