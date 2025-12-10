@@ -2,7 +2,7 @@
 id: 2
 title: "Hub de enlaces del Club de Programación FIUNA"
 description: "Un hub de enlaces para agrupar enlaces, redes y llamadas a la acción en una sola página."
-image: "images/projects/yvyralink/cover.png"
+image: "https://assets.cpfiuna.io/website/public/images/projects/yvyralink/cover-yvyralink.png"
 tags: ["Web", "React", "TypeScript", "Tailwind CSS", "Vite", "Linktree"]
 githubLink: "https://github.com/cpfiuna/yvyralink"
 demoLink: "https://yvyralink.cpfiuna.io"
@@ -17,8 +17,7 @@ githubStats: {}
 startDate: "23-11-2024"
 slug: "yvyralink"
 gallery:
-  - "/images/projects/yvyralink/01.png"
-  - "/images/projects/yvyralink/02.png"
+  - "https://assets.cpfiuna.io/website/public/images/projects/yvyralink/yvyralink-01.png"
 ---
 
 ## El punto de partida

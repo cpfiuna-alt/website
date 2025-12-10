@@ -2,7 +2,7 @@
 id: 3
 title: "Bot para el servidor de Discord  del Club de Programación FIUNA"
 description: "Un bot modular para gestionar el servidor del Club de Programación FIUNA." 
-image: "images/projects/discord-bot/cover.png"
+image: "https://assets.cpfiuna.io/website/public/images/projects/discord-bot/discord-bot-cover.png"
 tags: ["Herramienta", "Discord.js", "Node.js", "Automatización"]
 githubLink: "https://github.com/cpfiuna/discord-bot"
 demoLink: "https://discord.gg/UtRpKw2ay4"
@@ -17,8 +17,8 @@ githubStats: {}
 startDate: "02-06-2025"
 slug: "discord-bot"
 gallery:
-  - "/images/projects/discord-bot/cover.png"
-  - "/images/projects/discord-bot/commands.png"
+  - "https://assets.cpfiuna.io/website/public/images/projects/discord-bot/discord-bot-1.png"
+  - "https://assets.cpfiuna.io/website/public/images/projects/discord-bot/discord-bot-2.png"
 ---
 
 ## El Desafío

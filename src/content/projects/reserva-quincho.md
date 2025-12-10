@@ -2,7 +2,7 @@
 id: 2
 title: "Sistema de reservas del Quincho para la Facultad de Ingeniería"
 description: "Plataforma web para la gestión y reserva del Quincho de la FIUNA."
-image: "https://assets.cpfiuna.io/website/public/images/projects/quincho-fiuna/quincho-calendar-view.png"
+image: "https://assets.cpfiuna.io/website/public/images/projects/quincho-fiuna/quincho-cover.png"
 tags: ["Web", "React", "Supabase", "TypeScript", "Tailwind CSS", "Reservas", "Calendario"]
 githubLink: "https://github.com/cpfiuna/quincho"
 demoLink: "https://quincho.cpfiuna.io"
