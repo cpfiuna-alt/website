@@ -11,8 +11,10 @@ interface LayoutProps {
 const Layout: React.FC<LayoutProps> = ({ children }) => {
   const location = useLocation();
   
-  // Scroll to top on route change
+  // Scroll to top on route change + clear any stuck scroll locks
   useEffect(() => {
+    document.body.style.overflow = '';
+    document.documentElement.style.overflow = '';
     window.scrollTo(0, 0);
   }, [location.pathname]);
 

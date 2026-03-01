@@ -13,16 +13,13 @@ const ResourceUploadModal = ({ isOpen, onClose, onSubmit, resourceTypes }: Resou
   // Lock body scroll when modal is open
   useEffect(() => {
     if (isOpen) {
-      // Store original styles
-      const originalStyle = window.getComputedStyle(document.body).overflow;
-      const originalPaddingRight = window.getComputedStyle(document.body).paddingRight;
-      
       // Get scrollbar width to prevent layout shift
       const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+      const originalPaddingRight = document.body.style.paddingRight;
       
       // Apply scroll lock
       document.body.style.overflow = 'hidden';
-      document.body.style.paddingRight = `${parseInt(originalPaddingRight) + scrollbarWidth}px`;
+      document.body.style.paddingRight = `${parseInt(originalPaddingRight || '0') + scrollbarWidth}px`;
       
       // Prevent keyboard scrolling
       const handleKeyDown = (e: KeyboardEvent) => {
@@ -40,9 +37,9 @@ const ResourceUploadModal = ({ isOpen, onClose, onSubmit, resourceTypes }: Resou
       // Add event listeners
       document.addEventListener('keydown', handleKeyDown, { passive: false });
       
-      // Cleanup function to restore original styles and remove listeners
+      // Cleanup — restore to empty string so CSS takes over (never restore computed 'hidden')
       return () => {
-        document.body.style.overflow = originalStyle;
+        document.body.style.overflow = '';
         document.body.style.paddingRight = originalPaddingRight;
         document.removeEventListener('keydown', handleKeyDown);
       };
