@@ -1,0 +1,111 @@
+
+/* Optimized theme transitions */
+.theme-transition {
+  transition: background-color 0.2s ease-out, color 0.2s ease-out, border-color 0.2s ease-out;
+  will-change: background-color, color, border-color;
+}
+
+/* Reduce motion for accessibility and performance */
+@media (prefers-reduced-motion: reduce) {
+  .theme-transition {
+    transition: none;
+  }
+}
+
+/* Glass elements with optimized transitions */
+.glass {
+  @apply bg-white/10 dark:bg-black/20 backdrop-blur-md border border-white/20 dark:border-white/10 rounded-xl;
+  transition: background-color 0.2s ease-out, border-color 0.2s ease-out;
+}
+
+.glass-card {
+  @apply relative backdrop-blur-md bg-white/20 dark:bg-black/30 border border-white/20 dark:border-white/10 rounded-xl shadow-xl overflow-hidden;
+  transition: transform 0.15s ease-out;
+  /* Prevent initial flash by ensuring consistent background */
+  background-color: hsl(var(--background) / 0.2);
+  border-color: hsl(var(--border) / 0.2);
+}
+
+.glass-card:hover {
+  transform: translateY(-5px);
+}
+
+.glass-card-static {
+  @apply relative backdrop-blur-md bg-white/20 dark:bg-black/30 border border-white/20 dark:border-white/10 rounded-xl shadow-xl overflow-hidden;
+  transition: background-color 0.2s ease-out, border-color 0.2s ease-out;
+}
+
+.glow-border {
+  @apply border border-cpf-blue-500/50 shadow-neon-blue transition-all duration-300;
+}
+
+.glow-border:hover {
+  @apply animate-glow;
+}
+
+.gradient-text {
+  @apply bg-clip-text text-transparent bg-gradient-to-r from-cpf-blue-500 to-cpf-cyan;
+}
+
+.section-padding {
+  @apply py-12 px-4 md:py-16 md:px-12 lg:py-24;
+}
+
+.fadeIn {
+  @apply opacity-0 animate-fade-in;
+}
+
+.slideIn {
+  @apply opacity-0 animate-slide-in;
+}
+
+/* Organization Chart Styles */
+.org-chart-container {
+  @apply relative w-full max-w-4xl mx-auto my-8;
+}
+
+.org-chart-item {
+  @apply relative z-10;
+}
+
+.org-chart-content {
+  @apply w-36 md:w-48 transition-all duration-300 hover:shadow-neon-blue;
+}
+
+.org-chart-content-small {
+  @apply transition-all duration-300 hover:shadow-neon-blue;
+}
+
+.org-chart-president {
+  @apply mx-auto mb-0;
+}
+
+.org-chart-connector-vertical {
+  @apply absolute w-1 h-12 bg-primary/30 left-1/2 -translate-x-1/2 top-20;
+}
+
+.org-chart-connector-horizontal {
+  @apply absolute w-3/4 h-1 bg-primary/30 left-1/2 -translate-x-1/2 top-32;
+}
+
+.org-chart-row {
+  @apply flex flex-wrap justify-center gap-4 md:gap-8;
+}
+
+.org-chart-vp-level {
+  @apply relative;
+}
+
+.org-chart-secretaries {
+  @apply relative;
+}
+
+/* Organization Chart Mobile Styles */
+.org-chart-mobile {
+  @apply flex flex-col items-center;
+}
+
+/* Documentation page specific styles */
+.docs-card {
+  @apply hover:translate-y-0;
+}
