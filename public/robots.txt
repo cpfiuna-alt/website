@@ -1,9 +1,0 @@
-# robots.txt for Club de Programación FIUNA
-User-agent: *
-Allow: /
-
-# Sitemap location
-Sitemap: https://cpfiuna.io/sitemap.xml
-
-# Crawl-delay directive (optional)
-Crawl-delay: 10
