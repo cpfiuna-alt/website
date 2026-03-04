@@ -1,7 +1,24 @@
 
 /* Layout and Responsive Utilities */
+
+/* Banner height token — updated at runtime by BannerContext */
+:root {
+  --banner-height: 0px;
+}
+
 html {
   @apply scroll-smooth;
+}
+
+/* Main content offset: navbar height + banner height */
+main.layout-main {
+  padding-top: calc(var(--banner-height, 0px) + 4rem); /* 4rem = pt-16 */
+}
+
+@media (min-width: 768px) {
+  main.layout-main {
+    padding-top: calc(var(--banner-height, 0px) + 5rem); /* 5rem = pt-20 */
+  }
 }
 
 body {
@@ -25,6 +42,13 @@ body {
   button, a {
     min-height: 44px;
     min-width: 44px;
+  }
+
+  /* Banner elements must NOT inherit the 44px tap-target rule — it would inflate the banner height */
+  .banner-strip button,
+  .banner-strip a {
+    min-height: 0;
+    min-width: 0;
   }
   
   /* Adjust font sizes for mobile */

@@ -5,6 +5,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "@/context/ThemeContext";
+import { BannerProvider } from "@/context/BannerContext";
 import { Navigate } from 'react-router-dom';
 
 const Index = lazy(() => import('./pages/Index'));
@@ -49,6 +50,7 @@ const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider>
+        <BannerProvider>
         <TooltipProvider>
           <Toaster />
           <Sonner />
@@ -89,6 +91,7 @@ const App = () => {
             </Suspense>
           </BrowserRouter>
         </TooltipProvider>
+        </BannerProvider>
       </ThemeProvider>
       {import.meta.env.PROD && consentGiven && (
         <>

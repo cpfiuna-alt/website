@@ -36,10 +36,11 @@ const Header = () => {
 
   return (
     <header
-      className={`fixed top-0 left-0 w-full z-50 transition-all duration-300
+      className={`fixed left-0 w-full z-50 transition-all duration-300
       ${scrolled 
           ? "py-3 bg-background shadow-sm" 
           : "py-5 bg-transparent"}`}
+      style={{ top: 'var(--banner-height, 0px)' }}
     >
       <div className="container px-4 mx-auto flex items-center justify-between">
         <div className="flex-shrink-0 z-10">

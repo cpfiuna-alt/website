@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import Header from "./Header";
+import TopBanner from "./TopBanner";
 import Footer from "./Footer";
 import CookieConsent from "@/components/ui/CookieConsent";
 
@@ -47,8 +48,9 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
 
   return (
     <div className={`flex flex-col min-h-screen overflow-x-hidden w-full transition-all duration-500 ease-in-out ${!isHomePage ? 'bg-gradient-to-b from-background via-background/95 to-background/90' : ''}`}>
+      <TopBanner />
       <Header />
-      <main className="flex-grow pt-16 md:pt-20 w-full">
+      <main className="flex-grow layout-main w-full">
         {children}
       </main>
       <Footer />
