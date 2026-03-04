@@ -96,7 +96,7 @@ const Footer = () => {
               Somos una comunidad de estudiantes y profesionales
               apasionados por la programación y la tecnología.
             </p>
-            <div className="mt-8 flex flex-wrap justify-center lg:justify-start gap-4">
+            <div className="mt-8 flex flex-nowrap justify-center lg:justify-start gap-3">
               {socials.map((item) => (
                 <a
                   key={item.name}

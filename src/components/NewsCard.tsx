@@ -1,6 +1,6 @@
 
 import React from "react";
-import { ArrowRight, Calendar } from "lucide-react";
+import { Calendar } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
 
@@ -85,7 +85,8 @@ const NewsCard: React.FC<NewsCardProps> = ({
   };
 
   return (
-    <div className="glass-card hover:shadow-neon-blue transition-all duration-300 h-full flex flex-col">
+    <Link to={slug} className="block h-full">
+    <div className="glass-card hover:shadow-neon-blue transition-all duration-300 h-full flex flex-col cursor-pointer">
       <div className="relative h-48 overflow-hidden bg-gray-100 dark:bg-gray-800 flex items-center justify-center">
         <img
           src={getImage()}
@@ -123,14 +124,9 @@ const NewsCard: React.FC<NewsCardProps> = ({
         <p className="text-muted-foreground mb-4 text-sm flex-grow">
           {excerpt || "Sin descripción disponible"}
         </p>
-        {/*<Link
-          to={slug}
-          className="inline-flex items-center text-primary font-medium hover:underline text-sm mt-auto"
-        >
-          Leer más <ArrowRight className="ml-2 h-4 w-4" />
-        </Link>*/}
       </div>
     </div>
+    </Link>
   );
 };
 

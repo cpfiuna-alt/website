@@ -317,7 +317,7 @@ const CourseDetail = () => {
         {/* Course Content */}
         <div className="container mx-auto px-6">
           <Tabs defaultValue="overview" className="w-full">
-            <TabsList className="mb-8 w-full justify-start overflow-x-auto">
+            <TabsList className="mb-8 w-full justify-start h-auto flex-wrap">
               <TabsTrigger value="overview">Descripción General</TabsTrigger>
               <TabsTrigger value="syllabus">Programa</TabsTrigger>
               <TabsTrigger value="resources">Recursos</TabsTrigger>
