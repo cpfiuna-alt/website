@@ -14,7 +14,6 @@
     "noEmit": true,
     "jsx": "react-jsx",
     "jsxImportSource": "react",
-    "types": ["vite/client", "react"],
 
     /* Linting */
     "strict": false,

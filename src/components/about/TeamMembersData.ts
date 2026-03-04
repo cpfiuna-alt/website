@@ -13,20 +13,8 @@ export const teamMembers = [
     },
   },
   {
-    name: "Oscar Alderete",
-    role: "Vicepresidente",
-    image: "https://assets.cpfiuna.io/website/public/miembros/oscaralderete.jpg",
-    bio: "Buscando construir soluciones tecnológicas y automatizar mi vida.",
-    social: {
-      github: "https://github.com/Osukaru17",
-      linkedin: "https://linkedin.com/in/oscaralderete/",
-      instagram: "https://instagram.com/oscar_alderete99",
-      email: "mailto:osualderete@fiuna.edu.py",
-    },
-  },
-  {
     name: "Esteban Ibarra",
-    role: "Secretario",
+    role: "Vicepresidente",
     image: "https://assets.cpfiuna.io/website/public/miembros/estebanibarra.jpg",
     bio: "Encargado de la organización de eventos y gestión de la comunicación del club.",
     social: {
@@ -34,6 +22,18 @@ export const teamMembers = [
       linkedin: "https://linkedin.com/in/juanesibarraa/",
       instagram: "https://instagram.com/ibarra_jeje",
       email: "mailto:juan.ibarra@fiuna.edu.py",
+    },
+  },
+  {
+    name: "Mathías Martínez",
+    role: "Secretario",
+    image: "https://assets.cpfiuna.io/website/public/miembros/mathiasmartinez.jpg",
+    bio: "Viviendo mi vida entre algoritmos y estructuras de datos.",
+    social: {
+      github: "https://github.com/mathiasmartinez16",
+      linkedin: "https://linkedin.com/in/mathiasmartinez16",
+      instagram: "https://www.instagram.com/martinezmathias_/",
+      email: "mailto:mathias.martinez@fiuna.edu.py",
     },
   },
   {
@@ -76,15 +76,15 @@ export const secretariaMembers = [
     },
   },
   {
-    name: "Mathías Martínez",
-    /*role: "Algoritmos",*/
-    image: "https://assets.cpfiuna.io/website/public/miembros/mathiasmartinez.jpg",
-    bio: "Viviendo mi vida entre algoritmos y estructuras de datos.",
+    name: "Oscar Alderete",
+    /*role: "Sistemas",*/
+    image: "https://assets.cpfiuna.io/website/public/miembros/oscaralderete.jpg",
+    bio: "Buscando construir soluciones tecnológicas y automatizar mi vida.",
     social: {
-      github: "https://github.com/mathiasmartinez16",
-      linkedin: "https://linkedin.com/in/mathiasmartinez16",
-      instagram: "https://www.instagram.com/martinezmathias_/", 
-      email: "mailto:mathias.martinez@fiuna.edu.py",
+      github: "https://github.com/Osukaru17",
+      linkedin: "https://linkedin.com/in/oscaralderete/",
+      instagram: "https://instagram.com/oscar_alderete99",
+      email: "mailto:osualderete@fiuna.edu.py",
     },
   },
 ];
