@@ -50,6 +50,12 @@ body {
     min-height: 0;
     min-width: 0;
   }
+
+  /* Footer social icons must NOT inherit the 44px rule — it makes the row wider than the viewport */
+  .footer-socials a {
+    min-height: 0;
+    min-width: 0;
+  }
   
   /* Adjust font sizes for mobile */
   h1 {

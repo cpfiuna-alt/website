@@ -91,25 +91,29 @@ const Footer = () => {
       <div className="container mx-auto px-6 py-12 lg:py-16">
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-12">
           <div className="lg:col-span-4">
-            <Logo className="mx-auto lg:mx-0" />
+            <div className="flex justify-center lg:justify-start">
+              <Logo />
+            </div>
             <p className="mt-4 text-sm text-muted-foreground text-center lg:text-left">
               Somos una comunidad de estudiantes y profesionales
               apasionados por la programación y la tecnología.
             </p>
-            <div className="mt-8 flex flex-nowrap justify-center lg:justify-start gap-3">
-              {socials.map((item) => (
-                <a
-                  key={item.name}
-                  href={item.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-muted-foreground hover:text-primary transition-colors"
-                  aria-label={item.name}
-                >
-                  <item.icon className="h-5 w-5" />
-                  <span className="sr-only">{item.name}</span>
-                </a>
-              ))}
+            <div className="mt-8 flex justify-center lg:justify-start">
+              <div className="footer-socials flex flex-nowrap gap-3">
+                {socials.map((item) => (
+                  <a
+                    key={item.name}
+                    href={item.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-muted-foreground hover:text-primary transition-colors"
+                    aria-label={item.name}
+                  >
+                    <item.icon className="h-5 w-5" />
+                    <span className="sr-only">{item.name}</span>
+                  </a>
+                ))}
+              </div>
             </div>
           </div>
           <div className="lg:col-span-8 grid grid-cols-2 gap-8 sm:grid-cols-3">
